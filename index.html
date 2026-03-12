@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0e0c08">
+<title>Hip-Bomp | 匹夫凡夫</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Antique+Soft&family=Shippori+Mincho+B1:wght@400;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{
+  background:#0e0c08;color:#f0e8d0;
+  font-family:'Shippori Mincho B1',serif;
+  display:flex;flex-direction:column;align-items:center;
+  user-select:none;max-width:480px;margin:0 auto;height:100vh;
+}
+/* ヘッダー */
+.hero{width:100%;height:78px;overflow:hidden;position:relative;flex-shrink:0;background:#0e0c08;}
+.hero-logo{display:flex;align-items:center;padding:5px 12px;height:100%;gap:10px;}
+.enso-logo{height:62px;width:62px;object-fit:contain;flex-shrink:0;}
+.hero-title{display:flex;flex-direction:column;justify-content:center;gap:2px;}
+.hero-main{font-family:'Arial Black','Franklin Gothic Heavy',Impact,sans-serif;font-size:1.55rem;font-weight:900;color:#f5f0e8;letter-spacing:-0.02em;line-height:1;}
+.hero-sub{font-size:0.5rem;color:#c8a050;letter-spacing:0.35em;}
+/* タブ */
+.tabs{display:flex;width:100%;flex-shrink:0;border-bottom:1px solid #2a1e10;}
+.tab{flex:1;padding:7px 0;text-align:center;font-size:0.65rem;letter-spacing:0.3em;color:#4a3a28;cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent;font-family:'Zen Antique Soft',serif;}
+.tab.active{color:#c8a050;border-bottom-color:#c8a050;}
+/* 出力 */
+.output{width:100%;background:#16120a;border-bottom:1px solid #2a1e10;padding:6px 14px;display:flex;flex-direction:column;align-items:center;min-height:46px;justify-content:center;flex-shrink:0;}
+.out-word{font-family:'Zen Antique Soft',serif;font-size:1.2rem;letter-spacing:0.18em;transition:color 0.15s;}
+.out-hint{font-size:0.42rem;color:#4a3a28;margin-top:2px;letter-spacing:0.2em;}
+/* ===== SAMPLER ===== */
+#samplerView{flex:1;overflow:hidden;width:100%;display:flex;flex-direction:column;align-items:center;padding:6px 10px 8px;}
+.bgm-row{display:flex;align-items:center;gap:8px;width:100%;margin-bottom:6px;}
+.bgm-btn{background:#16120a;border:1px solid #c8a050;color:#c8a050;font-size:0.6rem;letter-spacing:0.15em;padding:5px 13px;cursor:pointer;border-radius:2px;font-family:'Shippori Mincho B1',serif;white-space:nowrap;touch-action:manipulation;}
+.bgm-btn.on{background:#c8a050;color:#0e0c08;}
+/* 助詞グリッド 2×4 */
+.joshi-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:4px;width:100%;margin-bottom:6px;}
+.jbtn{background:#16120a;border:1px solid #2a2010;color:#c8a050;font-size:1.05rem;font-family:'Zen Antique Soft',serif;padding:6px 0;cursor:pointer;border-radius:3px;transition:background 0.07s,transform 0.07s;touch-action:manipulation;}
+.jbtn.fired,.jbtn:active{background:#3a2e10;transform:scale(0.91);border-color:#c8a050;}
+/* サンプラー本体：ページボタン左・パッド右 */
+.sampler-body{display:flex;width:100%;flex:1;align-items:flex-start;gap:0;min-height:0;}
+.pages{display:flex;flex-direction:column;gap:4px;flex-shrink:0;padding:0 5px 0 0;}
+.pb{width:28px;height:28px;min-width:28px;background:#16120a;border:1px solid #2a1e10;border-radius:3px;color:#4a3a28;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-family:'Zen Antique Soft',serif;touch-action:manipulation;}
+.pb.active{background:#c8a050;color:#0e0c08;border-color:#c8a050;font-weight:bold;}
+/* パッドグリッド */
+.pad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;flex:1;min-width:0;}
+.pad{aspect-ratio:1;background:#16120a;border:1.5px solid #2a2010;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;transition:background 0.07s,transform 0.07s;padding:3px;}
+.pad.fired{background:#4a3010;transform:scale(0.91);border-color:#c8a050;}
+.pad-name{font-size:0.5rem;color:#c8a050;text-align:center;line-height:1.35;letter-spacing:0.03em;}
+/* ===== DJ ===== */
+#djView{flex:1;width:100%;display:none;flex-direction:column;align-items:center;overflow:hidden;position:relative;}
+.dj-bg{position:absolute;inset:0;z-index:0;}
+.dj-bg img{width:100%;height:100%;object-fit:cover;opacity:0.1;}
+.dj-content{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;padding:8px 12px 10px;}
+.turntables{display:flex;gap:8px;justify-content:center;margin-bottom:8px;}
+.deck{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;max-width:148px;}
+.deck-label{font-size:0.55rem;color:#c8a050;letter-spacing:0.4em;font-family:'Zen Antique Soft',serif;}
+.deck canvas{width:100%;aspect-ratio:1;display:block;border-radius:50%;touch-action:none;}
+.deck-bpm{font-size:0.42rem;color:#4a3a28;letter-spacing:0.2em;}
+.fader-section{margin-bottom:6px;}
+.fader-labels{display:flex;justify-content:space-between;margin-bottom:3px;}
+.fader-lbl{font-size:0.48rem;color:#c8a050;letter-spacing:0.3em;transition:opacity 0.2s;}
+.fader-wrap{position:relative;height:24px;display:flex;align-items:center;}
+.fader-track{width:100%;height:2px;background:#2a1e10;border-radius:2px;}
+input[type=range]#crossfader{position:absolute;width:100%;opacity:0;height:24px;cursor:pointer;z-index:2;}
+.fader-knob{position:absolute;width:16px;height:24px;background:#c8a050;border-radius:2px;top:50%;transform:translate(-50%,-50%);left:50%;box-shadow:0 0 8px rgba(200,160,80,0.4);pointer-events:none;z-index:1;}
+.dj-genres{display:flex;flex-direction:column;gap:4px;margin-bottom:7px;}
+.dj-genre-row{display:flex;align-items:center;gap:4px;}
+.dj-genre-lbl{font-size:0.48rem;color:#c8a050;letter-spacing:0.3em;width:16px;flex-shrink:0;}
+.genre-btns{display:flex;flex-wrap:wrap;gap:3px;}
+.gsel{background:#16120a;border:1px solid #2a2010;color:#4a3a28;font-size:0.46rem;padding:3px 6px;cursor:pointer;border-radius:2px;transition:all 0.15s;font-family:'Shippori Mincho B1',serif;touch-action:manipulation;}
+.gsel.active{background:#3a2e10;color:#c8a050;border-color:#c8a050;}
+.dj-bgm-btn{width:100%;background:#16120a;border:1px solid #c8a050;color:#c8a050;font-size:0.63rem;letter-spacing:0.3em;padding:7px;cursor:pointer;border-radius:2px;font-family:'Shippori Mincho B1',serif;transition:all 0.15s;touch-action:manipulation;}
+.dj-bgm-btn.on{background:#c8a050;color:#0e0c08;}
+</style>
+</head>
+<body>
+<div class="hero"><div class="hero-logo"><img class="enso-logo" src="hip-bomp-logo.svg" alt="Hip-Bomp"><div class="hero-title"><span class="hero-main">Hip-Bomp</span><span class="hero-sub">匹夫凡夫</span></div></div></div>
+<div class="tabs"><div class="tab active" id="tabSampler" onclick="setMode('sampler')">サンプラー</div><div class="tab" id="tabDJ" onclick="setMode('dj')">DJ モード</div></div>
+<div class="output"><div class="out-word" id="outWord">——</div><div class="out-hint" id="outHint">tap or flick</div></div>
+<div id="samplerView" style="display:flex">
+<div class="bgm-row"><button class="bgm-btn" id="bgmBtn" onclick="toggleBGM()">BGM ON</button></div>
+<div class="joshi-grid" id="joshiGrid"></div>
+<div class="sampler-body"><div class="pages" id="pageButtons"></div><div class="pad-grid" id="padGrid"></div></div>
+</div>
+<div id="djView">
+<div class="dj-bg"><img src="hip-bomp-logo.svg" alt=""></div>
+<div class="dj-content">
+<div class="turntables"><div class="deck"><div class="deck-label">DECK A</div><canvas id="recordA" width="130" height="130"></canvas><div class="deck-bpm" id="bpmA">BPM 120</div></div><div class="deck"><div class="deck-label">DECK B</div><canvas id="recordB" width="130" height="130"></canvas><div class="deck-bpm" id="bpmB">BPM 75</div></div></div>
+<div class="fader-section"><div class="fader-labels"><span class="fader-lbl" id="flblA">A</span><span class="fader-lbl" id="flblB">B</span></div><div class="fader-wrap"><div class="fader-track"></div><div class="fader-knob" id="faderKnob"></div><input type="range" id="crossfader" min="0" max="1" step="0.01" value="0.5"></div></div>
+<div class="dj-genres"><div class="dj-genre-row"><span class="dj-genre-lbl">A</span><div class="genre-btns" id="genreA"></div></div><div class="dj-genre-row"><span class="dj-genre-lbl">B</span><div class="genre-btns" id="genreB"></div></div></div>
+<button class="dj-bgm-btn" id="djBgmBtn" onclick="toggleDJBGM()">BGM ON</button>
+</div>
+</div>
+<script>
+const PAGES = [
+  [
+    {key:'yabodegozaimasu', name:'野暮でございます'},
+    {key:'nanto',           name:'なんと'},
+    {key:'wabi',            name:'侘び'},
+    {key:'sabi',            name:'寂び'},
+    {key:'omomukibukai',    name:'趣き深い'},
+    {key:'zokubutu',        name:'俗物'},
+    {key:'daga',            name:'だが'},
+    {key:'yeah',            name:'yeah'},
+    {key:'tensai',          name:'天才'}
+  ],
+  [
+    {key:'migoto',          name:'見事'},
+    {key:'kalma',           name:'業'},
+    {key:'wabisabi',        name:'侘び寂び'},
+    {key:'dorokusai',       name:'泥臭い'},
+    {key:'hiphop',          name:'Hip Hop'},
+    {key:'yoidesuka',       name:'よいですか'},
+    {key:'akindonosoroban', name:'商人のそろばん'},
+    {key:'ippon',           name:'一本'},
+    {key:'nippon',          name:'日本'}
+  ],
+  [
+    {key:'keepon',          name:'Keep On'},
+    {key:'kyakkashouko',    name:'脚下照顧'},
+    {key:'yunomi',          name:'湯呑み'},
+    {key:'hedogaderu',      name:'反吐が出る'},
+    {key:'onore',           name:'おのれ'},
+    {key:'oroka',           name:'愚か'},
+    {key:'hinsou',          name:'貧相'},
+    {key:'anchoku',         name:'安直'},
+    {key:'asamasii',        name:'浅ましい'}
+  ],
+  [
+    {key:'kekkounaotemae',  name:'結構なお手前'},
+    {key:'sorekosoga',      name:'それこそが'},
+    {key:'yokubou',         name:'欲望'},
+    {key:'kyouki',          name:'狂気'},
+    {key:'bigaku',          name:'美学'},
+    {key:'zen',             name:'禅'},
+    {key:'sikantaza',       name:'只管打坐'},
+    {key:'towa',            name:'とは'},
+    {key:'sono',            name:'その'}
+  ],
+  [
+    {key:'chajin',          name:'茶人'},
+    {key:'chasitu',         name:'茶室'},
+    {key:'sennorikyuu',     name:'千利休'},
+    {key:'kazuchawan',      name:'楽茶碗'},
+    {key:'konpeitou',       name:'金平糖'},
+    {key:'kiden',           name:'貴殿'},
+    {key:'marude',          name:'まるで'},
+    {key:'tugihagi',        name:'継ぎ接ぎ'},
+    {key:'mu',              name:'無'}
+  ],
+  [
+    {key:'jituni',          name:'実に'},
+    {key:'jituniyoi',       name:'実によい'},
+    {key:'desune',          name:'ですね'},
+    {key:'gozaimasu',       name:'ございます'},
+    {key:'nanodesu',        name:'なのです'},
+    {key:'sorekosoga',      name:'それこそが'},
+    {key:'yeah',            name:'yeah'},
+    {key:'migoto',          name:'見事'},
+    {key:'wabi',            name:'侘び'}
+  ],
+  [
+    {key:'yokubou',         name:'欲望'},
+    {key:'kyouki',          name:'狂気'},
+    {key:'kekkounaotemae',  name:'結構なお手前'},
+    {key:'wabisabi',        name:'侘び寂び'},
+    {key:'oroka',           name:'愚か'},
+    {key:'hinsou',          name:'貧相'},
+    {key:'zokubutu',        name:'俗物'},
+    {key:'tensai',          name:'天才'},
+    {key:'yeah',            name:'yeah'}
+  ]
+];
+const PAGE_LABELS = ['い','ろ','は','に','ほ','へ','と'];
+
+const JOSHI = [
+  {key:'wa', label:'は'}, {key:'ga', label:'が'},
+  {key:'no', label:'の'}, {key:'to', label:'と'},
+  {key:'mo', label:'も'}, {key:'wo', label:'を'},
+  {key:'ni', label:'に'}, {key:'de', label:'で'}
+];
+
+const BEAT_DEFS = {
+  fourfloor: { label:'四つ打ち', bpm:120,
+    K:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0], S:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+    H:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], B:[45,0,0,0,0,0,45,0,48,0,0,0,0,0,0,0],
+    mel:[{n:69,d:0.5},{n:0},{n:72,d:0.5},{n:0},{n:74,d:0.5},{n:0},{n:72,d:1},{n:0},
+         {n:69,d:0.5},{n:0},{n:67,d:0.5},{n:0},{n:69,d:1},{n:0},{n:0},{n:0}],
+    mtype:'square', mvol:0.1 },
+  dnb: { label:'D&B', bpm:170,
+    K:[1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0], S:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0],
+    H:[1,1,0,1,1,0,1,1,1,0,1,1,0,1,1,0], B:[41,0,0,0,0,0,0,0,41,0,0,0,0,0,0,0],
+    mel:[{n:64,d:0.3},{n:0},{n:64,d:0.3},{n:67,d:0.3},{n:69,d:0.5},{n:0},{n:67,d:0.3},{n:0},
+         {n:64,d:0.3},{n:0},{n:62,d:0.3},{n:0},{n:64,d:0.8},{n:0},{n:0},{n:0}],
+    mtype:'sawtooth', mvol:0.08 },
+  lofi: { label:'Lo-fi', bpm:75,
+    K:[1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0], S:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1],
+    H:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1], B:[36,0,0,0,0,0,36,0,39,0,0,0,41,0,0,0],
+    mel:[{n:65,d:1},{n:0},{n:0},{n:0},{n:64,d:1},{n:0},{n:0},{n:0},
+         {n:62,d:1},{n:0},{n:0},{n:0},{n:60,d:2},{n:0},{n:0},{n:0}],
+    mtype:'triangle', mvol:0.14 },
+  electro: { label:'Electro', bpm:128,
+    K:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0], S:[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+    H:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], B:[36,0,36,0,0,0,41,0,36,0,0,0,43,0,0,0],
+    mel:[{n:72,d:0.2},{n:72,d:0.2},{n:0},{n:74,d:0.2},{n:76,d:0.4},{n:0},{n:74,d:0.2},{n:0},
+         {n:72,d:0.2},{n:0},{n:69,d:0.2},{n:0},{n:71,d:0.6},{n:0},{n:0},{n:0}],
+    mtype:'sawtooth', mvol:0.09 },
+  dub: { label:'Dub', bpm:68,
+    K:[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0], S:[0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0],
+    H:[1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0], B:[36,0,0,0,41,0,0,0,36,0,0,0,43,0,41,0],
+    mel:[{n:60,d:2},{n:0},{n:0},{n:0},{n:0},{n:0},{n:0},{n:0},
+         {n:58,d:2},{n:0},{n:0},{n:0},{n:0},{n:0},{n:0},{n:0}],
+    mtype:'sine', mvol:0.16 }
+};
+
+// ===== Audio Engine (fetch方式) =====
+var actx = null;
+var bufCache = {};
+
+function getCtx() {
+  if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+  return actx;
+}
+
+function getBuffer(key) {
+  if (bufCache[key]) return Promise.resolve(bufCache[key]);
+  var ctx = getCtx();
+  return fetch('audio/' + key + '.mp3')
+    .then(function(r) { return r.arrayBuffer(); })
+    .then(function(ab) { return ctx.decodeAudioData(ab); })
+    .then(function(buf) { bufCache[key] = buf; return buf; });
+}
+
+function playKey(key) {
+  var ctx = getCtx();
+  if (ctx.state === 'suspended') ctx.resume();
+  return getBuffer(key).then(function(buf) {
+    var src = ctx.createBufferSource();
+    src.buffer = buf; src.connect(ctx.destination); src.start(0);
+    return buf.duration;
+  });
+}
+
+// 起動時に助詞をプリロード
+function preload() {
+  var keys = ['wa','ga','no','to','mo','wo','ni','de'];
+  keys.forEach(function(k) { getBuffer(k).catch(function(){}); });
+}
+
+// ===== Flick =====
+var tx=0, ty=0, tKey='', tName='';
+var THRESH=28, DIAG=0.41;
+
+function getDir(dx,dy) {
+  var ax=Math.abs(dx), ay=Math.abs(dy);
+  if (ax<THRESH && ay<THRESH) return 'none';
+  var r = ay===0 ? 999 : ax/ay;
+  if (r>(1/DIAG)) return dx>0 ? 'right' : 'left';
+  if (r<DIAG)     return dy>0 ? 'down'  : 'up';
+  if (dx>0&&dy<0) return 'upright';
+  if (dx<0&&dy<0) return 'upleft';
+  if (dx>0&&dy>0) return 'downright';
+  return 'downleft';
+}
+
+var DIR_MAP = {
+  up:{key:'wa',label:'は'}, down:{key:'ga',label:'が'},
+  left:{key:'no',label:'の'}, right:{key:'to',label:'と'},
+  upleft:{key:'mo',label:'も'}, upright:{key:'wo',label:'を'},
+  downleft:{key:'ni',label:'に'}, downright:{key:'de',label:'で'}
+};
+
+function showWord(text) {
+  var ow = document.getElementById('outWord');
+  ow.textContent = text; ow.style.color = '#fff';
+  setTimeout(function(){ ow.style.color = ''; }, 200);
+}
+
+function firePad(key, name, dir) {
+  playKey(key).then(function(dur) {
+    var label = '';
+    if (dir !== 'none' && DIR_MAP[dir]) {
+      label = DIR_MAP[dir].label;
+      setTimeout(function(){ playKey(DIR_MAP[dir].key); }, dur * 1000);
+    }
+    showWord(name + label);
+    document.getElementById('outHint').textContent = dir==='none' ? 'tap' : '〜'+label;
+  });
+}
+
+function fireJoshi(key, label) {
+  playKey(key);
+  showWord(label);
+  document.getElementById('outHint').textContent = '助詞';
+}
+
+function bindPad(el, pad) {
+  el.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    tx=e.touches[0].clientX; ty=e.touches[0].clientY;
+    tKey=pad.key; tName=pad.name; el.classList.add('fired');
+  }, {passive:false});
+  el.addEventListener('touchend', function(e) {
+    e.preventDefault(); el.classList.remove('fired');
+    var t = e.changedTouches[0];
+    firePad(tKey, tName, getDir(t.clientX-tx, t.clientY-ty));
+  }, {passive:false});
+  el.addEventListener('mousedown', function(e) {
+    tx=e.clientX; ty=e.clientY; tKey=pad.key; tName=pad.name; el.classList.add('fired');
+  });
+  el.addEventListener('mouseup', function(e) {
+    el.classList.remove('fired');
+    firePad(tKey, tName, getDir(e.clientX-tx, e.clientY-ty));
+  });
+}
+
+// ===== Pages =====
+var curPage = 0;
+function setPage(p) {
+  curPage = p;
+  document.querySelectorAll('.pb').forEach(function(b,i){ b.classList.toggle('active', i===p); });
+  renderPads();
+  // 次ページを先読み
+  var next = PAGES[(p+1) % PAGES.length];
+  next.forEach(function(pad){ getBuffer(pad.key).catch(function(){}); });
+}
+
+function renderPads() {
+  var grid = document.getElementById('padGrid'); grid.innerHTML = '';
+  PAGES[curPage].forEach(function(pad) {
+    var el = document.createElement('div'); el.className = 'pad';
+    var nm = document.createElement('span'); nm.className = 'pad-name'; nm.textContent = pad.name;
+    el.appendChild(nm); bindPad(el, pad); grid.appendChild(el);
+  });
+}
+
+function renderJoshi() {
+  var wrap = document.getElementById('joshiGrid'); wrap.innerHTML = '';
+  JOSHI.forEach(function(j) {
+    var btn = document.createElement('button'); btn.className = 'jbtn';
+    btn.textContent = j.label;
+    btn.addEventListener('click', function(){ fireJoshi(j.key, j.label); });
+    btn.addEventListener('touchstart', function(e){ e.preventDefault(); btn.classList.add('fired'); }, {passive:false});
+    btn.addEventListener('touchend',   function(e){ e.preventDefault(); btn.classList.remove('fired'); fireJoshi(j.key, j.label); }, {passive:false});
+    wrap.appendChild(btn);
+  });
+}
+
+// ===== BGM Engine =====
+var bgmDeck = {playing:false, scheduler:null, step:0, nextTime:0, genre:'fourfloor', gain:null};
+
+function mkGain(v) { var ctx=getCtx(), g=ctx.createGain(); g.gain.value=v; g.connect(ctx.destination); return g; }
+function schedKick(t,g) { var ctx=getCtx(),o=ctx.createOscillator(),gn=ctx.createGain(); o.connect(gn); gn.connect(g); o.frequency.setValueAtTime(150,t); o.frequency.exponentialRampToValueAtTime(38,t+0.18); gn.gain.setValueAtTime(0.9,t); gn.gain.exponentialRampToValueAtTime(0.001,t+0.25); o.start(t); o.stop(t+0.28); }
+function schedSnare(t,g,style) { var ctx=getCtx(),dur=style==='dub'?0.18:0.1; var buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate); var d=buf.getChannelData(0); for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.4; var n=ctx.createBufferSource(); n.buffer=buf; var f=ctx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=2400; var gn=ctx.createGain(); n.connect(f); f.connect(gn); gn.connect(g); gn.gain.setValueAtTime(0.42,t); gn.gain.exponentialRampToValueAtTime(0.001,t+dur); n.start(t); n.stop(t+dur+0.02); }
+function schedHH(t,g,open) { var ctx=getCtx(),dur=open?0.08:0.025; var buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate); var d=buf.getChannelData(0); for(var i=0;i<d.length;i++) d[i]=Math.random()*2-1; var n=ctx.createBufferSource(); n.buffer=buf; var f=ctx.createBiquadFilter(); f.type='highpass'; f.frequency.value=8500; var gn=ctx.createGain(); n.connect(f); f.connect(gn); gn.connect(g); gn.gain.setValueAtTime(0.1,t); gn.gain.exponentialRampToValueAtTime(0.001,t+dur); n.start(t); n.stop(t+dur+0.01); }
+function schedBass(t,g,note,style) { var ctx=getCtx(),hz=440*Math.pow(2,(note-69)/12); var o=ctx.createOscillator(); o.type=style==='electro'?'sawtooth':'sine'; var gn=ctx.createGain(); o.connect(gn); gn.connect(g); o.frequency.value=hz; var dur=style==='dub'?0.5:0.28; gn.gain.setValueAtTime(0.32,t); gn.gain.exponentialRampToValueAtTime(0.001,t+dur); o.start(t); o.stop(t+dur+0.05); }
+function schedMel(t,g,mn,stepDur,mtype,mvol) { if(!mn||mn.n===0) return; var ctx=getCtx(),hz=440*Math.pow(2,(mn.n-69)/12); var o=ctx.createOscillator(); o.type=mtype; o.frequency.value=hz; var dur=stepDur*(mn.d||0.5); var gn=ctx.createGain(); if(mtype==='triangle'){var lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;o.connect(lp);lp.connect(gn);}else{o.connect(gn);} gn.connect(g); gn.gain.setValueAtTime(mvol,t); gn.gain.exponentialRampToValueAtTime(0.001,t+dur*0.95); o.start(t); o.stop(t+dur+0.02); }
+
+function schedBGM() {
+  var ctx=getCtx(), bp=BEAT_DEFS[bgmDeck.genre], stepDur=60/bp.bpm/4;
+  while (bgmDeck.nextTime < ctx.currentTime+0.25) {
+    var s = bgmDeck.step%16;
+    if(bp.K[s]) schedKick(bgmDeck.nextTime, bgmDeck.gain);
+    if(bp.S[s]) schedSnare(bgmDeck.nextTime, bgmDeck.gain, bgmDeck.genre);
+    if(bp.H[s]) schedHH(bgmDeck.nextTime, bgmDeck.gain, s===15);
+    if(bp.B[s]) schedBass(bgmDeck.nextTime, bgmDeck.gain, bp.B[s], bgmDeck.genre);
+    if(bp.mel[s]) schedMel(bgmDeck.nextTime, bgmDeck.gain, bp.mel[s], stepDur, bp.mtype, bp.mvol);
+    bgmDeck.nextTime += stepDur; bgmDeck.step++;
+  }
+}
+
+function toggleBGM() {
+  var ctx=getCtx(), btn=document.getElementById('bgmBtn');
+  if (bgmDeck.playing) {
+    clearInterval(bgmDeck.scheduler); bgmDeck.playing=false;
+    btn.textContent='BGM ON'; btn.classList.remove('on');
+  } else {
+    if(ctx.state==='suspended') ctx.resume();
+    if(!bgmDeck.gain){ bgmDeck.gain=mkGain(0.85); }
+    bgmDeck.playing=true; bgmDeck.step=0; bgmDeck.nextTime=ctx.currentTime+0.05;
+    btn.textContent='BGM OFF'; btn.classList.add('on');
+    schedBGM(); bgmDeck.scheduler=setInterval(schedBGM,100);
+  }
+}
+
+// ===== DJ Mode =====
+var bgmA={playing:false,scheduler:null,step:0,nextTime:0,genre:'fourfloor',gain:null};
+var bgmB={playing:false,scheduler:null,step:0,nextTime:0,genre:'lofi',gain:null};
+var faderVal=0.5;
+
+function updateFader() {
+  if(bgmA.gain) bgmA.gain.gain.value=Math.cos(faderVal*Math.PI/2)*0.85;
+  if(bgmB.gain) bgmB.gain.gain.value=Math.sin(faderVal*Math.PI/2)*0.85;
+}
+
+function runDeck(deck) {
+  var ctx=getCtx(), bp=BEAT_DEFS[deck.genre], stepDur=60/bp.bpm/4;
+  while (deck.nextTime < ctx.currentTime+0.25) {
+    var s=deck.step%16;
+    if(bp.K[s]) schedKick(deck.nextTime, deck.gain);
+    if(bp.S[s]) schedSnare(deck.nextTime, deck.gain, deck.genre);
+    if(bp.H[s]) schedHH(deck.nextTime, deck.gain, s===15);
+    if(bp.B[s]) schedBass(deck.nextTime, deck.gain, bp.B[s], deck.genre);
+    if(bp.mel[s]) schedMel(deck.nextTime, deck.gain, bp.mel[s], stepDur, bp.mtype, bp.mvol);
+    deck.nextTime+=stepDur; deck.step++;
+  }
+}
+
+function startDeck(deck) {
+  var ctx=getCtx();
+  if(ctx.state==='suspended') ctx.resume();
+  if(!deck.gain){ deck.gain=ctx.createGain(); deck.gain.connect(ctx.destination); }
+  deck.playing=true; deck.step=0; deck.nextTime=ctx.currentTime+0.05;
+  updateFader(); runDeck(deck);
+  deck.scheduler=setInterval(function(){ runDeck(deck); }, 100);
+}
+
+function stopDeck(deck) { clearInterval(deck.scheduler); deck.playing=false; }
+
+function toggleDJBGM() {
+  var btn=document.getElementById('djBgmBtn');
+  if (bgmA.playing||bgmB.playing) {
+    stopDeck(bgmA); stopDeck(bgmB);
+    btn.textContent='BGM ON'; btn.classList.remove('on');
+    document.getElementById('bgmBtn').textContent='BGM ON';
+    document.getElementById('bgmBtn').classList.remove('on');
+  } else {
+    startDeck(bgmA); startDeck(bgmB);
+    btn.textContent='BGM OFF'; btn.classList.add('on');
+  }
+}
+
+function setDeckGenre(deck, genre, side) {
+  deck.genre=genre;
+  document.querySelectorAll('.gsel-'+side).forEach(function(b){ b.classList.toggle('active', b.dataset.g===genre); });
+  document.getElementById('bpm'+side).textContent='BPM '+BEAT_DEFS[genre].bpm;
+  if(deck.playing){ stopDeck(deck); startDeck(deck); }
+}
+
+// ===== Turntable =====
+var decks=[
+  {el:null, angle:0, lastAngle:0, spinning:false, cx:0, cy:0, ref:null},
+  {el:null, angle:0, lastAngle:0, spinning:false, cx:0, cy:0, ref:null}
+];
+decks[0].ref=bgmA; decks[1].ref=bgmB;
+
+function getAngle(cx,cy,px,py){ return Math.atan2(py-cy,px-cx)*180/Math.PI; }
+
+function drawRecord(dk) {
+  var c=dk.el; if(!c) return;
+  var w=c.width, h=c.height, cx=w/2, cy=h/2, r=w/2-3;
+  var ctx2=c.getContext('2d'); ctx2.clearRect(0,0,w,h);
+  var grd=ctx2.createRadialGradient(cx,cy,r*0.5,cx,cy,r);
+  grd.addColorStop(0,'#1e1810'); grd.addColorStop(1,'#0e0c08');
+  ctx2.beginPath(); ctx2.arc(cx,cy,r,0,Math.PI*2); ctx2.fillStyle=grd; ctx2.fill();
+  ctx2.save(); ctx2.translate(cx,cy); ctx2.rotate(dk.angle*Math.PI/180);
+  for(var i=8;i<r-4;i+=4){ ctx2.beginPath(); ctx2.arc(0,0,i,0,Math.PI*2); ctx2.strokeStyle='rgba(200,160,80,'+(0.03+0.015*(i%2))+')'; ctx2.lineWidth=1; ctx2.stroke(); }
+  var lg=ctx2.createRadialGradient(0,0,0,0,0,r*0.26); lg.addColorStop(0,'#c8a050'); lg.addColorStop(1,'#7a5020');
+  ctx2.beginPath(); ctx2.arc(0,0,r*0.26,0,Math.PI*2); ctx2.fillStyle=lg; ctx2.fill();
+  ctx2.fillStyle='#0e0c08'; ctx2.font='bold '+(r*0.13)+'px serif'; ctx2.textAlign='center'; ctx2.textBaseline='middle'; ctx2.fillText('RE:Q',0,0);
+  ctx2.beginPath(); ctx2.arc(0,0,3,0,Math.PI*2); ctx2.fillStyle='#f0e8d0'; ctx2.fill();
+  ctx2.restore();
+  ctx2.beginPath(); ctx2.arc(cx,cy,r,0,Math.PI*2); ctx2.strokeStyle='rgba(200,160,80,0.25)'; ctx2.lineWidth=1.5; ctx2.stroke();
+}
+
+function bindTurntable(dk, id) {
+  var c=document.getElementById(id); dk.el=c; drawRecord(dk);
+  function onStart(px,py){ var r=c.getBoundingClientRect(); dk.cx=r.left+r.width/2; dk.cy=r.top+r.height/2; dk.lastAngle=getAngle(dk.cx,dk.cy,px,py); dk.spinning=true; }
+  function onMove(px,py){ if(!dk.spinning) return; var a=getAngle(dk.cx,dk.cy,px,py); var da=a-dk.lastAngle; if(da>180) da-=360; if(da<-180) da+=360; dk.angle+=da; dk.lastAngle=a; drawRecord(dk); }
+  function onEnd(){ dk.spinning=false; }
+  c.addEventListener('touchstart',function(e){e.preventDefault();var t=e.touches[0];onStart(t.clientX,t.clientY);},{passive:false});
+  c.addEventListener('touchmove', function(e){e.preventDefault();var t=e.touches[0];onMove(t.clientX,t.clientY);},{passive:false});
+  c.addEventListener('touchend',  function(e){e.preventDefault();onEnd();},{passive:false});
+  c.addEventListener('mousedown', function(e){onStart(e.clientX,e.clientY);});
+  c.addEventListener('mousemove', function(e){onMove(e.clientX,e.clientY);});
+  c.addEventListener('mouseup',   function(e){onEnd();});
+  c.addEventListener('mouseleave',function(e){onEnd();});
+}
+
+function initFader() {
+  var fd=document.getElementById('crossfader');
+  fd.addEventListener('input',function(){
+    faderVal=parseFloat(fd.value); updateFader();
+    document.getElementById('faderKnob').style.left=(faderVal*100)+'%';
+    document.getElementById('flblA').style.opacity=1-faderVal*0.7;
+    document.getElementById('flblB').style.opacity=0.3+faderVal*0.7;
+  });
+}
+
+function initDJGenres() {
+  var genres=Object.keys(BEAT_DEFS);
+  ['A','B'].forEach(function(side){
+    var wrap=document.getElementById('genre'+side);
+    var def=side==='A'?'fourfloor':'lofi';
+    genres.forEach(function(g){
+      var btn=document.createElement('button');
+      btn.className='gsel gsel-'+side+(g===def?' active':'');
+      btn.textContent=BEAT_DEFS[g].label; btn.dataset.g=g;
+      btn.addEventListener('click',function(){ setDeckGenre(side==='A'?bgmA:bgmB, g, side); });
+      wrap.appendChild(btn);
+    });
+    document.getElementById('bpm'+side).textContent='BPM '+BEAT_DEFS[def].bpm;
+  });
+}
+
+// ===== Mode Switch =====
+function setMode(mode) {
+  document.getElementById('samplerView').style.display = mode==='sampler' ? 'flex' : 'none';
+  document.getElementById('djView').style.display      = mode==='dj'      ? 'flex' : 'none';
+  document.getElementById('tabSampler').classList.toggle('active', mode==='sampler');
+  document.getElementById('tabDJ').classList.toggle('active',      mode==='dj');
+  if(mode==='dj'){ drawRecord(decks[0]); drawRecord(decks[1]); }
+}
+
+// ===== Init =====
+renderPads();
+renderJoshi();
+initFader();
+initDJGenres();
+bindTurntable(decks[0], 'recordA');
+bindTurntable(decks[1], 'recordB');
+setMode('sampler');
+preload();
+
+// ページボタン生成
+(function(){
+  var wrap=document.getElementById('pageButtons');
+  PAGE_LABELS.forEach(function(lbl,i){
+    var btn=document.createElement('button');
+    btn.className='pb'+(i===0?' active':'');
+    btn.textContent=lbl;
+    btn.addEventListener('click',function(){ setPage(i); });
+    btn.addEventListener('touchstart',function(e){e.preventDefault();btn.classList.add('active-touch');},{passive:false});
+    btn.addEventListener('touchend',function(e){e.preventDefault();btn.classList.remove('active-touch');setPage(i);},{passive:false});
+    wrap.appendChild(btn);
+  });
+})();
+
+</script>
+</body>
+</html>
