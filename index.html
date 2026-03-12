@@ -68,7 +68,7 @@ input[type=range]#crossfader{position:absolute;width:100%;opacity:0;height:24px;
 </head>
 <body>
 <div class="hero"><div class="hero-logo"><img class="enso-logo" src="hip-bomp-logo.svg" alt="Hip-Bomp"><div class="hero-title"><span class="hero-main">Hip-Bomp</span><span class="hero-sub">匹夫凡夫</span></div></div></div>
-<div class="tabs"><div class="tab active" id="tabSampler" onclick="setMode('sampler')">サンプラー</div><div class="tab" id="tabDJ" onclick="setMode('dj')">DJ モード</div></div>
+<div class="tabs"><div class="tab active" id="tabSampler" onclick="setMode('sampler')">言霊（ラップ）</div><div class="tab" id="tabDJ" onclick="setMode('dj')">漆盆（DJ）</div></div>
 <div class="output"><img class="vj-img" id="vjImg" src="" alt=""><div class="out-word" id="outWord">——</div><div class="out-hint" id="outHint">tap or flick</div></div>
 <div id="samplerView" style="display:flex">
 <div class="sampler-body"><div class="pages" id="pageButtons"></div><div class="pad-grid" id="padGrid"></div></div>
@@ -76,10 +76,10 @@ input[type=range]#crossfader{position:absolute;width:100%;opacity:0;height:24px;
 <div id="djView">
 <div class="dj-bg"><img src="hip-bomp-logo.svg" alt=""></div>
 <div class="dj-content">
-<div class="turntables"><div class="deck"><div class="deck-label">DECK A</div><canvas id="recordA" width="130" height="130"></canvas><div class="deck-bpm" id="bpmA">BPM 170</div></div><div class="deck"><div class="deck-label">DECK B</div><canvas id="recordB" width="130" height="130"></canvas><div class="deck-bpm" id="bpmB">BPM 75</div></div></div>
-<div class="fader-section"><div class="fader-labels"><span class="fader-lbl" id="flblA">A</span><span class="fader-lbl" id="flblB">B</span></div><div class="fader-wrap"><div class="fader-track"></div><div class="fader-knob" id="faderKnob"></div><input type="range" id="crossfader" min="0" max="1" step="0.01" value="0.5"></div></div>
-<button class="dj-bgm-btn" id="djBgmBtn" onclick="toggleDJBGM()">BGM ON</button>
-<div class="dj-genre-panel"><div class="dj-genre-col"><div class="dj-genre-head">A</div><div id="genreA"></div></div><div class="dj-genre-col"><div class="dj-genre-head">B</div><div id="genreB"></div></div></div>
+<div class="turntables"><div class="deck"><div class="deck-label">漆盆「阿」</div><canvas id="recordA" width="130" height="130"></canvas><div class="deck-bpm" id="bpmA">BPM 170</div></div><div class="deck"><div class="deck-label">漆盆「吽」</div><canvas id="recordB" width="130" height="130"></canvas><div class="deck-bpm" id="bpmB">BPM 75</div></div></div>
+<div class="fader-section"><div class="fader-labels"><span class="fader-lbl" id="flblA">甲</span><span class="fader-lbl" id="flblB">乙</span></div><div class="fader-wrap"><div class="fader-track"></div><div class="fader-knob" id="faderKnob"></div><input type="range" id="crossfader" min="0" max="1" step="0.01" value="0.5"></div></div>
+<button class="dj-bgm-btn" id="djBgmBtn" onclick="toggleDJBGM()">お囃子を鳴らす</button>
+<div class="dj-genre-panel"><div class="dj-genre-col"><div class="dj-genre-head">甲</div><div id="genreA"></div></div><div class="dj-genre-col"><div class="dj-genre-head">乙</div><div id="genreB"></div></div></div>
 <div class="inst-panel" id="instPanel"></div>
 </div>
 </div>
@@ -328,10 +328,10 @@ function toggleDJBGM(){
   var btn=document.getElementById('djBgmBtn');
   if(bgmA.playing||bgmB.playing){
     stopDeck(bgmA);stopDeck(bgmB);
-    btn.textContent='BGM ON';btn.classList.remove('on');
+    btn.textContent='お囃子を鳴らす';btn.classList.remove('on');
   } else {
     startDeck(bgmA);startDeck(bgmB);
-    btn.textContent='BGM OFF';btn.classList.add('on');
+    btn.textContent='お囃子を止める';btn.classList.add('on');
   }
 }
 function setDeckGenre(deck,genre,side){
