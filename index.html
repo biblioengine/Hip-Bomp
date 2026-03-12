@@ -25,16 +25,16 @@ body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
 .out-word{font-family:'Zen Antique Soft',serif;font-size:1.2rem;letter-spacing:0.18em;transition:color 0.15s;}
 .out-hint{font-size:0.42rem;color:#4a3a28;margin-top:2px;letter-spacing:0.2em;}
 /* SAMPLER */
-#samplerView{flex:1;overflow:hidden;width:100%;display:flex;flex-direction:column;align-items:center;padding:6px 6px 8px;}
+#samplerView{flex:1;overflow:hidden;width:100%;display:flex;flex-direction:column;align-items:stretch;padding:6px 4px 8px;}
 .joshi-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:4px;width:100%;margin-bottom:6px;}
 .jbtn{background:#16120a;border:1px solid #2a2010;color:#c8a050;font-size:1.05rem;font-family:'Zen Antique Soft',serif;padding:6px 0;cursor:pointer;border-radius:3px;transition:background 0.07s,transform 0.07s;touch-action:manipulation;}
 .jbtn.fired,.jbtn:active{background:#3a2e10;transform:scale(0.91);border-color:#c8a050;}
-.sampler-body{display:flex;width:100%;flex:1;align-items:stretch;gap:0;min-height:0;overflow:hidden;padding-right:4px;}
-.pages{display:flex;flex-direction:column;gap:3px;flex-shrink:0;padding:0 4px 0 0;align-self:stretch;}
+.sampler-body{display:flex;width:100%;flex:1;align-items:stretch;gap:0;min-height:0;overflow:hidden;}
+.pages{display:flex;flex-direction:column;gap:3px;width:32px;min-width:32px;flex-shrink:0;padding:0 3px 0 0;align-self:stretch;}
 .pb{width:28px;min-width:28px;flex:1;background:#16120a;border:1px solid #2a1e10;border-radius:3px;color:#4a3a28;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-family:'Zen Antique Soft',serif;touch-action:manipulation;}
 .pb.active{background:#c8a050;color:#0e0c08;border-color:#c8a050;font-weight:bold;}
-.pad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;flex:1;min-width:0;max-width:calc(100% - 36px);}
-.pad{aspect-ratio:1;background:#16120a;border:1.5px solid #2a2010;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;transition:background 0.07s,transform 0.07s;padding:3px;}
+.pad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;flex:1;min-width:0;overflow:hidden;}
+.pad{background:#16120a;border:1.5px solid #2a2010;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;transition:background 0.07s,transform 0.07s;padding:3px;min-width:0;}
 .pad.fired{background:#4a3010;transform:scale(0.91);border-color:#c8a050;}
 .pad-name{font-size:0.5rem;color:#c8a050;text-align:center;line-height:1.35;letter-spacing:0.03em;}
 /* DJ */
