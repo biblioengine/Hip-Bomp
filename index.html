@@ -21,14 +21,14 @@ body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
 .tabs{display:flex;width:100%;flex-shrink:0;border-bottom:1px solid #2a1e10;}
 .tab{flex:1;padding:7px 0;text-align:center;font-size:0.65rem;letter-spacing:0.3em;color:#4a3a28;cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent;font-family:'Zen Antique Soft',serif;}
 .tab.active{color:#c8a050;border-bottom-color:#c8a050;}
-.output{width:100%;background:#16120a;border-bottom:1px solid #2a1e10;padding:6px 14px;display:flex;flex-direction:column;align-items:center;min-height:46px;justify-content:center;flex-shrink:0;}
-.out-word{font-family:'Zen Antique Soft',serif;font-size:1.2rem;letter-spacing:0.18em;transition:color 0.15s;}
-.out-hint{font-size:0.42rem;color:#4a3a28;margin-top:2px;letter-spacing:0.2em;}
+.output{width:100%;background:#16120a;border-bottom:1px solid #2a1e10;padding:10px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;min-height:120px;position:relative;overflow:hidden;}.vj-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity 0.3s;pointer-events:none;}.vj-img.show{opacity:1;}
+.out-word{font-family:'Zen Antique Soft',serif;font-size:2.2rem;letter-spacing:0.25em;transition:color 0.15s;text-align:center;line-height:1.3;}
+.out-hint{font-size:0.52rem;color:#4a3a28;margin-top:6px;letter-spacing:0.3em;}
 /* SAMPLER */
 #samplerView{flex:1;overflow:hidden;width:100%;display:flex;flex-direction:column;align-items:stretch;padding:6px 4px 8px;}
-.joshi-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:4px;width:100%;margin-bottom:6px;}
-.jbtn{background:#16120a;border:1px solid #2a2010;color:#c8a050;font-size:1.05rem;font-family:'Zen Antique Soft',serif;padding:6px 0;cursor:pointer;border-radius:3px;transition:background 0.07s,transform 0.07s;touch-action:manipulation;}
-.jbtn.fired,.jbtn:active{background:#3a2e10;transform:scale(0.91);border-color:#c8a050;}
+
+
+
 .sampler-body{display:flex;width:100%;flex:1;align-items:stretch;gap:0;min-height:0;overflow:hidden;}
 .pages{display:flex;flex-direction:column;gap:3px;width:32px;min-width:32px;flex-shrink:0;padding:0 3px 0 0;align-self:stretch;}
 .pb{width:28px;min-width:28px;flex:1;background:#16120a;border:1px solid #2a1e10;border-radius:3px;color:#4a3a28;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-family:'Zen Antique Soft',serif;touch-action:manipulation;}
@@ -69,9 +69,8 @@ input[type=range]#crossfader{position:absolute;width:100%;opacity:0;height:24px;
 <body>
 <div class="hero"><div class="hero-logo"><img class="enso-logo" src="hip-bomp-logo.svg" alt="Hip-Bomp"><div class="hero-title"><span class="hero-main">Hip-Bomp</span><span class="hero-sub">匹夫凡夫</span></div></div></div>
 <div class="tabs"><div class="tab active" id="tabSampler" onclick="setMode('sampler')">サンプラー</div><div class="tab" id="tabDJ" onclick="setMode('dj')">DJ モード</div></div>
-<div class="output"><div class="out-word" id="outWord">——</div><div class="out-hint" id="outHint">tap or flick</div></div>
+<div class="output"><img class="vj-img" id="vjImg" src="" alt=""><div class="out-word" id="outWord">——</div><div class="out-hint" id="outHint">tap or flick</div></div>
 <div id="samplerView" style="display:flex">
-<div class="joshi-grid" id="joshiGrid"></div>
 <div class="sampler-body"><div class="pages" id="pageButtons"></div><div class="pad-grid" id="padGrid"></div></div>
 </div>
 <div id="djView">
@@ -168,16 +167,28 @@ function getDir(dx,dy){
 }
 var DIR_MAP={up:{key:'wa',label:'は'},down:{key:'ga',label:'が'},left:{key:'no',label:'の'},right:{key:'to',label:'と'},
   upleft:{key:'mo',label:'も'},upright:{key:'wo',label:'を'},downleft:{key:'ni',label:'に'},downright:{key:'de',label:'で'}};
-function showWord(t){ var ow=document.getElementById('outWord'); ow.textContent=t; ow.style.color='#fff'; setTimeout(function(){ow.style.color='';},200); }
-function firePad(key,name,dir){
-  playKey(key).then(function(dur){
-    var label='';
-    if(dir!=='none'&&DIR_MAP[dir]){ label=DIR_MAP[dir].label; setTimeout(function(){playKey(DIR_MAP[dir].key);},dur*1000); }
-    showWord(name+label);
-    document.getElementById('outHint').textContent=dir==='none'?'tap':'~'+label;
-  });
+function showWord(t,key){
+  var ow=document.getElementById('outWord');
+  ow.textContent=t; ow.style.color='#fff';
+  setTimeout(function(){ow.style.color='';},200);
+  if(key){
+    var img=document.getElementById('vjImg');
+    var src='images/'+key+'.png';
+    img.src=src; img.classList.add('show');
+    img.onerror=function(){ img.classList.remove('show'); };
+  }
 }
-function fireJoshi(key,label){ playKey(key); showWord(label); document.getElementById('outHint').textContent='助詞'; }
+function firePad(key,name,dir){
+  var label='';
+  if(dir!=='none'&&DIR_MAP[dir]){
+    label=DIR_MAP[dir].label;
+    playKey(DIR_MAP[dir].key);
+  }
+  playKey(key);
+  showWord(name+label, key);
+  document.getElementById('outHint').textContent=dir==='none'?'tap':'~'+label;
+}
+
 function bindPad(el,pad){
   el.addEventListener('touchstart',function(e){e.preventDefault();tx=e.touches[0].clientX;ty=e.touches[0].clientY;tKey=pad.key;tName=pad.name;el.classList.add('fired');},{passive:false});
   el.addEventListener('touchend',function(e){e.preventDefault();el.classList.remove('fired');var t=e.changedTouches[0];firePad(tKey,tName,getDir(t.clientX-tx,t.clientY-ty));},{passive:false});
@@ -199,16 +210,7 @@ function renderPads(){
     el.appendChild(nm); bindPad(el,pad); grid.appendChild(el);
   });
 }
-function renderJoshi(){
-  var wrap=document.getElementById('joshiGrid'); wrap.innerHTML='';
-  JOSHI.forEach(function(j){
-    var btn=document.createElement('button'); btn.className='jbtn'; btn.textContent=j.label;
-    btn.addEventListener('click',function(){fireJoshi(j.key,j.label);});
-    btn.addEventListener('touchstart',function(e){e.preventDefault();btn.classList.add('fired');},{passive:false});
-    btn.addEventListener('touchend',function(e){e.preventDefault();btn.classList.remove('fired');fireJoshi(j.key,j.label);},{passive:false});
-    wrap.appendChild(btn);
-  });
-}
+
 
 // BGM
 var bgmA={playing:false,scheduler:null,step:0,nextTime:0,genre:'dnb',gain:null};
@@ -383,7 +385,7 @@ function setMode(mode){
   if(mode==='dj'){drawRecord(decks[0]);drawRecord(decks[1]);}
 }
 
-renderPads(); renderJoshi(); initFader(); initDJGenres();
+renderPads(); initFader(); initDJGenres();
 bindTurntable(decks[0],'recordA'); bindTurntable(decks[1],'recordB');
 setMode('sampler'); preload();
 
