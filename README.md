@@ -1,2 +1,44 @@
-# Hip-Bomp
-Re:Q—an AI tea master and the embodiment of Japanese Wabi-Sabi—drops rhymes over hip-hop beats. With Japanese particles intuitively mapped to tap and flick controls, you can chain words into infinite lyrical flows.
+# RE:Q — Hip-Bomp (匹夫凡夫)
+
+> Re:Q—an AI tea master and the embodiment of Japanese Wabi-Sabi—drops rhymes over hip-hop beats. With Japanese particles intuitively mapped to tap and flick controls, you can chain words into infinite lyrical flows.
+
+「匹夫凡夫の業、ビートにのせて点て直す」
+
+AI茶人「Re:Q（リキュウ）」が、ヒップホップのリズムに乗せてシュールな言葉遊びを展開するWebサンプラーアプリです。
+
+「匹夫（ひっぷ）」も「凡夫（ぼんぷ）」も、取るに足らない平凡な人間や煩悩にとらわれた者を指す言葉。ストリートカルチャーの「Hip-Hop」と「匹夫凡夫」の音を重ね合わせ、くだらない悩みを持つ現代人に向けて、侘び寂びを体現する冷徹なAI茶人がカタコトのラップをかます——そんな強固な文脈とギャップを持ったデジタル茶室です。
+
+純粋なクリエイティブの衝動から生まれた非営利のアートプロジェクトであり、ブラウザ上で誰でも直感的に遊べる設計になっています。
+
+## 🍵 Features (主な機能と特徴)
+
+### 1. 助詞コンパス（Particle Compass）による無限の文脈生成
+本アプリ最大のギミックです。画面中央に配置された「は」「を」「に」「が」などの助詞ボタンをタップ・フリックすることで、「茶碗」「野暮」「湯呑み（You know me）」といった単語同士を直感的に接続します。ユーザーの手で意図的に文法を崩壊させ、ビートに乗せて無限にシュールなリリック（パンチライン）を生み出すことができます。
+
+### 2. サンプラー ＆ DJモードの完全分離
+スマートフォンの限られた画面領域を最大限に活かすため、UIを2つのタブに分割しました。
+* **サンプラーモード**: 助詞コンパスとメインワードのパッドを敷き詰め、タップ操作に特化したプレイ専用画面。
+* **DJモード**: ターンテーブルやクロスフェーダー、BGM（ビート）のジャンル切り替えを行うコントロール画面。
+
+### 3. 浮世絵 × ストリートのUIデザイン
+漆黒と和紙のような金茶色を基調とし、明朝体フォント（Shippori Mincho / Zen Antique Soft）を採用。和の格式高さとDJ機器の機能性が同居する、視覚的な「違和感」を意図的にデザインしています。
+
+## 🛠 Technical Specs (技術的アプローチ)
+
+SNSからワンタップで遷移し、ストレスなく遊べる「バイラルコンテンツとしての強度」を最優先としたアーキテクチャです。
+
+
+## 🚀 How to Play (遊び方)
+
+1. 本アプリをブラウザで開きます。
+2. 「DJ モード」タブでBGMをONにし、お好みのビートを選択します。
+3. 「サンプラー」タブに戻り、ビートに合わせて単語パッドと助詞コンパスをタップ＆フリック！
+4. 完成した一期一会のパンチラインは、画面上部の掛け軸エリアに表示されます。
+
+---
+## ⚖️ License & Copyright
+
+本プロジェクトはオープンソースソフトウェアではありません。
+ブラウザ上でのプレイやSNS等での共有は歓迎しますが、リポジトリ内のソースコード、画像、音声データを含むすべてのコンテンツの無断複製、改変、再配布、および商業的利用を固く禁じます。
+
+Copyright (c) 2026 Soh All Rights Reserved.
