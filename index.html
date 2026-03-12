@@ -144,13 +144,9 @@ function getCtx(){ if(!actx) actx=new(window.AudioContext||window.webkitAudioCon
 function getBuffer(key){
   if(bufCache[key]) return Promise.resolve(bufCache[key]);
   return fetch('audio/'+key+'.mp3')
-    .then(function(r){
-      if(!r.ok) throw new Error('HTTP '+r.status+' for '+key);
-      return r.arrayBuffer();
-    })
+    .then(function(r){return r.arrayBuffer();})
     .then(function(ab){return getCtx().decodeAudioData(ab);})
-    .then(function(b){bufCache[key]=b;return b;})
-    .catch(function(e){console.error('getBuffer error:',key,e);throw e;});
+    .then(function(b){bufCache[key]=b;return b;});
 }
 function playKey(key){
   var ctx=getCtx(); if(ctx.state==='suspended') ctx.resume();
@@ -206,11 +202,14 @@ function bindPad(el,pad){
     var t=e.changedTouches[0];
     var dir=getDir(t.clientX-tx,t.clientY-ty);
     var label='';
+    var joshiKey=null;
     if(dir!=='none'&&DIR_MAP[dir]){
       label=DIR_MAP[dir].label;
-      playKey(DIR_MAP[dir].key);
+      joshiKey=DIR_MAP[dir].key;
     }
-    playKey(pad.key);
+    playKey(pad.key).then(function(dur){
+      if(joshiKey) setTimeout(function(){ playKey(joshiKey); }, dur*1000);
+    });
     showWord(pad.name+label, pad.key);
     document.getElementById('outHint').textContent=label?'~'+label:'tap';
   },{passive:false});
@@ -222,11 +221,14 @@ function bindPad(el,pad){
     el.classList.remove('fired');
     var dir=getDir(e.clientX-tx,e.clientY-ty);
     var label='';
+    var joshiKey=null;
     if(dir!=='none'&&DIR_MAP[dir]){
       label=DIR_MAP[dir].label;
-      playKey(DIR_MAP[dir].key);
+      joshiKey=DIR_MAP[dir].key;
     }
-    playKey(pad.key);
+    playKey(pad.key).then(function(dur){
+      if(joshiKey) setTimeout(function(){ playKey(joshiKey); }, dur*1000);
+    });
     showWord(pad.name+label, pad.key);
     document.getElementById('outHint').textContent=label?'~'+label:'tap';
   });
