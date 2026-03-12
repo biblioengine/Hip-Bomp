@@ -269,8 +269,8 @@ function renderPads(){
 
 
 // BGM
-var bgmA={playing:false,scheduler:null,step:0,nextTime:0,genre:'dnb',gain:null};
-var bgmB={playing:false,scheduler:null,step:0,nextTime:0,genre:'lofi',gain:null};
+var bgmA={playing:false,scheduler:null,step:0,nextTime:0,genre:'dnb',gain:null,side:'A'};
+var bgmB={playing:false,scheduler:null,step:0,nextTime:0,genre:'lofi',gain:null,side:'B'};
 var faderVal=0.5;
 function mkGain(v){var ctx=getCtx(),g=ctx.createGain();g.gain.value=v;g.connect(ctx.destination);return g;}
 function updateFader(){
