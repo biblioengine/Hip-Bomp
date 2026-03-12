@@ -143,9 +143,14 @@ var actx=null, bufCache={};
 function getCtx(){ if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)(); return actx; }
 function getBuffer(key){
   if(bufCache[key]) return Promise.resolve(bufCache[key]);
-  return fetch('audio/'+key+'.mp3').then(function(r){return r.arrayBuffer();})
+  return fetch('audio/'+key+'.mp3')
+    .then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status+' for '+key);
+      return r.arrayBuffer();
+    })
     .then(function(ab){return getCtx().decodeAudioData(ab);})
-    .then(function(b){bufCache[key]=b;return b;});
+    .then(function(b){bufCache[key]=b;return b;})
+    .catch(function(e){console.error('getBuffer error:',key,e);throw e;});
 }
 function playKey(key){
   var ctx=getCtx(); if(ctx.state==='suspended') ctx.resume();
@@ -195,21 +200,35 @@ function bindPad(el,pad){
     tx=e.touches[0].clientX;ty=e.touches[0].clientY;
     tKey=pad.key;tName=pad.name;
     el.classList.add('fired');
-    fireWord(pad.key,pad.name);
   },{passive:false});
   el.addEventListener('touchend',function(e){
     e.preventDefault();el.classList.remove('fired');
     var t=e.changedTouches[0];
-    fireJoshi(getDir(t.clientX-tx,t.clientY-ty),tName);
+    var dir=getDir(t.clientX-tx,t.clientY-ty);
+    var label='';
+    if(dir!=='none'&&DIR_MAP[dir]){
+      label=DIR_MAP[dir].label;
+      playKey(DIR_MAP[dir].key);
+    }
+    playKey(pad.key);
+    showWord(pad.name+label, pad.key);
+    document.getElementById('outHint').textContent=label?'~'+label:'tap';
   },{passive:false});
   el.addEventListener('mousedown',function(e){
     tx=e.clientX;ty=e.clientY;tKey=pad.key;tName=pad.name;
     el.classList.add('fired');
-    fireWord(pad.key,pad.name);
   });
   el.addEventListener('mouseup',function(e){
     el.classList.remove('fired');
-    fireJoshi(getDir(e.clientX-tx,e.clientY-ty),tName);
+    var dir=getDir(e.clientX-tx,e.clientY-ty);
+    var label='';
+    if(dir!=='none'&&DIR_MAP[dir]){
+      label=DIR_MAP[dir].label;
+      playKey(DIR_MAP[dir].key);
+    }
+    playKey(pad.key);
+    showWord(pad.name+label, pad.key);
+    document.getElementById('outHint').textContent=label?'~'+label:'tap';
   });
 }
 var curPage=0;
