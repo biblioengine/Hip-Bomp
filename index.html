@@ -34,7 +34,7 @@ body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
 .pb{width:28px;min-width:28px;flex:1;background:#16120a;border:1px solid #2a1e10;border-radius:3px;color:#4a3a28;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-family:'Zen Antique Soft',serif;touch-action:manipulation;}
 .pb.active{background:#c8a050;color:#0e0c08;border-color:#c8a050;font-weight:bold;}
 .pad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;flex:1;min-width:0;overflow:hidden;}
-.pad{background:#16120a;border:1.5px solid #2a2010;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;transition:background 0.07s,transform 0.07s;padding:3px;min-width:0;}
+.pad{background:#16120a;border:1.5px solid #2a2010;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;transition:background 0.07s,transform 0.07s;padding:3px;min-width:0;position:relative;overflow:hidden;}
 .pad.fired{background:#4a3010;transform:scale(0.91);border-color:#c8a050;}
 .pad-name{font-size:0.5rem;color:#c8a050;text-align:center;line-height:1.35;letter-spacing:0.03em;}
 /* DJ */
@@ -64,7 +64,7 @@ input[type=range]#crossfader{position:absolute;width:100%;opacity:0;height:24px;
 .inst-panel{display:flex;flex-wrap:wrap;gap:4px;width:100%;}
 .ibtn{flex:1;min-width:calc(20% - 4px);background:#16120a;border:1px solid #2a2010;color:#4a3a28;font-size:0.5rem;padding:5px 2px;cursor:pointer;border-radius:2px;transition:all 0.15s;font-family:'Shippori Mincho B1',serif;text-align:center;touch-action:manipulation;}
 .ibtn.on{background:#3a2e10;color:#c8a050;border-color:#c8a050;}
-</style>
+.fg{position:absolute;color:rgba(200,160,80,0.3);line-height:1;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:1px;}.fg .arr{font-size:1.4rem;font-weight:900;}.fg .lbl{font-size:0.9rem;font-family:'Arial Black','Helvetica Neue',sans-serif;font-weight:900;}.fg-top{top:2px;left:50%;transform:translateX(-50%);}.fg-bottom{bottom:2px;left:50%;transform:translateX(-50%);}.fg-left{left:2px;top:50%;transform:translateY(-50%);}.fg-right{right:2px;top:50%;transform:translateY(-50%);}.fg-tl{top:2px;left:2px;}.fg-tr{top:2px;right:2px;align-items:flex-end;}.fg-bl{bottom:2px;left:2px;}.fg-br{bottom:2px;right:2px;align-items:flex-end;}</style>
 </head>
 <body>
 <div class="hero"><div class="hero-logo"><img class="enso-logo" src="hip-bomp-logo.svg" alt="Hip-Bomp"><div class="hero-title"><span class="hero-main">Hip-Bomp</span><span class="hero-sub">匹夫凡夫</span></div></div></div>
@@ -202,10 +202,29 @@ function setPage(p){
   renderPads();
   var next=PAGES[(p+1)%PAGES.length]; next.forEach(function(pad){getBuffer(pad.key).catch(function(){});});
 }
+var GUIDES=[
+  {cls:'fg fg-tl', arrow:'↖', label:'も'},
+  {cls:'fg fg-top', arrow:'↑', label:'は'},
+  {cls:'fg fg-tr', arrow:'↗', label:'を'},
+  {cls:'fg fg-left', arrow:'←', label:'の'},
+  null,
+  {cls:'fg fg-right', arrow:'→', label:'と'},
+  {cls:'fg fg-bl', arrow:'↙', label:'に'},
+  {cls:'fg fg-bottom', arrow:'↓', label:'が'},
+  {cls:'fg fg-br', arrow:'↘', label:'で'}
+];
+
 function renderPads(){
   var grid=document.getElementById('padGrid'); grid.innerHTML='';
-  PAGES[curPage].forEach(function(pad){
+  PAGES[curPage].forEach(function(pad,i){
     var el=document.createElement('div'); el.className='pad';
+    // フリックガイド（中央=4以外）
+    var g=GUIDES[i];
+    if(g){
+      var gd=document.createElement('span'); gd.className=g.cls;
+      gd.innerHTML='<span class="arr">'+g.arrow+'</span><span class="lbl">'+g.label+'</span>';
+      el.appendChild(gd);
+    }
     var nm=document.createElement('span'); nm.className='pad-name'; nm.textContent=pad.name;
     el.appendChild(nm); bindPad(el,pad); grid.appendChild(el);
   });
