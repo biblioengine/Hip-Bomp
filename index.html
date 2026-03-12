@@ -346,7 +346,7 @@ var decks=[
   {el:null,angle:0,lastAngle:0,spinning:false,cx:0,cy:0,ref:null},
   {el:null,angle:0,lastAngle:0,spinning:false,cx:0,cy:0,ref:null}
 ];
-decks[0].ref=bgmA; decks[1].ref=bgmB;
+decks[0].ref=bgmA; decks[0].label='阿'; decks[1].ref=bgmB; decks[1].label='吽';
 function getAngle(cx,cy,px,py){return Math.atan2(py-cy,px-cx)*180/Math.PI;}
 function drawRecord(dk){
   var c=dk.el; if(!c) return;
@@ -359,7 +359,7 @@ function drawRecord(dk){
   for(var i=8;i<r-4;i+=4){ctx2.beginPath();ctx2.arc(0,0,i,0,Math.PI*2);ctx2.strokeStyle='rgba(200,160,80,'+(0.03+0.015*(i%2))+')';ctx2.lineWidth=1;ctx2.stroke();}
   var lg=ctx2.createRadialGradient(0,0,0,0,0,r*0.26); lg.addColorStop(0,'#c8a050'); lg.addColorStop(1,'#7a5020');
   ctx2.beginPath(); ctx2.arc(0,0,r*0.26,0,Math.PI*2); ctx2.fillStyle=lg; ctx2.fill();
-  ctx2.fillStyle='#0e0c08'; ctx2.font='bold '+(r*0.13)+'px serif'; ctx2.textAlign='center'; ctx2.textBaseline='middle'; ctx2.fillText('RE:Q',0,0);
+  ctx2.fillStyle='#0e0c08'; ctx2.font='bold '+(r*0.33)+'px serif'; ctx2.textAlign='center'; ctx2.textBaseline='middle'; ctx2.fillText(dk.label||'',0,0);
   ctx2.beginPath(); ctx2.arc(0,0,3,0,Math.PI*2); ctx2.fillStyle='#f0e8d0'; ctx2.fill();
   ctx2.restore();
   ctx2.beginPath(); ctx2.arc(cx,cy,r,0,Math.PI*2); ctx2.strokeStyle='rgba(200,160,80,0.25)'; ctx2.lineWidth=1.5; ctx2.stroke();
