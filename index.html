@@ -494,7 +494,8 @@ setMode('sampler'); preload();
   PAGE_LABELS.forEach(function(lbl,i){
     var btn=document.createElement('button');
     btn.className='pb'+(i===0?' active':'');
-    btn.style.backgroundImage="url('pads/pb_"+lbl+".png')";
+    var romajiMap={'い':'i','ろ':'ro','は':'ha','に':'ni','ほ':'ho','へ':'he','と':'to'};
+    btn.style.backgroundImage="url('pads/pb_"+(romajiMap[lbl]||lbl)+".png')";
     var span=document.createElement('span');
     span.textContent=lbl;
     span.style.cssText='position:absolute;font-family:\'Zen Antique Soft\',serif;font-size:0.8rem;color:#2a1000;text-shadow:0 1px 1px rgba(255,220,140,0.6);font-weight:bold;pointer-events:none;';
