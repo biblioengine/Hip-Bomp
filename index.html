@@ -226,6 +226,10 @@ function renderPads(){
   var grid=document.getElementById('padGrid'); grid.innerHTML='';
   PAGES[curPage].forEach(function(pad,i){
     var el=document.createElement('div'); el.className='pad';
+    // 木札背景画像
+    el.style.backgroundImage="url('pads/"+pad.key+".png')";
+    el.style.backgroundSize='cover';
+    el.style.backgroundPosition='center';
     var g=GUIDES[i];
     if(g){
       var gd=document.createElement('span'); gd.className=g.cls;
@@ -250,17 +254,24 @@ function updateFader(){
 
 function selectLoop(side,idx){
   var st=loopState[side];
+  // 同じボタンで停止
   if(st.idx===idx){
     if(st.audio){st.audio.pause();st.audio.currentTime=0;st.audio=null;}
     st.idx=null;
     document.querySelectorAll('.lbtn-'+side).forEach(function(b){b.classList.remove('on');});
     return;
   }
+  // 既存停止
   if(st.audio){st.audio.pause();st.audio=null;}
   st.idx=idx;
   document.querySelectorAll('.lbtn-'+side).forEach(function(b,i){b.classList.toggle('on',i===idx);});
-  if(document.getElementById('djBgmBtn').classList.contains('playing')){
-    playLoop(side);
+  // 常に再生（ユーザー操作起点なのでAutoplay許可される）
+  playLoop(side);
+  // お囃子ボタンをON状態に見せる
+  var btn=document.getElementById('djBgmBtn');
+  if(loopState.A.audio||loopState.B.audio){
+    btn.classList.add('playing');
+    btn.textContent='お囃子を止める';
   }
 }
 
@@ -282,10 +293,19 @@ function stopLoop(side){
 
 function toggleDJBGM(){
   var btn=document.getElementById('djBgmBtn');
-  var playing=btn.classList.toggle('playing');
-  btn.textContent=playing?'お囃子を止める':'お囃子を鳴らす';
-  if(playing){playLoop('A');playLoop('B');}
-  else{stopLoop('A');stopLoop('B');}
+  var playing=btn.classList.contains('playing');
+  if(playing){
+    stopLoop('A');stopLoop('B');
+    btn.classList.remove('playing');
+    btn.textContent='お囃子を鳴らす';
+  } else {
+    // 選択中のループがあれば再生
+    playLoop('A');playLoop('B');
+    if(loopState.A.audio||loopState.B.audio){
+      btn.classList.add('playing');
+      btn.textContent='お囃子を止める';
+    }
+  }
 }
 
 // ターンテーブル
@@ -385,9 +405,18 @@ setMode('sampler'); preload();
 
 (function(){
   var wrap=document.getElementById('pageButtons');
+  var pbKeys=['i','ro','ha','ni','ho','he','to'];
   PAGE_LABELS.forEach(function(lbl,i){
     var btn=document.createElement('button');
-    btn.className='pb'+(i===0?' active':''); btn.textContent=lbl;
+    btn.className='pb'+(i===0?' active':'');
+    btn.style.backgroundImage="url('pads/pb_"+pbKeys[i]+".png')";
+    btn.style.backgroundSize='cover';
+    btn.style.backgroundPosition='center';
+    btn.textContent='';  // 画像があるのでテキスト不要（フォールバック用に空）
+    // 画像なければテキスト表示
+    var img=new Image();
+    img.onerror=function(){btn.textContent=lbl;};
+    img.src='pads/pb_'+pbKeys[i]+'.png';
     btn.addEventListener('click',function(){setPage(i);});
     btn.addEventListener('touchstart',function(e){e.preventDefault();},{passive:false});
     btn.addEventListener('touchend',function(e){e.preventDefault();setPage(i);},{passive:false});
