@@ -34,7 +34,8 @@ body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
 .pb{width:32px;min-width:32px;flex:1;border:none;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;touch-action:manipulation;padding:0;background-size:cover;background-position:center;background-repeat:no-repeat;position:relative;overflow:hidden;}
 .pb.active{box-shadow:0 0 0 2px #c8a050, 0 0 8px #c8a05088;filter:brightness(1.15);}
 .pad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;flex:1;min-width:0;overflow:hidden;}
-.pad{background:#16120a;border:1.5px solid #2a2010;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;transition:background 0.07s,transform 0.07s;padding:3px;min-width:0;position:relative;overflow:hidden;}
+.pad{background:#16120a;border:1.5px solid #2a2010;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;transition:background 0.07s,transform 0.07s;padding:3px;min-width:0;position:relative;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat;}
+.pad .pad-name{position:relative;z-index:1;text-shadow:0 1px 3px rgba(0,0,0,0.7),0 0 8px rgba(0,0,0,0.5);}
 .pad.fired{background:#4a3010;transform:scale(0.91);border-color:#c8a050;}
 .pad-name{font-size:0.5rem;color:#c8a050;text-align:center;line-height:1.35;letter-spacing:0.03em;}
 /* DJ */
@@ -262,8 +263,19 @@ function renderPads(){
       gd.innerHTML='<span class="arr">'+g.arrow+'</span><span class="lbl">'+g.label+'</span>';
       el.appendChild(gd);
     }
+    // フォールバック用テキスト
     var nm=document.createElement('span'); nm.className='pad-name'; nm.textContent=pad.name;
-    el.appendChild(nm); bindPad(el,pad); grid.appendChild(el);
+    el.appendChild(nm);
+    // 木札画像を試みる（ロード成功したら背景に設定＋テキスト非表示）
+    var img=new Image();
+    img.onload=function(){
+      el.style.backgroundImage="url('pads/"+pad.key+".png')";
+      el.style.backgroundSize='cover';
+      el.style.backgroundPosition='center';
+      nm.style.display='none';
+    };
+    img.src='pads/'+pad.key+'.png';
+    bindPad(el,pad); grid.appendChild(el);
   });
 }
 
