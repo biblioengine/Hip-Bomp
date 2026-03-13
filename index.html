@@ -174,7 +174,7 @@ function showWord(t,key){
   setTimeout(function(){ow.style.color='';},200);
   if(key){
     var img=document.getElementById('vjImg');
-    var src='pads/'+key+'.png';
+    var src='images/'+key+'.png';
     img.src=src; img.classList.add('show');
     img.onerror=function(){ img.classList.remove('show'); };
   }
