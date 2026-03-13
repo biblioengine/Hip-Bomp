@@ -252,42 +252,31 @@ var GUIDES=[
   {cls:'fg fg-br', arrow:'↘', label:'で'}
 ];
 
-// パッド画像キャッシュ
-var padImgCache={};
-function preloadPageImgs(pageIdx){
-  PAGES[pageIdx].forEach(function(pad){
-    if(pad.key in padImgCache) return;
-    padImgCache[pad.key]=null;
-    var img=new Image();
-    img.onload=function(){ padImgCache[pad.key]=true; };
-    img.onerror=function(){ padImgCache[pad.key]=false; };
-    img.src='pads/'+pad.key+'.png';
-  });
-}
-
 function renderPads(){
   var grid=document.getElementById('padGrid'); grid.innerHTML='';
   PAGES[curPage].forEach(function(pad,i){
     var el=document.createElement('div'); el.className='pad';
-    if(padImgCache[pad.key]===true){
-      el.style.backgroundImage="url('pads/"+pad.key+".png')";
-      el.style.backgroundSize='cover';
-      el.style.backgroundPosition='center';
-    }
+    // 常に木札画像を設定（ブラウザキャッシュに任せる）
+    el.style.backgroundImage="url('pads/"+pad.key+".png')";
+    el.style.backgroundSize='cover';
+    el.style.backgroundPosition='center';
+    el.style.backgroundRepeat='no-repeat';
     var g=GUIDES[i];
     if(g){
       var gd=document.createElement('span'); gd.className=g.cls;
       gd.innerHTML='<span class="arr">'+g.arrow+'</span><span class="lbl">'+g.label+'</span>';
       el.appendChild(gd);
     }
+    // 画像ロード失敗時のみテキスト表示
     var nm=document.createElement('span'); nm.className='pad-name';
     nm.textContent=pad.name;
-    if(padImgCache[pad.key]===true) nm.style.display='none';
+    nm.style.display='none';
+    var probe=new Image();
+    probe.onerror=function(){ nm.style.display=''; el.style.backgroundImage='none'; };
+    probe.src='pads/'+pad.key+'.png';
     el.appendChild(nm);
     bindPad(el,pad); grid.appendChild(el);
   });
-  // 次ページ先読み
-  preloadPageImgs((curPage+1)%PAGES.length);
 }
 
 
@@ -505,8 +494,6 @@ setMode('sampler'); preload();
     btn.addEventListener('touchend',function(e){e.preventDefault();setPage(i);},{passive:false});
     wrap.appendChild(btn);
   });
-  // 全ページ画像を起動時にプリロード
-  PAGES.forEach(function(_,i){ preloadPageImgs(i); });
 })();
 </script>
 </body>
