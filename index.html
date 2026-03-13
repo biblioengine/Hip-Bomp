@@ -30,9 +30,9 @@ body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
 
 
 .sampler-body{display:flex;width:100%;flex:1;align-items:stretch;gap:0;min-height:0;overflow:hidden;}
-.pages{display:flex;flex-direction:column;gap:3px;width:32px;min-width:32px;flex-shrink:0;padding:0 3px 0 0;align-self:stretch;}
-.pb{width:28px;min-width:28px;flex:1;background:#16120a;border:1px solid #2a1e10;border-radius:3px;color:#4a3a28;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-family:'Zen Antique Soft',serif;touch-action:manipulation;}
-.pb.active{background:#c8a050;color:#0e0c08;border-color:#c8a050;font-weight:bold;}
+.pages{display:flex;flex-direction:column;gap:3px;width:36px;min-width:36px;flex-shrink:0;padding:0 3px 0 0;align-self:stretch;}
+.pb{width:32px;min-width:32px;flex:1;border:none;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;touch-action:manipulation;padding:0;background-size:cover;background-position:center;background-repeat:no-repeat;position:relative;overflow:hidden;}
+.pb.active{box-shadow:0 0 0 2px #c8a050, 0 0 8px #c8a05088;filter:brightness(1.15);}
 .pad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;flex:1;min-width:0;overflow:hidden;}
 .pad{background:#16120a;border:1.5px solid #2a2010;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;transition:background 0.07s,transform 0.07s;padding:3px;min-width:0;position:relative;overflow:hidden;}
 .pad.fired{background:#4a3010;transform:scale(0.91);border-color:#c8a050;}
@@ -173,7 +173,7 @@ function showWord(t,key){
   setTimeout(function(){ow.style.color='';},200);
   if(key){
     var img=document.getElementById('vjImg');
-    var src='images/'+key+'.png';
+    var src='pads/'+key+'.png';
     img.src=src; img.classList.add('show');
     img.onerror=function(){ img.classList.remove('show'); };
   }
@@ -470,7 +470,12 @@ setMode('sampler'); preload();
   var wrap=document.getElementById('pageButtons');
   PAGE_LABELS.forEach(function(lbl,i){
     var btn=document.createElement('button');
-    btn.className='pb'+(i===0?' active':''); btn.textContent=lbl;
+    btn.className='pb'+(i===0?' active':'');
+    btn.style.backgroundImage="url('pads/pb_"+lbl+".png')";
+    var span=document.createElement('span');
+    span.textContent=lbl;
+    span.style.cssText='position:absolute;font-family:\'Zen Antique Soft\',serif;font-size:0.8rem;color:#2a1000;text-shadow:0 1px 1px rgba(255,220,140,0.6);font-weight:bold;pointer-events:none;';
+    btn.appendChild(span);
     btn.addEventListener('click',function(){setPage(i);});
     btn.addEventListener('touchstart',function(e){e.preventDefault();},{passive:false});
     btn.addEventListener('touchend',function(e){e.preventDefault();setPage(i);},{passive:false});
