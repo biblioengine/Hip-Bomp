@@ -8,7 +8,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Zen+Antique+Soft&family=Shippori+Mincho+B1:wght@400;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;height:100dvh;overflow:hidden;}
+html,body{height:100%;overflow:hidden;}
 body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
   display:flex;flex-direction:column;align-items:center;
   user-select:none;max-width:480px;margin:0 auto;height:100dvh;}
@@ -21,66 +21,74 @@ body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
 .tabs{display:flex;width:100%;flex-shrink:0;border-bottom:1px solid #2a1e10;}
 .tab{flex:1;padding:7px 0;text-align:center;font-size:0.65rem;letter-spacing:0.3em;color:#4a3a28;cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent;font-family:'Zen Antique Soft',serif;}
 .tab.active{color:#c8a050;border-bottom-color:#c8a050;}
-.output{width:100%;background:#16120a;border-bottom:1px solid #2a1e10;padding:10px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;min-height:120px;position:relative;overflow:hidden;}.vj-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity 0.3s;pointer-events:none;}.vj-img.show{opacity:1;}
+.output{width:100%;background:#16120a;border-bottom:1px solid #2a1e10;padding:10px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;min-height:110px;position:relative;overflow:hidden;}
+.vj-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity 0.3s;pointer-events:none;}
+.vj-img.show{opacity:1;}
 .out-word{font-family:'Zen Antique Soft',serif;font-size:2.2rem;letter-spacing:0.25em;transition:color 0.15s;text-align:center;line-height:1.3;}
 .out-hint{font-size:0.52rem;color:#4a3a28;margin-top:6px;letter-spacing:0.3em;}
 /* SAMPLER */
-#samplerView{flex:1;overflow:hidden;width:100%;display:flex;flex-direction:column;align-items:stretch;padding:6px 4px 8px;}
-
-
-
-.sampler-body{display:flex;width:100%;flex:1;align-items:stretch;gap:0;min-height:0;overflow:hidden;}
-.pages{display:flex;flex-direction:column;gap:3px;width:36px;min-width:36px;flex-shrink:0;padding:0 3px 0 0;align-self:stretch;}
-.pb{width:32px;min-width:32px;flex:1;border:none;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;touch-action:manipulation;padding:0;background-size:cover;background-position:center;background-repeat:no-repeat;position:relative;overflow:hidden;}
-.pb.active{box-shadow:0 0 0 2px #c8a050, 0 0 8px #c8a05088;filter:brightness(1.15);}
-.pad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;flex:1;min-width:0;overflow:hidden;}
-.pad{background:#16120a;border:1.5px solid #2a2010;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;transition:background 0.07s,transform 0.07s;padding:3px;min-width:0;position:relative;overflow:hidden;background-size:cover;background-position:center;background-repeat:no-repeat;}
-.pad .pad-name{position:relative;z-index:1;text-shadow:0 1px 3px rgba(0,0,0,0.7),0 0 8px rgba(0,0,0,0.5);}
+#samplerView{flex:1;overflow:hidden;width:100%;display:flex;flex-direction:column;align-items:center;padding:6px 10px 8px;}
+.sampler-body{display:flex;width:100%;flex:1;align-items:stretch;gap:0;min-height:0;}
+.pages{display:flex;flex-direction:column;gap:4px;flex-shrink:0;padding:0 5px 0 0;align-self:stretch;}
+.pb{width:28px;min-width:28px;flex:1;background:#16120a;border:1px solid #2a1e10;border-radius:3px;color:#4a3a28;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-family:'Zen Antique Soft',serif;touch-action:manipulation;}
+.pb.active{background:#c8a050;color:#0e0c08;border-color:#c8a050;font-weight:bold;}
+.pad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;flex:1;min-width:0;}
+.pad{aspect-ratio:1;background:#16120a;border:1.5px solid #2a2010;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;transition:background 0.07s,transform 0.07s;padding:3px;min-width:0;position:relative;overflow:hidden;}
 .pad.fired{background:#4a3010;transform:scale(0.91);border-color:#c8a050;}
 .pad-name{font-size:0.5rem;color:#c8a050;text-align:center;line-height:1.35;letter-spacing:0.03em;}
+.fg{position:absolute;color:rgba(200,160,80,0.5);line-height:1;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:1px;}
+.fg .arr{font-size:1.4rem;}
+.fg .lbl{font-size:0.9rem;font-family:'Zen Antique Soft',serif;}
+.fg-top{top:2px;left:50%;transform:translateX(-50%);}
+.fg-bottom{bottom:2px;left:50%;transform:translateX(-50%);}
+.fg-left{left:2px;top:50%;transform:translateY(-50%);}
+.fg-right{right:2px;top:50%;transform:translateY(-50%);}
+.fg-tl{top:2px;left:2px;}
+.fg-tr{top:2px;right:2px;align-items:flex-end;}
+.fg-bl{bottom:2px;left:2px;}
+.fg-br{bottom:2px;right:2px;align-items:flex-end;}
 /* DJ */
-#djView{flex:1;width:100%;display:none;flex-direction:column;align-items:center;overflow-y:auto;overflow-x:hidden;position:relative;-webkit-overflow-scrolling:touch;}
+#djView{flex:1;width:100%;display:none;flex-direction:column;align-items:center;overflow:hidden;position:relative;}
 .dj-bg{position:absolute;inset:0;z-index:0;}
 .dj-bg img{width:100%;height:100%;object-fit:cover;opacity:0.1;}
-.dj-content{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;padding:6px 10px 10px;}
-.turntables{display:flex;justify-content:space-between;margin-bottom:4px;}
+.dj-content{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;padding:8px 10px 8px;}
+.turntables{display:flex;justify-content:space-between;margin-bottom:6px;}
 .deck{display:flex;flex-direction:column;align-items:center;gap:3px;width:48%;}
 .deck-label{font-size:0.55rem;color:#c8a050;letter-spacing:0.4em;font-family:'Zen Antique Soft',serif;}
 .deck canvas{width:100%;aspect-ratio:1;display:block;border-radius:50%;touch-action:none;}
 .deck-bpm{font-size:0.42rem;color:#4a3a28;letter-spacing:0.2em;}
-.fader-section{margin-bottom:4px;}
+.fader-section{margin-bottom:6px;}
 .fader-labels{display:flex;justify-content:space-between;margin-bottom:3px;}
 .fader-lbl{font-size:0.48rem;color:#c8a050;letter-spacing:0.3em;transition:opacity 0.2s;}
 .fader-wrap{position:relative;height:24px;display:flex;align-items:center;}
 .fader-track{width:100%;height:2px;background:#2a1e10;border-radius:2px;}
 input[type=range]#crossfader{position:absolute;width:100%;opacity:0;height:24px;cursor:pointer;z-index:2;}
 .fader-knob{position:absolute;width:16px;height:24px;background:#c8a050;border-radius:2px;top:50%;transform:translate(-50%,-50%);left:50%;box-shadow:0 0 8px rgba(200,160,80,0.4);pointer-events:none;z-index:1;}
-.dj-bgm-btn{width:100%;background:#16120a;border:1px solid #c8a050;color:#c8a050;font-size:0.63rem;letter-spacing:0.3em;padding:5px;cursor:pointer;border-radius:2px;font-family:'Shippori Mincho B1',serif;transition:all 0.15s;touch-action:manipulation;margin-bottom:4px;}
-.dj-bgm-btn.on{background:#c8a050;color:#0e0c08;}
-.dj-genre-panel{display:flex;gap:6px;width:100%;margin-bottom:4px;}
-.dj-genre-col{flex:1;display:flex;flex-direction:column;gap:3px;}
+.dj-bgm-btn{width:100%;background:#16120a;border:1px solid #c8a050;color:#c8a050;font-size:0.63rem;letter-spacing:0.3em;padding:7px;cursor:pointer;border-radius:2px;font-family:'Shippori Mincho B1',serif;transition:all 0.15s;touch-action:manipulation;margin-bottom:6px;}
+.dj-bgm-btn.playing{background:#c8a050;color:#0e0c08;}
+.dj-genre-panel{display:flex;gap:6px;width:100%;margin-bottom:6px;}
+.dj-genre-col{flex:1;display:flex;flex-direction:column;gap:4px;}
 .dj-genre-head{font-size:0.5rem;color:#c8a050;letter-spacing:0.4em;text-align:center;padding:2px 0;border-bottom:1px solid #2a1e10;margin-bottom:2px;font-family:'Zen Antique Soft',serif;}
-.gsel{width:100%;background:#16120a;border:1px solid #2a2010;color:#4a3a28;font-size:0.5rem;padding:3px 0;cursor:pointer;border-radius:2px;transition:all 0.15s;font-family:'Shippori Mincho B1',serif;text-align:center;touch-action:manipulation;display:block;}
-.gsel.active{background:#3a2e10;color:#c8a050;border-color:#c8a050;}
-.inst-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;width:100%;margin-top:4px;}
-.ibtn{flex:1;min-width:calc(20% - 4px);background:#16120a;border:1px solid #2a2010;color:#4a3a28;font-size:0.5rem;padding:5px 2px;cursor:pointer;border-radius:2px;transition:all 0.15s;font-family:'Shippori Mincho B1',serif;text-align:center;touch-action:manipulation;}
-.ibtn.on{background:#3a2e10;color:#c8a050;border-color:#c8a050;}
-.fg{position:absolute;color:rgba(200,160,80,0.3);line-height:1;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:1px;}.fg .arr{font-size:1.4rem;font-weight:900;}.fg .lbl{font-size:0.9rem;font-family:'Arial Black','Helvetica Neue',sans-serif;font-weight:900;}.fg-top{top:2px;left:50%;transform:translateX(-50%);}.fg-bottom{bottom:2px;left:50%;transform:translateX(-50%);}.fg-left{left:2px;top:50%;transform:translateY(-50%);}.fg-right{right:2px;top:50%;transform:translateY(-50%);}.fg-tl{top:2px;left:2px;}.fg-tr{top:2px;right:2px;align-items:flex-end;}.fg-bl{bottom:2px;left:2px;}.fg-br{bottom:2px;right:2px;align-items:flex-end;}</style>
+.loop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
+.lbtn{background:#16120a;border:1px solid #2a2010;color:#c8a050;font-size:0.85rem;padding:5px 0;cursor:pointer;font-family:'Zen Antique Soft',serif;text-align:center;touch-action:manipulation;display:block;width:100%;border-radius:3px;transition:all 0.15s;}
+.lbtn.on{box-shadow:0 0 0 2px #c8a050,0 0 8px #c8a05088;background:#3a2e10;}
+
+</style>
 </head>
 <body>
 <div class="hero"><div class="hero-logo"><img class="enso-logo" src="hip-bomp-logo.svg" alt="Hip-Bomp"><div class="hero-title"><span class="hero-main">Hip-Bomp</span><span class="hero-sub">匹夫凡夫</span></div></div></div>
-<div class="tabs"><div class="tab active" id="tabSampler" onclick="setMode('sampler')">言霊（ラップ）</div><div class="tab" id="tabDJ" onclick="setMode('dj')">漆盆（DJ）</div></div>
-<div class="output" id="output"><img class="vj-img" id="vjImg" src="" alt=""><div class="out-word" id="outWord">——</div><div class="out-hint" id="outHint">tap or flick</div></div>
+<div class="tabs"><div class="tab active" id="tabSampler" onclick="setMode('sampler')">言霊</div><div class="tab" id="tabDJ" onclick="setMode('dj')">漆盆</div></div>
+<div class="output"><img class="vj-img" id="vjImg" src="" alt=""><div class="out-word" id="outWord">――</div><div class="out-hint" id="outHint">tap or flick</div></div>
 <div id="samplerView" style="display:flex">
 <div class="sampler-body"><div class="pages" id="pageButtons"></div><div class="pad-grid" id="padGrid"></div></div>
 </div>
 <div id="djView">
 <div class="dj-bg"><img src="hip-bomp-logo.svg" alt=""></div>
 <div class="dj-content">
-<div class="turntables"><div class="deck"><div class="deck-label">漆盆「阿」</div><canvas id="recordA" width="110" height="110"></canvas><div class="deck-bpm" id="bpmA">BPM 170</div></div><div class="deck"><div class="deck-label">漆盆「吽」</div><canvas id="recordB" width="110" height="110"></canvas><div class="deck-bpm" id="bpmB">BPM 75</div></div></div>
+<div class="turntables"><div class="deck"><div class="deck-label">漆盆「阿」</div><canvas id="recordA" width="130" height="130"></canvas></div><div class="deck"><div class="deck-label">漆盆「吽」</div><canvas id="recordB" width="130" height="130"></canvas></div></div>
 <div class="fader-section"><div class="fader-labels"><span class="fader-lbl" id="flblA">甲</span><span class="fader-lbl" id="flblB">乙</span></div><div class="fader-wrap"><div class="fader-track"></div><div class="fader-knob" id="faderKnob"></div><input type="range" id="crossfader" min="0" max="1" step="0.01" value="0.5"></div></div>
 <button class="dj-bgm-btn" id="djBgmBtn" onclick="toggleDJBGM()">お囃子を鳴らす</button>
-<div class="dj-genre-panel"><div class="dj-genre-col"><div class="dj-genre-head">甲</div><div id="genreA"></div></div><div class="dj-genre-col"><div class="dj-genre-head">乙</div><div id="genreB"></div></div></div>
+<div class="dj-genre-panel"><div class="dj-genre-col"><div class="dj-genre-head">甲</div><div class="loop-grid" id="loopA"></div></div><div class="dj-genre-col"><div class="dj-genre-head">乙</div><div class="loop-grid" id="loopB"></div></div></div>
 </div>
 </div>
 <script>
@@ -112,39 +120,15 @@ const JOSHI = [
   {key:'wa',label:'は'},{key:'ga',label:'が'},{key:'no',label:'の'},{key:'to',label:'と'},
   {key:'mo',label:'も'},{key:'wo',label:'を'},{key:'ni',label:'に'},{key:'de',label:'で'}
 ];
-const BEAT_DEFS = {
-  dnb:{label:'D&B',bpm:170,
-    K:[1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0],S:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0],
-    H:[1,1,0,1,1,0,1,1,1,0,1,1,0,1,1,0],B:[41,0,0,0,0,0,0,0,41,0,0,0,0,0,0,0],
-    mel:[{n:64,d:0.3},{n:0},{n:64,d:0.3},{n:67,d:0.3},{n:69,d:0.5},{n:0},{n:67,d:0.3},{n:0},
-         {n:64,d:0.3},{n:0},{n:62,d:0.3},{n:0},{n:64,d:0.8},{n:0},{n:0},{n:0}],
-    mtype:'sawtooth',mvol:0.08},
-  lofi:{label:'Lo-fi',bpm:75,
-    K:[1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0],S:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1],
-    H:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1],B:[36,0,0,0,0,0,36,0,39,0,0,0,41,0,0,0],
-    mel:[{n:65,d:1},{n:0},{n:0},{n:0},{n:64,d:1},{n:0},{n:0},{n:0},
-         {n:62,d:1},{n:0},{n:0},{n:0},{n:60,d:2},{n:0},{n:0},{n:0}],
-    mtype:'triangle',mvol:0.14},
-  electro:{label:'Electro',bpm:128,
-    K:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],S:[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
-    H:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],B:[36,0,36,0,0,0,41,0,36,0,0,0,43,0,0,0],
-    mel:[{n:72,d:0.2},{n:72,d:0.2},{n:0},{n:74,d:0.2},{n:76,d:0.4},{n:0},{n:74,d:0.2},{n:0},
-         {n:72,d:0.2},{n:0},{n:69,d:0.2},{n:0},{n:71,d:0.6},{n:0},{n:0},{n:0}],
-    mtype:'sawtooth',mvol:0.09},
-  dub:{label:'Dub',bpm:68,
-    K:[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],S:[0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0],
-    H:[1,0,0,1,0,0,1,0,1,0,0,1,0,0,1,0],B:[36,0,0,0,41,0,0,0,36,0,0,0,43,0,41,0],
-    mel:[{n:60,d:2},{n:0},{n:0},{n:0},{n:0},{n:0},{n:0},{n:0},
-         {n:58,d:2},{n:0},{n:0},{n:0},{n:0},{n:0},{n:0},{n:0}],
-    mtype:'sine',mvol:0.16}
-};
+const LOOP_LABELS = ['一','二','三','四','五','六'];
+const LOOP_FILES = ['bgm/loop1.mp3','bgm/loop2.mp3','bgm/loop3.mp3','bgm/loop4.mp3','bgm/loop5.mp3','bgm/loop6.mp3'];
+
 
 var actx=null, bufCache={};
 function getCtx(){ if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)(); return actx; }
 function getBuffer(key){
   if(bufCache[key]) return Promise.resolve(bufCache[key]);
-  return fetch('audio/'+key+'.mp3')
-    .then(function(r){return r.arrayBuffer();})
+  return fetch('audio/'+key+'.mp3').then(function(r){return r.arrayBuffer();})
     .then(function(ab){return getCtx().decodeAudioData(ab);})
     .then(function(b){bufCache[key]=b;return b;});
 }
@@ -168,26 +152,30 @@ function getDir(dx,dy){
 }
 var DIR_MAP={up:{key:'wa',label:'は'},down:{key:'ga',label:'が'},left:{key:'no',label:'の'},right:{key:'to',label:'と'},
   upleft:{key:'mo',label:'も'},upright:{key:'wo',label:'を'},downleft:{key:'ni',label:'に'},downright:{key:'de',label:'で'}};
+
 function showWord(t,key){
-  var ow=document.getElementById('outWord');
-  ow.textContent=t; ow.style.color='#fff';
+  var ow=document.getElementById('outWord'); ow.textContent=t; ow.style.color='#fff';
   setTimeout(function(){ow.style.color='';},200);
   if(key){
     var img=document.getElementById('vjImg');
-    var src='images/'+key+'.png';
-    img.src=src; img.classList.add('show');
-    img.onerror=function(){ img.classList.remove('show'); };
+    img.src='images/'+key+'.png';
+    img.classList.add('show');
+    img.onerror=function(){img.classList.remove('show');};
   }
 }
-function firePad(key,name,dir){
-  var label='';
-  if(dir!=='none'&&DIR_MAP[dir]){
-    label=DIR_MAP[dir].label;
-    playKey(DIR_MAP[dir].key);
-  }
+
+function fireWord(key,name){
   playKey(key);
-  showWord(name+label, key);
-  document.getElementById('outHint').textContent=dir==='none'?'tap':'~'+label;
+  showWord(name,key);
+  document.getElementById('outHint').textContent='...';
+}
+function fireJoshi(dir,name){
+  if(dir!=='none'&&DIR_MAP[dir]){
+    var label=DIR_MAP[dir].label;
+    playKey(DIR_MAP[dir].key);
+    showWord(name+label,tKey);
+    document.getElementById('outHint').textContent='〜'+label;
+  }
 }
 
 function bindPad(el,pad){
@@ -196,43 +184,24 @@ function bindPad(el,pad){
     tx=e.touches[0].clientX;ty=e.touches[0].clientY;
     tKey=pad.key;tName=pad.name;
     el.classList.add('fired');
+    fireWord(pad.key,pad.name);
   },{passive:false});
   el.addEventListener('touchend',function(e){
     e.preventDefault();el.classList.remove('fired');
     var t=e.changedTouches[0];
-    var dir=getDir(t.clientX-tx,t.clientY-ty);
-    var label='';
-    var joshiKey=null;
-    if(dir!=='none'&&DIR_MAP[dir]){
-      label=DIR_MAP[dir].label;
-      joshiKey=DIR_MAP[dir].key;
-    }
-    playKey(pad.key).then(function(dur){
-      if(joshiKey) setTimeout(function(){ playKey(joshiKey); }, dur*1000);
-    });
-    showWord(pad.name+label, pad.key);
-    document.getElementById('outHint').textContent=label?'~'+label:'tap';
+    fireJoshi(getDir(t.clientX-tx,t.clientY-ty),tName);
   },{passive:false});
   el.addEventListener('mousedown',function(e){
     tx=e.clientX;ty=e.clientY;tKey=pad.key;tName=pad.name;
     el.classList.add('fired');
+    fireWord(pad.key,pad.name);
   });
   el.addEventListener('mouseup',function(e){
     el.classList.remove('fired');
-    var dir=getDir(e.clientX-tx,e.clientY-ty);
-    var label='';
-    var joshiKey=null;
-    if(dir!=='none'&&DIR_MAP[dir]){
-      label=DIR_MAP[dir].label;
-      joshiKey=DIR_MAP[dir].key;
-    }
-    playKey(pad.key).then(function(dur){
-      if(joshiKey) setTimeout(function(){ playKey(joshiKey); }, dur*1000);
-    });
-    showWord(pad.name+label, pad.key);
-    document.getElementById('outHint').textContent=label?'~'+label:'tap';
+    fireJoshi(getDir(e.clientX-tx,e.clientY-ty),tName);
   });
 }
+
 var curPage=0;
 function setPage(p){
   curPage=p;
@@ -240,133 +209,92 @@ function setPage(p){
   renderPads();
   var next=PAGES[(p+1)%PAGES.length]; next.forEach(function(pad){getBuffer(pad.key).catch(function(){});});
 }
+
 var GUIDES=[
-  {cls:'fg fg-tl', arrow:'↖', label:'も'},
-  {cls:'fg fg-top', arrow:'↑', label:'は'},
-  {cls:'fg fg-tr', arrow:'↗', label:'を'},
-  {cls:'fg fg-left', arrow:'←', label:'の'},
+  {cls:'fg fg-tl',arrow:'↖',label:'も'},
+  {cls:'fg fg-top',arrow:'↑',label:'は'},
+  {cls:'fg fg-tr',arrow:'↗',label:'を'},
+  {cls:'fg fg-left',arrow:'←',label:'の'},
   null,
-  {cls:'fg fg-right', arrow:'→', label:'と'},
-  {cls:'fg fg-bl', arrow:'↙', label:'に'},
-  {cls:'fg fg-bottom', arrow:'↓', label:'が'},
-  {cls:'fg fg-br', arrow:'↘', label:'で'}
+  {cls:'fg fg-right',arrow:'→',label:'と'},
+  {cls:'fg fg-bl',arrow:'↙',label:'に'},
+  {cls:'fg fg-bottom',arrow:'↓',label:'が'},
+  {cls:'fg fg-br',arrow:'↘',label:'で'}
 ];
 
 function renderPads(){
   var grid=document.getElementById('padGrid'); grid.innerHTML='';
   PAGES[curPage].forEach(function(pad,i){
     var el=document.createElement('div'); el.className='pad';
-    // 常に木札画像を設定（ブラウザキャッシュに任せる）
-    el.style.backgroundImage="url('pads/"+pad.key+".png')";
-    el.style.backgroundSize='cover';
-    el.style.backgroundPosition='center';
-    el.style.backgroundRepeat='no-repeat';
     var g=GUIDES[i];
     if(g){
       var gd=document.createElement('span'); gd.className=g.cls;
       gd.innerHTML='<span class="arr">'+g.arrow+'</span><span class="lbl">'+g.label+'</span>';
       el.appendChild(gd);
     }
-    // 画像ロード失敗時のみテキスト表示
-    var nm=document.createElement('span'); nm.className='pad-name';
-    nm.textContent=pad.name;
-    nm.style.display='none';
-    var probe=new Image();
-    probe.onerror=function(){ nm.style.display=''; el.style.backgroundImage='none'; };
-    probe.src='pads/'+pad.key+'.png';
-    el.appendChild(nm);
-    bindPad(el,pad); grid.appendChild(el);
+    var nm=document.createElement('span'); nm.className='pad-name'; nm.textContent=pad.name;
+    el.appendChild(nm); bindPad(el,pad); grid.appendChild(el);
   });
 }
 
-
-// BGM
-var bgmA={playing:false,scheduler:null,step:0,nextTime:0,genre:'dnb',gain:null,side:'A'};
-var bgmB={playing:false,scheduler:null,step:0,nextTime:0,genre:'lofi',gain:null,side:'B'};
+// ループ音源
+var loopState={A:{idx:null,audio:null},B:{idx:null,audio:null}};
 var faderVal=0.5;
-function mkGain(v){var ctx=getCtx(),g=ctx.createGain();g.gain.value=v;g.connect(ctx.destination);return g;}
+
 function updateFader(){
-  if(bgmA.gain) bgmA.gain.gain.value=Math.cos(faderVal*Math.PI/2)*0.85;
-  if(bgmB.gain) bgmB.gain.gain.value=Math.sin(faderVal*Math.PI/2)*0.85;
+  var volA=Math.cos(faderVal*Math.PI/2)*0.85;
+  var volB=Math.sin(faderVal*Math.PI/2)*0.85;
+  if(loopState.A.audio) loopState.A.audio.volume=volA;
+  if(loopState.B.audio) loopState.B.audio.volume=volB;
 }
-function schedKick(t,g){var ctx=getCtx(),o=ctx.createOscillator(),gn=ctx.createGain();o.connect(gn);gn.connect(g);o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(38,t+0.18);gn.gain.setValueAtTime(0.9,t);gn.gain.exponentialRampToValueAtTime(0.001,t+0.25);o.start(t);o.stop(t+0.28);}
-function schedSnare(t,g,style){var ctx=getCtx(),dur=style==='dub'?0.18:0.1;var buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate);var d=buf.getChannelData(0);for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.4;var n=ctx.createBufferSource();n.buffer=buf;var f=ctx.createBiquadFilter();f.type='bandpass';f.frequency.value=2400;var gn=ctx.createGain();n.connect(f);f.connect(gn);gn.connect(g);gn.gain.setValueAtTime(0.42,t);gn.gain.exponentialRampToValueAtTime(0.001,t+dur);n.start(t);n.stop(t+dur+0.02);}
-function schedHH(t,g,open){var ctx=getCtx(),dur=open?0.08:0.025;var buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate);var d=buf.getChannelData(0);for(var i=0;i<d.length;i++) d[i]=Math.random()*2-1;var n=ctx.createBufferSource();n.buffer=buf;var f=ctx.createBiquadFilter();f.type='highpass';f.frequency.value=8500;var gn=ctx.createGain();n.connect(f);f.connect(gn);gn.connect(g);gn.gain.setValueAtTime(0.1,t);gn.gain.exponentialRampToValueAtTime(0.001,t+dur);n.start(t);n.stop(t+dur+0.01);}
-function schedBass(t,g,note,style){var ctx=getCtx(),hz=440*Math.pow(2,(note-69)/12);var o=ctx.createOscillator();o.type=style==='electro'?'sawtooth':'sine';var gn=ctx.createGain();o.connect(gn);gn.connect(g);o.frequency.value=hz;var dur=style==='dub'?0.5:0.28;gn.gain.setValueAtTime(0.32,t);gn.gain.exponentialRampToValueAtTime(0.001,t+dur);o.start(t);o.stop(t+dur+0.05);}
-function schedMel(t,g,mn,stepDur,mtype,mvol){if(!mn||mn.n===0) return;var ctx=getCtx(),hz=440*Math.pow(2,(mn.n-69)/12);var o=ctx.createOscillator();o.type=mtype;o.frequency.value=hz;var dur=stepDur*(mn.d||0.5);var gn=ctx.createGain();if(mtype==='triangle'){var lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;o.connect(lp);lp.connect(gn);}else{o.connect(gn);}gn.connect(g);gn.gain.setValueAtTime(mvol,t);gn.gain.exponentialRampToValueAtTime(0.001,t+dur*0.95);o.start(t);o.stop(t+dur+0.02);}
 
-// 楽器
-var instState={
-  A:{piano:false,guitar:false,brass:false,elep:false,hihat:false,bass:false},
-  B:{piano:false,guitar:false,brass:false,elep:false,hihat:false,bass:false}
-};
-var INST_PHRASES={
-  piano: [69,0,72,0,74,0,0,72,69,0,0,67,69,0,0,0],
-  guitar:[45,0,0,48,0,0,45,0,48,0,0,0,50,0,0,0],
-  brass: [0,0,0,0,64,0,0,0,0,0,0,0,67,0,0,0],
-  elep:  [72,0,0,74,0,0,72,0,69,0,0,0,67,0,0,0],
-  hihat: [1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,1],
-  bass:  [36,0,0,0,41,0,0,0,36,0,0,0,43,0,41,0]
-};
-function schedPiano(t,g,note,sd){var ctx=getCtx(),hz=440*Math.pow(2,(note-69)/12);var o=ctx.createOscillator();o.type='triangle';o.frequency.value=hz;var gn=ctx.createGain();o.connect(gn);gn.connect(g);gn.gain.setValueAtTime(0.16,t);gn.gain.exponentialRampToValueAtTime(0.001,t+sd*1.8);o.start(t);o.stop(t+sd*2);}
-function schedGuitar(t,g,note){var ctx=getCtx(),hz=440*Math.pow(2,(note-69)/12);var o=ctx.createOscillator();o.type='sawtooth';o.frequency.value=hz;var lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1200;var gn=ctx.createGain();o.connect(lp);lp.connect(gn);gn.connect(g);gn.gain.setValueAtTime(0.13,t);gn.gain.exponentialRampToValueAtTime(0.001,t+0.3);o.start(t);o.stop(t+0.35);}
-function schedBrass(t,g,note){var ctx=getCtx(),hz=440*Math.pow(2,(note-69)/12);var o=ctx.createOscillator();o.type='square';o.frequency.value=hz;var hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=300;var gn=ctx.createGain();o.connect(hp);hp.connect(gn);gn.connect(g);gn.gain.setValueAtTime(0,t);gn.gain.linearRampToValueAtTime(0.15,t+0.04);gn.gain.exponentialRampToValueAtTime(0.001,t+0.25);o.start(t);o.stop(t+0.28);}
-function schedInstHH(t,g){var ctx=getCtx();var buf=ctx.createBuffer(1,ctx.sampleRate*0.06,ctx.sampleRate);var d=buf.getChannelData(0);for(var i=0;i<d.length;i++) d[i]=Math.random()*2-1;var src=ctx.createBufferSource();src.buffer=buf;var hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=10000;var gn=ctx.createGain();src.connect(hp);hp.connect(gn);gn.connect(g);gn.gain.setValueAtTime(0.18,t);gn.gain.exponentialRampToValueAtTime(0.001,t+0.06);src.start(t);src.stop(t+0.08);}
-function schedInstBass(t,g,note){var ctx=getCtx(),hz=440*Math.pow(2,(note-12-69)/12);var o=ctx.createOscillator();o.type='sine';o.frequency.value=hz;var gn=ctx.createGain();o.connect(gn);gn.connect(g);gn.gain.setValueAtTime(0.35,t);gn.gain.exponentialRampToValueAtTime(0.001,t+0.4);o.start(t);o.stop(t+0.45);}
-function schedElep(t,g,note,sd){var ctx=getCtx(),hz=440*Math.pow(2,(note-69)/12);var o=ctx.createOscillator();o.type='sine';o.frequency.value=hz;var o2=ctx.createOscillator();o2.type='sine';o2.frequency.value=hz*2.756;var gn=ctx.createGain();var gn2=ctx.createGain();o.connect(gn);o2.connect(gn2);gn.connect(g);gn2.connect(g);gn.gain.setValueAtTime(0.18,t);gn.gain.exponentialRampToValueAtTime(0.001,t+sd*2);gn2.gain.setValueAtTime(0.08,t);gn2.gain.exponentialRampToValueAtTime(0.001,t+sd*0.8);o.start(t);o2.start(t);o.stop(t+sd*2+0.05);o2.stop(t+sd*0.9);}
-
-function runDeck(deck){
-  var ctx=getCtx(),bp=BEAT_DEFS[deck.genre],stepDur=60/bp.bpm/4;
-  while(deck.nextTime<ctx.currentTime+0.25){
-    var s=deck.step%16;
-    if(bp.K[s]) schedKick(deck.nextTime,deck.gain);
-    if(bp.S[s]) schedSnare(deck.nextTime,deck.gain,deck.genre);
-    if(bp.H[s]) schedHH(deck.nextTime,deck.gain,s===15);
-    if(bp.B[s]) schedBass(deck.nextTime,deck.gain,bp.B[s],deck.genre);
-    if(bp.mel[s]) schedMel(deck.nextTime,deck.gain,bp.mel[s],stepDur,bp.mtype,bp.mvol);
-    var ist=instState[deck.side]||{};
-    if(ist.piano&&INST_PHRASES.piano[s])   schedPiano(deck.nextTime,deck.gain,INST_PHRASES.piano[s],stepDur);
-    if(ist.guitar&&INST_PHRASES.guitar[s]) schedGuitar(deck.nextTime,deck.gain,INST_PHRASES.guitar[s]);
-    if(ist.brass&&INST_PHRASES.brass[s])   schedBrass(deck.nextTime,deck.gain,INST_PHRASES.brass[s]);
-    if(ist.elep&&INST_PHRASES.elep[s])     schedElep(deck.nextTime,deck.gain,INST_PHRASES.elep[s],stepDur);
-    if(ist.hihat&&INST_PHRASES.hihat[s])   schedInstHH(deck.nextTime,deck.gain);
-    if(ist.bass&&INST_PHRASES.bass[s])     schedInstBass(deck.nextTime,deck.gain,INST_PHRASES.bass[s]);
-    deck.nextTime+=stepDur; deck.step++;
+function selectLoop(side,idx){
+  var st=loopState[side];
+  if(st.idx===idx){
+    if(st.audio){st.audio.pause();st.audio.currentTime=0;st.audio=null;}
+    st.idx=null;
+    document.querySelectorAll('.lbtn-'+side).forEach(function(b){b.classList.remove('on');});
+    return;
+  }
+  if(st.audio){st.audio.pause();st.audio=null;}
+  st.idx=idx;
+  document.querySelectorAll('.lbtn-'+side).forEach(function(b,i){b.classList.toggle('on',i===idx);});
+  if(document.getElementById('djBgmBtn').classList.contains('playing')){
+    playLoop(side);
   }
 }
-function startDeck(deck){
-  var ctx=getCtx(); if(ctx.state==='suspended') ctx.resume();
-  if(!deck.gain){deck.gain=ctx.createGain();deck.gain.connect(ctx.destination);}
-  deck.playing=true; deck.step=0; deck.nextTime=ctx.currentTime+0.05;
-  updateFader(); runDeck(deck);
-  deck.scheduler=setInterval(function(){runDeck(deck);},100);
+
+function playLoop(side){
+  var st=loopState[side];
+  if(st.idx===null) return;
+  if(st.audio){st.audio.pause();st.audio=null;}
+  var a=new Audio(LOOP_FILES[st.idx]);
+  a.loop=true;
+  a.volume=side==='A'?Math.cos(faderVal*Math.PI/2)*0.85:Math.sin(faderVal*Math.PI/2)*0.85;
+  a.play().catch(function(){});
+  st.audio=a;
 }
-function stopDeck(deck){clearInterval(deck.scheduler);deck.playing=false;}
+
+function stopLoop(side){
+  var st=loopState[side];
+  if(st.audio){st.audio.pause();st.audio.currentTime=0;st.audio=null;}
+}
+
 function toggleDJBGM(){
   var btn=document.getElementById('djBgmBtn');
-  if(bgmA.playing||bgmB.playing){
-    stopDeck(bgmA);stopDeck(bgmB);
-    btn.textContent='お囃子を鳴らす';btn.classList.remove('on');
-  } else {
-    startDeck(bgmA);startDeck(bgmB);
-    btn.textContent='お囃子を止める';btn.classList.add('on');
-  }
-}
-function setDeckGenre(deck,genre,side){
-  deck.genre=genre;
-  document.querySelectorAll('.gsel-'+side).forEach(function(b){b.classList.toggle('active',b.dataset.g===genre);});
-  document.getElementById('bpm'+side).textContent='BPM '+BEAT_DEFS[genre].bpm;
-  if(deck.playing){stopDeck(deck);startDeck(deck);}
+  var playing=btn.classList.toggle('playing');
+  btn.textContent=playing?'お囃子を止める':'お囃子を鳴らす';
+  if(playing){playLoop('A');playLoop('B');}
+  else{stopLoop('A');stopLoop('B');}
 }
 
 // ターンテーブル
 var decks=[
-  {el:null,angle:0,lastAngle:0,spinning:false,cx:0,cy:0,ref:null},
-  {el:null,angle:0,lastAngle:0,spinning:false,cx:0,cy:0,ref:null}
+  {el:null,angle:0,lastAngle:0,spinning:false,cx:0,cy:0},
+  {el:null,angle:0,lastAngle:0,spinning:false,cx:0,cy:0}
 ];
-decks[0].ref=bgmA; decks[0].label='阿'; decks[0].side='A'; decks[1].ref=bgmB; decks[1].label='吽'; decks[1].side='B';
 function getAngle(cx,cy,px,py){return Math.atan2(py-cy,px-cx)*180/Math.PI;}
-function drawRecord(dk){
+function drawRecord(dk,label){
   var c=dk.el; if(!c) return;
   var w=c.width,h=c.height,cx=w/2,cy=h/2,r=w/2-3;
   var ctx2=c.getContext('2d'); ctx2.clearRect(0,0,w,h);
@@ -375,21 +303,21 @@ function drawRecord(dk){
   ctx2.beginPath(); ctx2.arc(cx,cy,r,0,Math.PI*2); ctx2.fillStyle=grd; ctx2.fill();
   ctx2.save(); ctx2.translate(cx,cy); ctx2.rotate(dk.angle*Math.PI/180);
   for(var i=8;i<r-4;i+=4){ctx2.beginPath();ctx2.arc(0,0,i,0,Math.PI*2);ctx2.strokeStyle='rgba(200,160,80,'+(0.03+0.015*(i%2))+')';ctx2.lineWidth=1;ctx2.stroke();}
-  var lg=ctx2.createRadialGradient(0,0,0,0,0,r*0.26); lg.addColorStop(0,'#c8a050'); lg.addColorStop(1,'#7a5020');
-  ctx2.beginPath(); ctx2.arc(0,0,r*0.26,0,Math.PI*2); ctx2.fillStyle=lg; ctx2.fill();
-  ctx2.fillStyle='#0e0c08'; ctx2.font='bold '+(r*0.33)+'px serif'; ctx2.textAlign='center'; ctx2.textBaseline='middle'; ctx2.fillText(dk.label||'',0,0);
+  var lg=ctx2.createRadialGradient(0,0,0,0,0,r*0.33); lg.addColorStop(0,'#c8a050'); lg.addColorStop(1,'#7a5020');
+  ctx2.beginPath(); ctx2.arc(0,0,r*0.33,0,Math.PI*2); ctx2.fillStyle=lg; ctx2.fill();
+  ctx2.fillStyle='#0e0c08'; ctx2.font='bold '+(r*0.17)+'px serif'; ctx2.textAlign='center'; ctx2.textBaseline='middle'; ctx2.fillText(label||'RE:Q',0,0);
   ctx2.beginPath(); ctx2.arc(0,0,3,0,Math.PI*2); ctx2.fillStyle='#f0e8d0'; ctx2.fill();
   ctx2.restore();
   ctx2.beginPath(); ctx2.arc(cx,cy,r,0,Math.PI*2); ctx2.strokeStyle='rgba(200,160,80,0.25)'; ctx2.lineWidth=1.5; ctx2.stroke();
 }
-function bindTurntable(dk,id){
-  var c=document.getElementById(id); dk.el=c; drawRecord(dk);
+function bindTurntable(dk,id,label){
+  var c=document.getElementById(id); dk.el=c; drawRecord(dk,label);
   function onStart(px,py){var r=c.getBoundingClientRect();dk.cx=r.left+r.width/2;dk.cy=r.top+r.height/2;dk.lastAngle=getAngle(dk.cx,dk.cy,px,py);dk.spinning=true;}
   function onMove(px,py){
     if(!dk.spinning) return;
     var a=getAngle(dk.cx,dk.cy,px,py);
     var da=a-dk.lastAngle; if(da>180) da-=360; if(da<-180) da+=360;
-    dk.angle+=da; dk.lastAngle=a; drawRecord(dk);
+    dk.angle+=da; dk.lastAngle=a; drawRecord(dk,label);
     var speed=Math.abs(da);
     if(speed>1.5){
       var ctx=getCtx(); if(ctx.state==='suspended') ctx.resume();
@@ -425,76 +353,48 @@ function initFader(){
   });
 }
 
-var INST_DEFS=[
-  {key:'piano', label:'ピアノ'},
-  {key:'guitar',label:'ギター'},
-  {key:'brass', label:'ブラス'},
-  {key:'elep',  label:'エレピ'},
-  {key:'hihat', label:'ハイハット'},
-  {key:'bass',  label:'ベース'}
-];
-
 function initDJGenres(){
-  var genres=['dnb','lofi','electro','dub'];
   ['A','B'].forEach(function(side){
-    var col=document.getElementById('genre'+side);
-    var def=side==='A'?'dnb':'lofi';
-    // ジャンルボタン
-    genres.forEach(function(g){
+    var grid=document.getElementById('loop'+side);
+    LOOP_LABELS.forEach(function(lbl,i){
       var btn=document.createElement('button');
-      btn.className='gsel gsel-'+side+(g===def?' active':'');
-      btn.textContent=BEAT_DEFS[g].label; btn.dataset.g=g;
-      btn.addEventListener('click',function(){setDeckGenre(side==='A'?bgmA:bgmB,g,side);});
-      col.appendChild(btn);
+      btn.className='lbtn lbtn-'+side;
+      btn.textContent=lbl;
+      (function(idx){
+        btn.addEventListener('click',function(){selectLoop(side,idx);});
+        btn.addEventListener('touchstart',function(e){e.preventDefault();},{passive:false});
+        btn.addEventListener('touchend',function(e){e.preventDefault();selectLoop(side,idx);},{passive:false});
+      })(i);
+      grid.appendChild(btn);
     });
-    document.getElementById('bpm'+side).textContent='BPM '+BEAT_DEFS[def].bpm;
-    // 楽器ボタン（2列3行）
-    var igrid=document.createElement('div'); igrid.className='inst-grid';
-    INST_DEFS.forEach(function(inst){
-      var btn=document.createElement('button'); btn.className='ibtn'; btn.textContent=inst.label;
-      function toggle(){
-        instState[side][inst.key]=!instState[side][inst.key];
-        btn.classList.toggle('on',instState[side][inst.key]);
-      }
-      btn.addEventListener('click',toggle);
-      btn.addEventListener('touchstart',function(e){e.preventDefault();},{passive:false});
-      btn.addEventListener('touchend',function(e){e.preventDefault();toggle();},{passive:false});
-      igrid.appendChild(btn);
-    });
-    col.appendChild(igrid);
   });
 }
 
 function setMode(mode){
   document.getElementById('samplerView').style.display=mode==='sampler'?'flex':'none';
   document.getElementById('djView').style.display=mode==='dj'?'flex':'none';
-  document.getElementById('output').style.display=mode==='sampler'?'flex':'none';
   document.getElementById('tabSampler').classList.toggle('active',mode==='sampler');
   document.getElementById('tabDJ').classList.toggle('active',mode==='dj');
-  if(mode==='dj'){drawRecord(decks[0]);drawRecord(decks[1]);}
+  if(mode==='dj'){drawRecord(decks[0],'阿');drawRecord(decks[1],'吽');}
 }
 
 renderPads(); initFader(); initDJGenres();
-bindTurntable(decks[0],'recordA'); bindTurntable(decks[1],'recordB');
+bindTurntable(decks[0],'recordA','阿');
+bindTurntable(decks[1],'recordB','吽');
 setMode('sampler'); preload();
 
 (function(){
   var wrap=document.getElementById('pageButtons');
   PAGE_LABELS.forEach(function(lbl,i){
     var btn=document.createElement('button');
-    btn.className='pb'+(i===0?' active':'');
-    var romajiMap={'い':'i','ろ':'ro','は':'ha','に':'ni','ほ':'ho','へ':'he','と':'to'};
-    btn.style.backgroundImage="url('pads/pb_"+(romajiMap[lbl]||lbl)+".png')";
-    var span=document.createElement('span');
-    span.textContent=lbl;
-    span.style.cssText='position:absolute;font-family:\'Zen Antique Soft\',serif;font-size:0.8rem;color:#2a1000;text-shadow:0 1px 1px rgba(255,220,140,0.6);font-weight:bold;pointer-events:none;';
-    btn.appendChild(span);
+    btn.className='pb'+(i===0?' active':''); btn.textContent=lbl;
     btn.addEventListener('click',function(){setPage(i);});
     btn.addEventListener('touchstart',function(e){e.preventDefault();},{passive:false});
     btn.addEventListener('touchend',function(e){e.preventDefault();setPage(i);},{passive:false});
     wrap.appendChild(btn);
   });
 })();
+
 </script>
 </body>
 </html>
