@@ -253,11 +253,7 @@ function bindBlock(col,row){
   if(oldEl.parentNode)oldEl.parentNode.replaceChild(newEl,oldEl);
   cell.el=newEl;
   var el=newEl,sx,sy;
-  function start(px,py){
-    sx=px;sy=py;el.classList.add('fired');
-    // touchstart時にワードを鳴らす
-    var c=grid[col][row];if(c)playKey(c.word.key);
-  }
+  function start(px,py){sx=px;sy=py;el.classList.add('fired');}
   function end(px,py){
     el.classList.remove('fired');
     var c=grid[col][row];if(!c)return;
@@ -269,8 +265,9 @@ function bindBlock(col,row){
       var joshi=DIR_MAP[dir];
       addVJ(word.name+joshi.label,word.cat);
       lastWord=word;
-      // フリックを離した時に助詞だけを鳴らす
-      playKey(joshi.key);
+      playKey(word.key).then(function(dur){
+        setTimeout(function(){ playKey(joshi.key); }, (dur||0.3)*1000);
+      });
       tap(col,row,true);
     }
   }
@@ -468,14 +465,15 @@ var appStarted=false;
 function startApp(){
   if(appStarted)return;
   appStarted=true;
-  getCtx().resume();
+  getCtx().resume().then(function(){
+    preload();
+  });
   var sp=document.getElementById('splash');
   sp.classList.add('fade-out');
   setTimeout(function(){
     sp.style.display='none';
     setMode('sampler');
     initGrid();
-    preload();
   },900);
 }
 
