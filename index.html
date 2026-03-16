@@ -170,27 +170,34 @@ body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
 
 <script>
 const PAGES = [
-  [{key:'yabodegozaimasu',name:'野暮でございます'},{key:'nanto',name:'なんと'},{key:'wabi',name:'侘び'},
-   {key:'sabi',name:'寂び'},{key:'omomukibukai',name:'趣き深い'},{key:'zokubutu',name:'俗物'},
-   {key:'daga',name:'だが'},{key:'yeah',name:'yeah'},{key:'tensai',name:'天才'}],
-  [{key:'migoto',name:'見事'},{key:'kalma',name:'業'},{key:'wabisabi',name:'侘び寂び'},
-   {key:'dorokusai',name:'泥臭い'},{key:'hiphop',name:'Hip Hop'},{key:'yoidesuka',name:'よいですか'},
-   {key:'akindonosoroban',name:'商人のそろばん'},{key:'ippon',name:'一本'},{key:'nippon',name:'日本'}],
-  [{key:'keepon',name:'Keep On'},{key:'kyakkashouko',name:'脚下照顧'},{key:'yunomi',name:'湯呑み'},
-   {key:'hedogaderu',name:'反吐が出る'},{key:'onore',name:'おのれ'},{key:'oroka',name:'愚か'},
-   {key:'hinsou',name:'貧相'},{key:'anchoku',name:'安直'},{key:'asamasii',name:'浅ましい'}],
-  [{key:'kekkounaotemae',name:'結構なお手前'},{key:'sorekosoga',name:'それこそが'},{key:'yokubou',name:'欲望'},
-   {key:'kyouki',name:'狂気'},{key:'bigaku',name:'美学'},{key:'zen',name:'禅'},
-   {key:'sikantaza',name:'只管打坐'},{key:'towa',name:'とは'},{key:'sono',name:'その'}],
-  [{key:'chajin',name:'茶人'},{key:'chasitu',name:'茶室'},{key:'sennorikyuu',name:'千利休'},
-   {key:'kazuchawan',name:'楽茶碗'},{key:'konpeitou',name:'金平糖'},{key:'kiden',name:'貴殿'},
-   {key:'marude',name:'まるで'},{key:'tugihagi',name:'継ぎ接ぎ'},{key:'mu',name:'無'}],
-  [{key:'jituni',name:'実に'},{key:'jituniyoi',name:'実によい'},{key:'desune',name:'ですね'},
-   {key:'gozaimasu',name:'ございます'},{key:'nanodesu',name:'なのです'},{key:'sorekosoga',name:'それこそが'},
-   {key:'yeah',name:'yeah'},{key:'migoto',name:'見事'},{key:'wabi',name:'侘び'}],
-  [{key:'yokubou',name:'欲望'},{key:'kyouki',name:'狂気'},{key:'kekkounaotemae',name:'結構なお手前'},
-   {key:'wabisabi',name:'侘び寂び'},{key:'oroka',name:'愚か'},{key:'hinsou',name:'貧相'},
-   {key:'zokubutu',name:'俗物'},{key:'tensai',name:'天才'},{key:'yeah',name:'yeah'}]
+  // い: 茶道・評価・強調・語尾
+  [{key:'chasitu',name:'茶室'},{key:'wabisabi',name:'侘び寂び'},{key:'omomukibukai',name:'趣き深い'},
+   {key:'yabodegozaimasu',name:'野暮でございます'},{key:'kekkounaotemae',name:'結構なお手前'},{key:'tateru',name:'点てる'},
+   {key:'taisou',name:'大層'},{key:'jituni',name:'実に'},{key:'nari',name:'なり'}],
+  // ろ: 現代の煩悩・評価・動作・強調
+  [{key:'sumaho',name:'スマホ'},{key:'shouninyokkyuu',name:'承認欲求'},{key:'zangyou',name:'残業'},
+   {key:'asamasii',name:'浅ましい'},{key:'nagekawashii',name:'嘆かわしい'},{key:'messuru',name:'滅する'},
+   {key:'suteru',name:'捨てる'},{key:'yumeyume',name:'ゆめゆめ'},{key:'karuma',name:'業（カルマ）'}],
+  // は: 固有名詞・人物・場所・ヒップホップ和訳
+  [{key:'req',name:'Re:Q'},{key:'ware',name:'我（われ）'},{key:'hideyoshi',name:'秀吉'},
+   {key:'sutoriito',name:'ストリート'},{key:'maimen',name:'我が同胞'},{key:'furou',name:'流転'},
+   {key:'wakku',name:'偽物'},{key:'repesen',name:'背負う'},{key:'yo',name:'Yo'}],
+  // に: 論理・動作・仏教・強調・評価
+  [{key:'sorega',name:'それが'},{key:'sorekosoga',name:'それこそが'},{key:'akindonosoroban',name:'商人の算盤'},
+   {key:'satoru',name:'悟る'},{key:'odoru',name:'踊る'},{key:'chirusuru',name:'チルする'},
+   {key:'zen',name:'禅'},{key:'ito',name:'いと'},{key:'zokubutsu',name:'俗物'}],
+  // ほ: ライム・固有名詞・合いの手
+  [{key:'ippon',name:'一本'},{key:'nippon',name:'日本'},{key:'hipbomp',name:'Hip-Bomp'},
+   {key:'keepon',name:'Keep On'},{key:'chanoyou',name:'茶のよう'},{key:'yunomi',name:'湯呑み'},
+   {key:'youknowme',name:'You know me'},{key:'chekera',name:'チェケラ'},{key:'yeah',name:'yeah'}],
+  // へ: 現代の煩悩・空間・スケール・動作・合いの手
+  [{key:'sns',name:'SNS'},{key:'enjou',name:'炎上'},{key:'uchuu',name:'宇宙'},
+   {key:'kyouki',name:'狂気'},{key:'bigaku',name:'美学'},{key:'kanjiru',name:'感じる'},
+   {key:'iza',name:'いざ'},{key:'tensai',name:'天才'},{key:'mu',name:'無'}],
+  // と: 接続詞
+  [{key:'shikashi',name:'しかし'},{key:'dakara',name:'だから'},{key:'yueni',name:'ゆえに'},
+   {key:'saredo',name:'されど'},{key:'tsumari',name:'つまり'},{key:'shikamo',name:'しかも'},
+   {key:'tokoroga',name:'ところが'},{key:'soshite',name:'そして'},{key:'nazenara',name:'なぜなら'}]
 ];
 const PAGE_LABELS = ['い','ろ','は','に','ほ','へ','と'];
 const JOSHI = [
