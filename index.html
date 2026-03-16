@@ -211,6 +211,13 @@ function pickWord(){
   return WORD_POOL[0];
 }
 
+function preload(){
+  // 全ワード＋助詞を事前にfetchしてキャッシュ
+  var keys=['wa','ga','no','to','mo','wo','ni','de'];
+  WORD_POOL.forEach(function(w){keys.push(w.key);});
+  keys.forEach(function(k){getBuffer(k).catch(function(){});});
+}
+
 var COLS=5,ROWS=5,grid=[],lastWord=null;
 
 function initGrid(){
@@ -246,7 +253,11 @@ function bindBlock(col,row){
   if(oldEl.parentNode)oldEl.parentNode.replaceChild(newEl,oldEl);
   cell.el=newEl;
   var el=newEl,sx,sy;
-  function start(px,py){sx=px;sy=py;el.classList.add('fired');}
+  function start(px,py){
+    sx=px;sy=py;el.classList.add('fired');
+    // touchstart時にワードを鳴らす
+    var c=grid[col][row];if(c)playKey(c.word.key);
+  }
   function end(px,py){
     el.classList.remove('fired');
     var c=grid[col][row];if(!c)return;
@@ -254,14 +265,12 @@ function bindBlock(col,row){
     if(dir==='none'){
       tap(col,row);
     } else if(DIR_MAP[dir]){
-      var word=grid[col][row].word;
+      var word=c.word;
       var joshi=DIR_MAP[dir];
       addVJ(word.name+joshi.label,word.cat);
       lastWord=word;
-      // ワードを鳴らし、鳴り終わってから助詞を鳴らす
-      playKey(word.key).then(function(dur){
-        setTimeout(function(){ playKey(joshi.key); }, (dur||0.3)*1000);
-      });
+      // フリックを離した時に助詞だけを鳴らす
+      playKey(joshi.key);
       tap(col,row,true);
     }
   }
@@ -466,6 +475,7 @@ function startApp(){
     sp.style.display='none';
     setMode('sampler');
     initGrid();
+    preload();
   },900);
 }
 
