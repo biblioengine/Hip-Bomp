@@ -142,6 +142,8 @@ body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
   <div class="out-hint" id="outHint">tap or flick</div>
 </div>
 <div class="sampler-body"><div class="pages" id="pageButtons"></div><div class="pad-grid" id="padGrid"></div></div>
+<!-- DJモードへボタン（背景画像のボタン位置に重ねる） -->
+<div onclick="setMode('dj')" style="position:absolute;left:24%;top:87%;width:52%;height:7%;touch-action:manipulation;cursor:pointer;z-index:10;-webkit-tap-highlight-color:rgba(0,255,255,0.2);"></div>
 </div>
 <div id="djView">
 <div class="dj-scene">
@@ -164,40 +166,42 @@ body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
   <div class="dj-tap lbtn-B" style="left:79%;top:70.2%;width:13%;height:3.5%;" onclick="selectLoop('B',2)"></div>
   <div class="dj-tap lbtn-B" style="left:51%;top:74%;width:13%;height:3.5%;" onclick="selectLoop('B',3)"></div>
   <div class="dj-tap lbtn-B" style="left:65%;top:74%;width:13%;height:3.5%;" onclick="selectLoop('B',4)"></div>
-  <div class="dj-tap lbtn-B" style="left:79%;top:74%;width:13%;height:3.5%;" onclick="selectLoop('B',5)"></div>
+  <div class="dj-tap lbtn-B" style="left:79%;top:74%;width:13%;height:3.5%;" onclick="selectLoop('B',5)"><!-- ラップモードへボタン -->
+<div onclick="setMode('sampler')" style="position:absolute;left:24%;top:87%;width:52%;height:7%;touch-action:manipulation;cursor:pointer;z-index:10;-webkit-tap-highlight-color:rgba(0,255,255,0.2);"></div>
+</div>
 </div>
 </div>
 
 <script>
 const PAGES = [
-  // い: 茶道・評価・強調・語尾
+  // い: 茶道・評価・強調
   [{key:'chasitu',name:'茶室'},{key:'wabisabi',name:'侘び寂び'},{key:'omomukibukai',name:'趣き深い'},
-   {key:'yabodegozaimasu',name:'野暮でございます'},{key:'kekkounaotemae',name:'結構なお手前'},{key:'tateru',name:'点てる'},
-   {key:'taisou',name:'大層'},{key:'jituni',name:'実に'},{key:'nari',name:'なり'}],
-  // ろ: 現代の煩悩・評価・動作・強調
+   {key:'yabodegozaimasu',name:'野暮でございます'},{key:'kekkounaotemae',name:'結構なお手前'},{key:'taisou',name:'大層'},
+   {key:'ito',name:'いと'},{key:'yumeyume',name:'ゆめゆめ'},{key:'messuru',name:'滅する'}],
+  // ろ: 現代の煩悩・評価・動作
   [{key:'sumaho',name:'スマホ'},{key:'shouninyokkyuu',name:'承認欲求'},{key:'zangyou',name:'残業'},
-   {key:'asamasii',name:'浅ましい'},{key:'nagekawashii',name:'嘆かわしい'},{key:'messuru',name:'滅する'},
-   {key:'suteru',name:'捨てる'},{key:'yumeyume',name:'ゆめゆめ'},{key:'karuma',name:'業（カルマ）'}],
-  // は: 固有名詞・人物・場所・ヒップホップ和訳
-  [{key:'req',name:'Re:Q'},{key:'ware',name:'我（われ）'},{key:'hideyoshi',name:'秀吉'},
-   {key:'sutoriito',name:'ストリート'},{key:'maimen',name:'我が同胞'},{key:'furou',name:'流転'},
-   {key:'wakku',name:'偽物'},{key:'repesen',name:'背負う'},{key:'yo',name:'Yo'}],
-  // に: 論理・動作・仏教・強調・評価
+   {key:'asamasii',name:'浅ましい'},{key:'nagekawasii',name:'嘆かわしい'},{key:'suteru',name:'捨てる'},
+   {key:'karuma',name:'業（カルマ）'},{key:'kiden',name:'貴殿'},{key:'mitumeru',name:'見つめる'}],
+  // は: 固有名詞・ヒップホップ和訳
+  [{key:'rikyuu',name:'Re:Q'},{key:'ware',name:'我（われ）'},{key:'hipbomp',name:'Hip-Bomp'},
+   {key:'street',name:'ストリート'},{key:'flow',name:'流転（フロウ）'},{key:'fake',name:'偽物（ワック）'},
+   {key:'repezen',name:'背負う（レペゼン）'},{key:'yo',name:'Yo'},{key:'yeah',name:'yeah'}],
+  // に: 論理・動作・仏教・合いの手
   [{key:'sorega',name:'それが'},{key:'sorekosoga',name:'それこそが'},{key:'akindonosoroban',name:'商人の算盤'},
    {key:'satoru',name:'悟る'},{key:'odoru',name:'踊る'},{key:'chirusuru',name:'チルする'},
-   {key:'zen',name:'禅'},{key:'ito',name:'いと'},{key:'zokubutsu',name:'俗物'}],
-  // ほ: ライム・固有名詞・合いの手
-  [{key:'ippon',name:'一本'},{key:'nippon',name:'日本'},{key:'hipbomp',name:'Hip-Bomp'},
-   {key:'keepon',name:'Keep On'},{key:'chanoyou',name:'茶のよう'},{key:'yunomi',name:'湯呑み'},
-   {key:'youknowme',name:'You know me'},{key:'chekera',name:'チェケラ'},{key:'yeah',name:'yeah'}],
+   {key:'zen',name:'禅'},{key:'zokubutu',name:'俗物'},{key:'you',name:'You'}],
+  // ほ: ライム・合いの手
+  [{key:'ippon',name:'一本'},{key:'nippon',name:'日本'},{key:'keepon',name:'Keep On'},
+   {key:'chanoyu',name:'茶のよう'},{key:'yunomi',name:'湯呑み'},{key:'youknowme',name:'You know me'},
+   {key:'checkitout',name:'チェケラ'},{key:'punchline',name:'パンチライン'},{key:'damm',name:'Damm'}],
   // へ: 現代の煩悩・空間・スケール・動作・合いの手
-  [{key:'sns',name:'SNS'},{key:'enjou',name:'炎上'},{key:'uchuu',name:'宇宙'},
-   {key:'kyouki',name:'狂気'},{key:'bigaku',name:'美学'},{key:'kanjiru',name:'感じる'},
+  [{key:'SNS',name:'SNS'},{key:'enjou',name:'炎上'},{key:'uchuu',name:'宇宙'},
+   {key:'kyouki',name:'狂気'},{key:'bigaku',name:'美学'},{key:'kannjiru',name:'感じる'},
    {key:'iza',name:'いざ'},{key:'tensai',name:'天才'},{key:'mu',name:'無'}],
   // と: 接続詞
-  [{key:'shikashi',name:'しかし'},{key:'dakara',name:'だから'},{key:'yueni',name:'ゆえに'},
-   {key:'saredo',name:'されど'},{key:'tsumari',name:'つまり'},{key:'shikamo',name:'しかも'},
-   {key:'tokoroga',name:'ところが'},{key:'soshite',name:'そして'},{key:'nazenara',name:'なぜなら'}]
+  [{key:'sikasi',name:'しかし'},{key:'dakara',name:'だから'},{key:'yueni',name:'ゆえに'},
+   {key:'saredo',name:'されど'},{key:'tumari',name:'つまり'},{key:'sikamo',name:'しかも'},
+   {key:'tokoroga',name:'ところが'},{key:'sosite',name:'そして'},{key:'nazenara',name:'なぜなら'}]
 ];
 const PAGE_LABELS = ['い','ろ','は','に','ほ','へ','と'];
 const JOSHI = [
