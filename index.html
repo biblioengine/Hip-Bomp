@@ -464,13 +464,7 @@ function setMode(mode){
   var tabD=document.getElementById('tabDJ');
   if(tabS) tabS.classList.toggle('active',!isDJ);
   if(tabD) tabD.classList.toggle('active',isDJ);
-  if(!isDJ){
-    // DJモードから戻るとき音を止める
-    ['A','B'].forEach(function(s){
-      if(loopState[s].audio){loopState[s].audio.pause();loopState[s].audio=null;}
-      loopState[s].idx=null;
-    });
-  }
+  // モード切替時も音楽は継続再生
 }
 
 var appStarted=false;
