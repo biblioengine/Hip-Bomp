@@ -9,131 +9,53 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;background:#000;}
 body{display:flex;flex-direction:column;align-items:center;max-width:480px;margin:0 auto;height:100dvh;user-select:none;}
+/* スプラッシュ */
 #splash{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;transition:opacity 0.8s ease;}
 #splash.fade-out{opacity:0;pointer-events:none;}
 #splash img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center 15%;}
+/* ヘルプ */
 #helpView{position:fixed;inset:0;z-index:9000;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;}
 .help-img{width:100%;height:100%;object-fit:contain;}
 #helpBackBtn{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);width:40%;max-width:160px;cursor:pointer;touch-action:manipulation;}
+/* ナビバー */
 .nav-bar{width:100%;display:flex;justify-content:space-between;align-items:center;padding:6px 10px;flex-shrink:0;background:#000;}
 .nav-logo{height:32px;cursor:pointer;touch-action:manipulation;}
 .nav-help{height:28px;cursor:pointer;touch-action:manipulation;}
+/* ラップモード */
 #samplerView{flex:1;width:100%;display:none;flex-direction:column;min-height:0;}
+/* VJエリア */
+#vjArea{flex:0 0 28%;position:relative;overflow:hidden;background:#000;}
+.vj-monitor{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:2;}
+#vjBg{position:absolute;inset:0;z-index:0;}
+#vjText{position:absolute;inset:0;overflow:hidden;z-index:3;}
+#djModeBtn{position:absolute;bottom:4px;right:4px;z-index:4;cursor:pointer;touch-action:manipulation;width:45%;}
+.vj-word{position:absolute;white-space:nowrap;font-weight:bold;animation:flowLeft 2.5s linear forwards;pointer-events:none;}
+@keyframes flowLeft{0%{transform:translateX(100vw);opacity:1;}80%{opacity:1;}100%{transform:translateX(-100vw);opacity:0;}}
+/* ブロックグリッド */
+#blockGrid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:3px;padding:3px;min-height:0;background:#111;}
+.block{background:#1a1a2e;border:1px solid #333;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:none;overflow:hidden;transition:transform 0.08s;min-height:0;}
+.block.fired{transform:scale(0.88);}
+.block-text{font-size:0.6rem;text-align:center;line-height:1.3;padding:2px;pointer-events:none;}
+.cat-noun  .block-text{color:#f0f;text-shadow:0 0 6px #f0f;}
+.cat-hip   .block-text{color:#ff0;text-shadow:0 0 6px #ff0;}
+.cat-adj   .block-text{color:#0f8;text-shadow:0 0 6px #0f8;}
+.cat-conj  .block-text{color:#fa0;text-shadow:0 0 6px #fa0;}
+.cat-ai    .block-text{color:#f66;text-shadow:0 0 6px #f66;}
+@keyframes dropIn{0%{transform:translateY(-120px);opacity:0;}60%{transform:translateY(8px);opacity:1;}100%{transform:translateY(0);opacity:1;}}
+.block.drop{animation:dropIn 0.35s cubic-bezier(0.25,0.46,0.45,0.94) both;}
+@keyframes vanish{0%{transform:scale(1);opacity:1;}100%{transform:scale(0);opacity:0;}}
+.block.vanish{animation:vanish 0.15s ease-in both;pointer-events:none;}
+/* DJモード */
 #djView{position:fixed;inset:0;z-index:100;width:100%;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#000;}
-.dj-scene{
-  position:relative;
-  width:100%;
-  aspect-ratio:571/1024;
-  max-height:100dvh;
-  max-width:calc(100dvh * 571/1024);
-  overflow:hidden;
-}
-.dj-bg-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;object-position:top center;pointer-events:none;}
+.dj-scene{position:relative;width:100%;aspect-ratio:571/1024;max-height:100dvh;max-width:calc(100dvh * 571/1024);overflow:hidden;}
+.dj-bg-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;}
 .dj-record{position:absolute;border-radius:50%;transform-origin:center center;touch-action:none;cursor:grab;}
 .dj-fader-img{position:absolute;touch-action:none;cursor:ew-resize;}
 .dj-tap{position:absolute;touch-action:manipulation;cursor:pointer;}
 .dj-tap.on{background:rgba(200,160,80,0.18);border-radius:3px;}
 .dj-bgm-tap.on{background:rgba(200,160,80,0.12);border-radius:4px;}
 .dj-nav{position:absolute;top:8px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 12px;z-index:200;}
-.dj-nav img{height:28px;cursor:pointer;touch-action:manipulation;}
-
-
-
-
-
-/* サンプラー */
-#samplerView{flex:1;display:flex;flex-direction:column;min-height:0;}
-
-/* VJエリア */
-#vjArea{
-  flex:0 0 28%;position:relative;overflow:hidden;
-  background:#0a0a0a;border-bottom:1px solid #222;
-}
-#vjBg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0.5;}
-#vjText{position:absolute;inset:0;overflow:hidden;}
-#djBtn{
-  position:absolute;top:6px;right:8px;z-index:10;
-  font-size:0.6rem;color:#0ff;border:1px solid #0ff;
-  border-radius:3px;padding:4px 10px;cursor:pointer;
-  font-family:monospace;
-}
-.vj-word{
-  position:absolute;white-space:nowrap;
-  font-weight:bold;
-  animation:flowLeft 2.5s linear forwards;
-  pointer-events:none;
-}
-@keyframes flowLeft{
-  0%{transform:translateX(100vw);opacity:1;}
-  80%{opacity:1;}
-  100%{transform:translateX(-100vw);opacity:0;}
-}
-
-
-/* ブロックグリッド */
-#blockGrid{
-  flex:1;display:grid;
-  grid-template-columns:repeat(5,1fr);
-  grid-template-rows:repeat(5,1fr);
-  gap:3px;padding:3px;min-height:0;background:#111;
-}
-.block{
-  background:#1a1a2e;border:1px solid #333;border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;touch-action:none;overflow:hidden;
-  transition:transform 0.08s;min-height:0;
-}
-.block.fired{transform:scale(0.88);}
-.block-text{
-  font-size:0.6rem;text-align:center;line-height:1.3;
-  padding:2px;pointer-events:none;
-}
-.cat-noun  .block-text{color:#f0f;text-shadow:0 0 6px #f0f;}
-.cat-hip   .block-text{color:#ff0;text-shadow:0 0 6px #ff0;}
-.cat-adj   .block-text{color:#0f8;text-shadow:0 0 6px #0f8;}
-.cat-joshi .block-text{color:#0ff;text-shadow:0 0 6px #0ff;}
-.cat-conj  .block-text{color:#fa0;text-shadow:0 0 6px #fa0;}
-.cat-ai    .block-text{color:#f66;text-shadow:0 0 6px #f66;}
-@keyframes dropIn{
-  0%  {transform:translateY(-120px);opacity:0;}
-  60% {transform:translateY(8px);opacity:1;}
-  100%{transform:translateY(0);opacity:1;}
-}
-.block.drop{animation:dropIn 0.35s cubic-bezier(0.25,0.46,0.45,0.94) both;}
-/* 落下中は一時的に暗くして動きを強調 */
-.block.falling{
-  animation:fallDown 0.2s ease-in both;
-}
-@keyframes fallDown{
-  0%  {transform:translateY(0);}
-  100%{transform:translateY(60px);opacity:0.3;}
-}
-@keyframes vanish{
-  0%{transform:scale(1);opacity:1;}
-  100%{transform:scale(0);opacity:0;}
-}
-.block.vanish{animation:vanish 0.15s ease-in both;pointer-events:none;}
-
-/* DJモード */
-#djView{
-  display:none;position:fixed;inset:0;background:#111;
-  flex-direction:column;align-items:center;justify-content:center;
-  font-size:1.2rem;color:#0ff;
-}
-#backBtn{
-  margin-top:20px;padding:10px 30px;border:1px solid #0ff;
-  border-radius:4px;cursor:pointer;color:#0ff;font-size:0.8rem;
-}
-
-.vj-monitor{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:fill;pointer-events:none;z-index:2;
-}
-#vjBg{position:absolute;inset:0;z-index:0;}
-#vjText{position:absolute;inset:0;z-index:3;}
-.vj-monitor{z-index:2;}
-#djBtn{position:absolute;bottom:8px;right:8px;z-index:4;}
-</style>
+.dj-nav img{height:28px;cursor:pointer;touch-action:manipulation;}</style>
 </head>
 <body>
 <div id="splash" onclick="startApp()">
@@ -143,7 +65,7 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
   <img class="help-img" src="help.png" alt="ヘルプ">
   <img id="helpBackBtn" src="hipbomp_logo.png" alt="タイトルへ" onclick="setMode('splash')">
 </div>
-<div id="samplerView" style="display:none">
+<div id="samplerView">
   <div class="nav-bar">
     <img class="nav-logo" src="hipbomp_logo.png" alt="タイトルへ" onclick="setMode('splash')">
     <img class="nav-help" src="ensou_logo.png" alt="ヘルプ" onclick="setMode('help')">
@@ -152,161 +74,121 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
     <img class="vj-monitor" src="VJmoniter.png" alt="">
     <div id="vjBg"></div>
     <div id="vjText"></div>
-    <img id="djBtn" src="todjmode.png" alt="DJモードへ" onclick="setMode('dj')" style="position:absolute;bottom:8px;right:8px;width:45%;cursor:pointer;touch-action:manipulation;">
+    <img id="djModeBtn" src="todjmode.png" alt="DJモードへ" onclick="setMode('dj')">
   </div>
   <div id="blockGrid"></div>
 </div>
 <div id="djView">
 <div class="dj-scene">
-  <!-- 背景 -->
   <img class="dj-bg-img" src="djmode.png" alt="">
-
-  <!-- レコードL -->
-  <img id="recordA" class="dj-record"
-    src="record_L.png" alt=""
-    style="left:3.5%;top:25.9%;width:42%;height:auto;">
-
-  <!-- レコードR -->
-  <img id="recordB" class="dj-record"
-    src="record_R.png" alt=""
-    style="left:53.4%;top:25.9%;width:42%;height:auto;">
-
-  <!-- スライダー（一輪挿し） -->
-  <img id="faderImg" class="dj-fader-img"
-    src="slider.png" alt=""
-    style="width:8%;top:46%;left:46%;">
-
-  <!-- ラップモードへボタン -->
-  <img class="dj-tap-img" src="torapmode.png" alt="ラップモードへ"
-    style="position:absolute;left:50%;top:89%;transform:translateX(-50%);width:70%;cursor:pointer;touch-action:manipulation;"
-    onclick="setMode('sampler')">
-
-  <!-- お囃子ボタン（透明タップ） -->
-  <div class="dj-tap dj-bgm-tap" id="djBgmBtn"
-    style="left:25%;top:17%;width:50%;height:8%;"
-    onclick="toggleDJBGM()"></div>
-
-  <!-- 甲ループ 一〜三（上段） -->
+  <img id="recordA" class="dj-record" src="record_L.png" alt="" style="left:3.5%;top:25.9%;width:42%;height:auto;">
+  <img id="recordB" class="dj-record" src="record_R.png" alt="" style="left:53.4%;top:25.9%;width:42%;height:auto;">
+  <img id="faderImg" class="dj-fader-img" src="slider.png" alt="" style="width:8%;top:46%;left:46%;">
+  <img src="torapmode.png" alt="ラップモードへ" onclick="setMode('sampler')"
+    style="position:absolute;left:50%;bottom:5%;transform:translateX(-50%);width:70%;cursor:pointer;touch-action:manipulation;z-index:10;">
+  <div class="dj-tap dj-bgm-tap" id="djBgmBtn" style="left:25%;top:17%;width:50%;height:8%;" onclick="toggleDJBGM()"></div>
   <div class="dj-tap lbtn-A" style="left:5.3%;top:59.6%;width:13.3%;height:6.6%;" onclick="selectLoop('A',0)"></div>
   <div class="dj-tap lbtn-A" style="left:19.3%;top:59.6%;width:13.3%;height:6.6%;" onclick="selectLoop('A',1)"></div>
   <div class="dj-tap lbtn-A" style="left:33.3%;top:59.6%;width:13.3%;height:6.6%;" onclick="selectLoop('A',2)"></div>
-  <!-- 甲ループ 四〜六（下段） -->
   <div class="dj-tap lbtn-A" style="left:5.3%;top:68.4%;width:13.3%;height:7.6%;" onclick="selectLoop('A',3)"></div>
   <div class="dj-tap lbtn-A" style="left:19.3%;top:68.4%;width:13.3%;height:7.6%;" onclick="selectLoop('A',4)"></div>
   <div class="dj-tap lbtn-A" style="left:33.3%;top:68.4%;width:13.3%;height:7.6%;" onclick="selectLoop('A',5)"></div>
-
-  <!-- 乙ループ 一〜三（上段） -->
   <div class="dj-tap lbtn-B" style="left:51.7%;top:59.6%;width:13.3%;height:6.6%;" onclick="selectLoop('B',0)"></div>
   <div class="dj-tap lbtn-B" style="left:65.7%;top:59.6%;width:13.3%;height:6.6%;" onclick="selectLoop('B',1)"></div>
   <div class="dj-tap lbtn-B" style="left:79.7%;top:59.6%;width:13.3%;height:6.6%;" onclick="selectLoop('B',2)"></div>
-  <!-- 乙ループ 四〜六（下段） -->
   <div class="dj-tap lbtn-B" style="left:51.7%;top:68.4%;width:13.3%;height:7.6%;" onclick="selectLoop('B',3)"></div>
   <div class="dj-tap lbtn-B" style="left:65.7%;top:68.4%;width:13.3%;height:7.6%;" onclick="selectLoop('B',4)"></div>
   <div class="dj-tap lbtn-B" style="left:79.7%;top:68.4%;width:13.3%;height:7.6%;" onclick="selectLoop('B',5)"></div>
-
-  <!-- ナビ -->
   <div class="dj-nav">
-    <img src="hipbomp_logo.png" onclick="setMode('sampler')" alt="言霊へ">
+    <img src="hipbomp_logo.png" onclick="setMode('splash')" alt="タイトルへ">
     <img src="ensou_logo.png" onclick="setMode('help')" alt="ヘルプ">
   </div>
 </div>
 </div>
 <script>
+
 var actx=null, bufCache={};
-function getCtx(){ if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)(); return actx; }
+function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
 function getBuffer(key){
-  if(bufCache[key]) return Promise.resolve(bufCache[key]);
-  return fetch('voice/'+key+'.mp3').then(function(r){return r.arrayBuffer();})
+  if(bufCache[key])return Promise.resolve(bufCache[key]);
+  return fetch('voice/'+key+'.mp3')
+    .then(function(r){if(!r.ok)throw new Error('404:'+key);return r.arrayBuffer();})
     .then(function(ab){return getCtx().decodeAudioData(ab);})
-    .then(function(b){bufCache[key]=b;return b;});
+    .then(function(b){bufCache[key]=b;return b;})
+    .catch(function(e){console.warn('audio:',key,e);return null;});
 }
 function playKey(key){
-  var ctx=getCtx(); if(ctx.state==='suspended') ctx.resume();
+  var ctx=getCtx();if(ctx.state==='suspended')ctx.resume();
   return getBuffer(key).then(function(buf){
-    var src=ctx.createBufferSource(); src.buffer=buf; src.connect(ctx.destination); src.start(0); return buf.duration;
-  });
-}
-function preloadSplash(){
-  var keys=['wa','ga','no','to','mo','wo','ni','de'];
-  PAGES[0].forEach(function(p){keys.push(p.key);});
-  keys.forEach(function(k){getBuffer(k).catch(function(){});});
+    if(!buf)return 0;
+    var src=ctx.createBufferSource();src.buffer=buf;src.connect(ctx.destination);src.start(0);return buf.duration;
+  }).catch(function(e){console.warn('playKey:',key,e);return 0;});
 }
 
-
-var WORD_POOL = [
-  {key:'wabi',     name:'侘び',        cat:'cat-noun', w:4},
-  {key:'sabi',     name:'寂び',        cat:'cat-noun', w:4},
-  {key:'zen',      name:'禅',          cat:'cat-noun', w:4},
-  {key:'mu',       name:'無',          cat:'cat-noun', w:5},
-  {key:'kalma',    name:'業',          cat:'cat-noun', w:3},
-  {key:'wabisabi', name:'侘び寂び',    cat:'cat-noun', w:2},
-  {key:'chajin',   name:'茶人',        cat:'cat-noun', w:2},
-  {key:'konpeitou',name:'金平糖',      cat:'cat-noun', w:2},
-  {key:'chasitu',  name:'茶室',        cat:'cat-noun', w:3},
-  {key:'hiphop',   name:'Hip Hop',     cat:'cat-hip',  w:3},
-  {key:'ippon',    name:'一本',        cat:'cat-hip',  w:3},
-  {key:'nippon',   name:'日本',        cat:'cat-hip',  w:3},
-  {key:'keepon',   name:'Keep On',     cat:'cat-hip',  w:3},
-  {key:'tensai',   name:'天才',        cat:'cat-hip',  w:3},
-  {key:'zokubutu', name:'俗物',        cat:'cat-hip',  w:3},
-  {key:'kyouki',   name:'狂気',        cat:'cat-hip',  w:2},
-  {key:'bigaku',   name:'美学',        cat:'cat-hip',  w:2},
+var WORD_POOL=[
+  {key:'wabi',name:'侘び',cat:'cat-noun',w:4},
+  {key:'sabi',name:'寂び',cat:'cat-noun',w:4},
+  {key:'zen',name:'禅',cat:'cat-noun',w:4},
+  {key:'mu',name:'無',cat:'cat-noun',w:5},
+  {key:'kalma',name:'業',cat:'cat-noun',w:3},
+  {key:'wabisabi',name:'侘び寂び',cat:'cat-noun',w:2},
+  {key:'chajin',name:'茶人',cat:'cat-noun',w:2},
+  {key:'konpeitou',name:'金平糖',cat:'cat-noun',w:2},
+  {key:'chasitu',name:'茶室',cat:'cat-noun',w:3},
+  {key:'hiphop',name:'Hip Hop',cat:'cat-hip',w:3},
+  {key:'ippon',name:'一本',cat:'cat-hip',w:3},
+  {key:'nippon',name:'日本',cat:'cat-hip',w:3},
+  {key:'keepon',name:'Keep On',cat:'cat-hip',w:3},
+  {key:'tensai',name:'天才',cat:'cat-hip',w:3},
+  {key:'zokubutu',name:'俗物',cat:'cat-hip',w:3},
+  {key:'kyouki',name:'狂気',cat:'cat-hip',w:2},
+  {key:'bigaku',name:'美学',cat:'cat-hip',w:2},
   {key:'yabodegozaimasu',name:'野暮でございます',cat:'cat-adj',w:2},
-  {key:'omomukibukai',   name:'趣き深い',       cat:'cat-adj',w:3},
-  {key:'migoto',         name:'見事',           cat:'cat-adj',w:3},
-  {key:'oroka',          name:'愚か',           cat:'cat-adj',w:3},
-  {key:'asamasii',       name:'浅ましい',       cat:'cat-adj',w:3},
-  {key:'kekkounaotemae', name:'結構なお手前',   cat:'cat-adj',w:2},
-  // 助詞はフリックで入力するためWORD_POOLから除外
-  {key:'shikashi',   name:'しかし',    cat:'cat-conj', w:3},
-  {key:'dakara',     name:'だから',    cat:'cat-conj', w:3},
-  {key:'yueni',      name:'ゆえに',    cat:'cat-conj', w:2},
-  {key:'saredo',     name:'されど',    cat:'cat-conj', w:2},
-  {key:'sorekosoga', name:'それこそが',cat:'cat-conj', w:2},
-  {key:'yeah',   name:'yeah',    cat:'cat-ai', w:3},
-  {key:'yo',     name:'Yo',      cat:'cat-ai', w:3},
-  {key:'chekera',name:'チェケラ',cat:'cat-ai', w:2},
+  {key:'omomukibukai',name:'趣き深い',cat:'cat-adj',w:3},
+  {key:'migoto',name:'見事',cat:'cat-adj',w:3},
+  {key:'oroka',name:'愚か',cat:'cat-adj',w:3},
+  {key:'asamasii',name:'浅ましい',cat:'cat-adj',w:3},
+  {key:'kekkounaotemae',name:'結構なお手前',cat:'cat-adj',w:2},
+  {key:'shikashi',name:'しかし',cat:'cat-conj',w:3},
+  {key:'dakara',name:'だから',cat:'cat-conj',w:3},
+  {key:'yueni',name:'ゆえに',cat:'cat-conj',w:2},
+  {key:'saredo',name:'されど',cat:'cat-conj',w:2},
+  {key:'sorekosoga',name:'それこそが',cat:'cat-conj',w:2},
+  {key:'yeah',name:'yeah',cat:'cat-ai',w:3},
+  {key:'yo',name:'Yo',cat:'cat-ai',w:3},
+  {key:'chekera',name:'チェケラ',cat:'cat-ai',w:2},
 ];
 
-var THRESH=28, DIAG=0.41;
+var THRESH=28,DIAG=0.41;
 var DIR_MAP={
-  up:{label:'は'},down:{label:'が'},
-  left:{label:'の'},right:{label:'と'},
-  upleft:{label:'も'},upright:{label:'を'},
-  downleft:{label:'に'},downright:{label:'で'}
+  up:{key:'wa',label:'は'},down:{key:'ga',label:'が'},
+  left:{key:'no',label:'の'},right:{key:'to',label:'と'},
+  upleft:{key:'mo',label:'も'},upright:{key:'wo',label:'を'},
+  downleft:{key:'ni',label:'に'},downright:{key:'de',label:'で'}
 };
-var NEON={
-  'cat-noun':'#f0f','cat-hip':'#ff0','cat-adj':'#0f8',
-  'cat-joshi':'#0ff','cat-conj':'#fa0','cat-ai':'#f66'
-};
+var NEON={'cat-noun':'#f0f','cat-hip':'#ff0','cat-adj':'#0f8','cat-conj':'#fa0','cat-ai':'#f66'};
 
 function getDir(dx,dy){
   var ax=Math.abs(dx),ay=Math.abs(dy);
-  if(ax<THRESH&&ay<THRESH) return 'none';
+  if(ax<THRESH&&ay<THRESH)return 'none';
   var r=ay===0?999:ax/ay;
-  if(r>(1/DIAG)) return dx>0?'right':'left';
-  if(r<DIAG)     return dy>0?'down':'up';
-  if(dx>0&&dy<0) return 'upright'; if(dx<0&&dy<0) return 'upleft';
-  if(dx>0&&dy>0) return 'downright'; return 'downleft';
+  if(r>(1/DIAG))return dx>0?'right':'left';
+  if(r<DIAG)return dy>0?'down':'up';
+  if(dx>0&&dy<0)return 'upright';if(dx<0&&dy<0)return 'upleft';
+  if(dx>0&&dy>0)return 'downright';return 'downleft';
 }
-
 function pickWord(){
   var total=WORD_POOL.reduce(function(s,w){return s+w.w;},0);
   var r=Math.random()*total,acc=0;
-  for(var i=0;i<WORD_POOL.length;i++){
-    acc+=WORD_POOL[i].w;
-    if(r<acc) return WORD_POOL[i];
-  }
+  for(var i=0;i<WORD_POOL.length;i++){acc+=WORD_POOL[i].w;if(r<acc)return WORD_POOL[i];}
   return WORD_POOL[0];
 }
 
-var COLS=5,ROWS=5;
-// grid[col][row] = {el, word}
-var grid=[];
-var lastWord=null;
+var COLS=5,ROWS=5,grid=[],lastWord=null;
 
 function initGrid(){
   var container=document.getElementById('blockGrid');
+  if(!container)return;
   container.innerHTML='';
   container.style.gridAutoFlow='column';
   grid=[];
@@ -317,7 +199,7 @@ function initGrid(){
       var el=makeBlock(word,false);
       container.appendChild(el);
       grid[c][r]={el:el,word:word};
-      bindBlock(c,r);
+      (function(col,row){bindBlock(col,row);})(c,r);
     }
   }
 }
@@ -326,56 +208,52 @@ function makeBlock(word,anim){
   var el=document.createElement('div');
   el.className='block '+word.cat+(anim?' drop':'');
   var t=document.createElement('span');
-  t.className='block-text';
-  t.textContent=word.name;
-  el.appendChild(t);
-  return el;
+  t.className='block-text';t.textContent=word.name;
+  el.appendChild(t);return el;
 }
 
 function bindBlock(col,row){
-  var cell=grid[col][row]; if(!cell) return;
-  // cloneNodeで古いイベントリスナーを全て削除
+  var cell=grid[col][row];if(!cell)return;
   var oldEl=cell.el;
   var newEl=oldEl.cloneNode(true);
-  oldEl.parentNode.replaceChild(newEl,oldEl);
+  if(oldEl.parentNode)oldEl.parentNode.replaceChild(newEl,oldEl);
   cell.el=newEl;
-  var el=newEl;
-  var sx,sy;
+  var el=newEl,sx,sy;
   function start(px,py){sx=px;sy=py;el.classList.add('fired');}
   function end(px,py){
     el.classList.remove('fired');
-    var c=grid[col][row]; if(!c) return;
+    var c=grid[col][row];if(!c)return;
     var dir=getDir(px-sx,py-sy);
     if(dir==='none'){
       tap(col,row);
     } else if(DIR_MAP[dir]){
       var word=grid[col][row].word;
       var label=DIR_MAP[dir].label;
-      addVJ(word.name+label, word.cat);
+      addVJ(word.name+label,word.cat);
+      playKey(DIR_MAP[dir].key);
       lastWord=word;
       tap(col,row,true);
     }
   }
   el.addEventListener('touchstart',function(e){e.preventDefault();start(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
-  el.addEventListener('touchend',  function(e){e.preventDefault();end(e.changedTouches[0].clientX,e.changedTouches[0].clientY);},{passive:false});
-  el.addEventListener('mousedown', function(e){start(e.clientX,e.clientY);});
-  el.addEventListener('mouseup',   function(e){end(e.clientX,e.clientY);});
+  el.addEventListener('touchend',function(e){e.preventDefault();end(e.changedTouches[0].clientX,e.changedTouches[0].clientY);},{passive:false});
+  el.addEventListener('mousedown',function(e){start(e.clientX,e.clientY);});
+  el.addEventListener('mouseup',function(e){end(e.clientX,e.clientY);});
 }
 
 function tap(col,row,skipVJ){
-  var cell=grid[col][row]; if(!cell) return;
+  var cell=grid[col][row];if(!cell)return;
   lastWord=cell.word;
-  if(!skipVJ) addVJ(cell.word.name, cell.word.cat);
-  // vanishアニメ→落下処理
+  if(!skipVJ)addVJ(cell.word.name,cell.word.cat);
+  playKey(cell.word.key);
   cell.el.classList.add('vanish');
   var c=col,r=row;
-  setTimeout(function(){ shiftDown(c,r); }, 160);
+  setTimeout(function(){shiftDown(c,r);},160);
 }
 
 function shiftDown(col,removedRow){
-  var STEP=80; // 各段の遅延ms
-  // removedRowより上を順番に落下（遅延付き）
-  for(var r=removedRow; r>0; r--){
+  var STEP=80;
+  for(var r=removedRow;r>0;r--){
     (function(dst,src,delay){
       setTimeout(function(){
         var srcCell=grid[col][src];
@@ -384,27 +262,25 @@ function shiftDown(col,removedRow){
         dstCell.el.querySelector('.block-text').textContent=dstCell.word.name;
         dstCell.el.className='block '+dstCell.word.cat+' drop';
         bindBlock(col,dst);
-        setTimeout(function(){dstCell.el.classList.remove('drop');},380);
-      }, delay);
-    })(r, r-1, (removedRow-r)*STEP);
+        setTimeout(function(){if(dstCell.el)dstCell.el.classList.remove('drop');},380);
+      },delay);
+    })(r,r-1,(removedRow-r)*STEP);
   }
-  // 最上段に新ブロック補充（少し遅れて）
   var newWord=pickWord();
-  var delay=removedRow*STEP+100;
   setTimeout(function(){
     var topCell=grid[col][0];
     topCell.word=newWord;
     topCell.el.querySelector('.block-text').textContent=newWord.name;
     topCell.el.className='block '+newWord.cat+' drop';
     bindBlock(col,0);
-    setTimeout(function(){topCell.el.classList.remove('drop');},380);
-  }, delay);
+    setTimeout(function(){if(topCell.el)topCell.el.classList.remove('drop');},380);
+  },removedRow*STEP+100);
 }
 
 function addVJ(text,cat){
-  var area=document.getElementById('vjText'); if(!area) return;
+  var area=document.getElementById('vjText');if(!area)return;
   var els=area.querySelectorAll('.vj-word');
-  if(els.length>=8) area.removeChild(els[0]);
+  if(els.length>=8)area.removeChild(els[0]);
   var el=document.createElement('div');
   el.className='vj-word';
   el.textContent=text;
@@ -413,24 +289,132 @@ function addVJ(text,cat){
   el.style.top=Math.floor(Math.random()*65+10)+'%';
   var sizes=['1.1rem','1.4rem','1.7rem','2.0rem'];
   el.style.fontSize=sizes[Math.floor(Math.random()*sizes.length)];
-  // 流れる速度もランダムに
   var dur=(2.0+Math.random()*1.5).toFixed(1);
   el.style.animation='flowLeft '+dur+'s linear forwards';
   area.appendChild(el);
-  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);}, dur*1000+100);
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},dur*1000+100);
 }
 
+// DJ ループ音源
+var loopState={A:{idx:null,audio:null},B:{idx:null,audio:null}};
+var faderVal=0.5;
+var faderDragging=false,faderStartX=0,faderStartVal=0.5;
 
+function updateFader(){
+  var vA=Math.cos(faderVal*Math.PI/2)*0.85,vB=Math.sin(faderVal*Math.PI/2)*0.85;
+  if(loopState.A.audio)loopState.A.audio.volume=vA;
+  if(loopState.B.audio)loopState.B.audio.volume=vB;
+}
+function playLoop(side){
+  var st=loopState[side];if(st.idx===null)return;
+  if(st.audio){st.audio.pause();st.audio=null;}
+  var a=new Audio('bgm/loop'+(st.idx+1)+'.mp3');
+  a.loop=true;
+  a.volume=side==='A'?Math.cos(faderVal*Math.PI/2)*0.85:Math.sin(faderVal*Math.PI/2)*0.85;
+  a.play().catch(function(){});st.audio=a;
+}
+function stopLoop(side){
+  var st=loopState[side];
+  if(st.audio){st.audio.pause();st.audio.currentTime=0;st.audio=null;}
+}
+function selectLoop(side,idx){
+  var st=loopState[side];
+  if(st.idx===idx){
+    if(st.audio){st.audio.pause();st.audio=null;}
+    st.idx=null;
+    document.querySelectorAll('.lbtn-'+side).forEach(function(b){b.classList.remove('on');});
+    return;
+  }
+  if(st.audio){st.audio.pause();st.audio=null;}
+  st.idx=idx;
+  document.querySelectorAll('.lbtn-'+side).forEach(function(b,i){b.classList.toggle('on',i===idx);});
+  playLoop(side);
+}
+function toggleDJBGM(){
+  var btn=document.getElementById('djBgmBtn');
+  var on=btn.classList.contains('on');
+  if(on){stopLoop('A');stopLoop('B');btn.classList.remove('on');}
+  else{playLoop('A');playLoop('B');if(loopState.A.audio||loopState.B.audio)btn.classList.add('on');}
+}
+
+// ターンテーブル
+var decks=[
+  {el:null,angle:0,lastAngle:0,spinning:false,cx:0,cy:0},
+  {el:null,angle:0,lastAngle:0,spinning:false,cx:0,cy:0}
+];
+function getAngle(cx,cy,px,py){return Math.atan2(py-cy,px-cx)*180/Math.PI;}
+function bindTurntable(dk,id){
+  var el=document.getElementById(id);if(!el)return;dk.el=el;
+  function onStart(px,py){var r=el.getBoundingClientRect();dk.cx=r.left+r.width/2;dk.cy=r.top+r.height/2;dk.lastAngle=getAngle(dk.cx,dk.cy,px,py);dk.spinning=true;}
+  function onMove(px,py){
+    if(!dk.spinning)return;
+    var a=getAngle(dk.cx,dk.cy,px,py);
+    var da=a-dk.lastAngle;if(da>180)da-=360;if(da<-180)da+=360;
+    dk.angle+=da;dk.lastAngle=a;
+    dk.el.style.transform='rotate('+dk.angle+'deg)';
+    var speed=Math.abs(da);
+    if(speed>1.5){
+      var ctx=getCtx();if(ctx.state==='suspended')ctx.resume();
+      var dur=0.04;
+      var buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*dur),ctx.sampleRate);
+      var d=buf.getChannelData(0);
+      for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.min(speed/20,1);
+      var src=ctx.createBufferSource();src.buffer=buf;
+      var bpf=ctx.createBiquadFilter();bpf.type='bandpass';bpf.frequency.value=800+speed*80;bpf.Q.value=2;
+      var gn=ctx.createGain();gn.gain.value=Math.min(speed/15,0.5);
+      src.connect(bpf);bpf.connect(gn);gn.connect(ctx.destination);
+      src.start(0);src.stop(ctx.currentTime+dur+0.01);
+    }
+  }
+  function onEnd(){dk.spinning=false;}
+  el.addEventListener('touchstart',function(e){e.preventDefault();var t=e.touches[0];onStart(t.clientX,t.clientY);},{passive:false});
+  el.addEventListener('touchmove',function(e){e.preventDefault();var t=e.touches[0];onMove(t.clientX,t.clientY);},{passive:false});
+  el.addEventListener('touchend',function(e){e.preventDefault();onEnd();},{passive:false});
+  el.addEventListener('mousedown',function(e){onStart(e.clientX,e.clientY);});
+  el.addEventListener('mousemove',function(e){onMove(e.clientX,e.clientY);});
+  el.addEventListener('mouseup',function(e){onEnd();});
+  el.addEventListener('mouseleave',function(e){onEnd();});
+}
+
+function initFader(){
+  var el=document.getElementById('faderImg');if(!el)return;
+  var GROOVE_L=5.3,GROOVE_R=86.0;
+  function setFaderVal(val){
+    faderVal=Math.max(0,Math.min(1,val));
+    var scene=document.querySelector('.dj-scene');if(!scene)return;
+    var sw=scene.offsetWidth,fw=el.offsetWidth;
+    var lMin=GROOVE_L/100*sw,lMax=GROOVE_R/100*sw;
+    el.style.left=(lMin+faderVal*(lMax-lMin)-fw/2)+'px';
+    updateFader();
+  }
+  function onStart(px){faderDragging=true;faderStartX=px;faderStartVal=faderVal;}
+  function onMove(px){
+    if(!faderDragging)return;
+    var scene=document.querySelector('.dj-scene');if(!scene)return;
+    var sw=scene.offsetWidth;
+    var lMin=GROOVE_L/100*sw,lMax=GROOVE_R/100*sw;
+    setFaderVal(faderStartVal+(px-faderStartX)/(lMax-lMin));
+  }
+  function onEnd(){faderDragging=false;}
+  el.addEventListener('touchstart',function(e){e.preventDefault();onStart(e.touches[0].clientX);},{passive:false});
+  el.addEventListener('touchmove',function(e){e.preventDefault();onMove(e.touches[0].clientX);},{passive:false});
+  el.addEventListener('touchend',function(e){e.preventDefault();onEnd();},{passive:false});
+  el.addEventListener('mousedown',function(e){onStart(e.clientX);});
+  window.addEventListener('mousemove',function(e){onMove(e.clientX);});
+  window.addEventListener('mouseup',function(e){onEnd();});
+  setFaderVal(0.5);
+}
+
+function initDJGenres(){}
 
 function setMode(mode){
   ['splash','helpView','samplerView','djView'].forEach(function(id){
     var el=document.getElementById(id);
-    if(el) el.style.display='none';
+    if(el)el.style.display='none';
   });
   if(mode==='splash'){
     var sp=document.getElementById('splash');
-    sp.style.display='flex';
-    sp.classList.remove('fade-out');
+    sp.style.display='flex';sp.classList.remove('fade-out');
     appStarted=false;
   } else if(mode==='help'){
     document.getElementById('helpView').style.display='flex';
@@ -441,154 +425,11 @@ function setMode(mode){
   }
 }
 
-// 起動はstartAppで行う
-
-// DJ ループ音源
-var loopState={A:{idx:null,audio:null},B:{idx:null,audio:null}};
-var faderVal=0.5;
-var faderDragging=false, faderStartX=0, faderStartVal=0.5;
-
-function updateFader(){
-  var vA=Math.cos(faderVal*Math.PI/2)*0.85, vB=Math.sin(faderVal*Math.PI/2)*0.85;
-  if(loopState.A.audio) loopState.A.audio.volume=vA;
-  if(loopState.B.audio) loopState.B.audio.volume=vB;
-}
-
-function playLoop(side){
-  var st=loopState[side]; if(st.idx===null) return;
-  if(st.audio){st.audio.pause();st.audio=null;}
-  var a=new Audio(LOOP_FILES[st.idx]); a.loop=true;
-  a.volume=side==='A'?Math.cos(faderVal*Math.PI/2)*0.85:Math.sin(faderVal*Math.PI/2)*0.85;
-  a.play().catch(function(){}); st.audio=a;
-}
-
-function stopLoop(side){
-  var st=loopState[side];
-  if(st.audio){st.audio.pause();st.audio.currentTime=0;st.audio=null;}
-}
-
-function toggleDJBGM(){
-  var btn=document.getElementById('djBgmBtn');
-  var on=btn.classList.contains('on');
-  if(on){ stopLoop('A');stopLoop('B');btn.classList.remove('on'); }
-  else { playLoop('A');playLoop('B');if(loopState.A.audio||loopState.B.audio)btn.classList.add('on'); }
-}
-
-function selectLoop(side,idx){
-  var st=loopState[side];
-  if(st.idx===idx){
-    if(st.audio){st.audio.pause();st.audio.currentTime=0;st.audio=null;}
-    st.idx=null;
-    document.querySelectorAll('.lbtn-'+side).forEach(function(b){b.classList.remove('on');});
-    return;
-  }
-  if(st.audio){st.audio.pause();st.audio=null;}
-  st.idx=idx;
-  document.querySelectorAll('.lbtn-'+side).forEach(function(b,i){b.classList.toggle('on',i===idx);});
-  var a=new Audio(LOOP_FILES[st.idx]); a.loop=true; a.volume=0.85;
-  a.play().catch(function(){}); st.audio=a;
-}
-
-// ターンテーブル
-var decks=[
-  {el:null,angle:0,lastAngle:0,spinning:false,cx:0,cy:0},
-  {el:null,angle:0,lastAngle:0,spinning:false,cx:0,cy:0}
-];
-function getAngle(cx,cy,px,py){return Math.atan2(py-cy,px-cx)*180/Math.PI;}
-function bindTurntable(dk,id){
-  var el=document.getElementById(id); if(!el) return; dk.el=el;
-  function onStart(px,py){
-    var r=el.getBoundingClientRect();
-    dk.cx=r.left+r.width/2; dk.cy=r.top+r.height/2;
-    dk.lastAngle=getAngle(dk.cx,dk.cy,px,py); dk.spinning=true;
-  }
-  function onMove(px,py){
-    if(!dk.spinning) return;
-    var a=getAngle(dk.cx,dk.cy,px,py);
-    var da=a-dk.lastAngle; if(da>180)da-=360; if(da<-180)da+=360;
-    dk.angle+=da; dk.lastAngle=a;
-    dk.el.style.transform='rotate('+dk.angle+'deg)';
-    var speed=Math.abs(da);
-    if(speed>1.5){
-      var ctx=getCtx(); if(ctx.state==='suspended')ctx.resume();
-      var dur=0.04;
-      var buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*dur),ctx.sampleRate);
-      var d=buf.getChannelData(0);
-      for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.min(speed/20,1);
-      var src=ctx.createBufferSource(); src.buffer=buf;
-      var bpf=ctx.createBiquadFilter(); bpf.type='bandpass';
-      bpf.frequency.value=800+speed*80; bpf.Q.value=2;
-      var gn=ctx.createGain(); gn.gain.value=Math.min(speed/15,0.5);
-      src.connect(bpf); bpf.connect(gn); gn.connect(ctx.destination);
-      src.start(0); src.stop(ctx.currentTime+dur+0.01);
-    }
-  }
-  function onEnd(){dk.spinning=false;}
-  el.addEventListener('touchstart',function(e){e.preventDefault();var t=e.touches[0];onStart(t.clientX,t.clientY);},{passive:false});
-  el.addEventListener('touchmove', function(e){e.preventDefault();var t=e.touches[0];onMove(t.clientX,t.clientY);},{passive:false});
-  el.addEventListener('touchend',  function(e){e.preventDefault();onEnd();},{passive:false});
-  el.addEventListener('mousedown', function(e){onStart(e.clientX,e.clientY);});
-  el.addEventListener('mousemove', function(e){onMove(e.clientX,e.clientY);});
-  el.addEventListener('mouseup',   function(e){onEnd();});
-  el.addEventListener('mouseleave',function(e){onEnd();});
-}
-
-// フェーダー
-function initFader(){
-  var el=document.getElementById('faderImg'); if(!el) return;
-  var GROOVE_LEFT_PCT  = 5.3;
-  var GROOVE_RIGHT_PCT = 86.0;
-  function setFaderVal(val){
-    faderVal=Math.max(0,Math.min(1,val));
-    var scene=document.querySelector('.dj-scene'); if(!scene) return;
-    var sw=scene.offsetWidth; var fw=el.offsetWidth;
-    var leftMin=GROOVE_LEFT_PCT/100*sw;
-    var leftMax=GROOVE_RIGHT_PCT/100*sw;
-    el.style.left=(leftMin+faderVal*(leftMax-leftMin))+'px';
-    updateFader();
-  }
-  function onStart(px){faderDragging=true;faderStartX=px;faderStartVal=faderVal;}
-  function onMove(px){
-    if(!faderDragging) return;
-    var scene=document.querySelector('.dj-scene'); if(!scene) return;
-    var sw=scene.offsetWidth;
-    var leftMin=GROOVE_LEFT_PCT/100*sw;
-    var leftMax=GROOVE_RIGHT_PCT/100*sw;
-    setFaderVal(faderStartVal+(px-faderStartX)/(leftMax-leftMin));
-  }
-  function onEnd(){faderDragging=false;}
-  el.addEventListener('touchstart',function(e){e.preventDefault();onStart(e.touches[0].clientX);},{passive:false});
-  el.addEventListener('touchmove', function(e){e.preventDefault();onMove(e.touches[0].clientX);},{passive:false});
-  el.addEventListener('touchend',  function(e){e.preventDefault();onEnd();},{passive:false});
-  el.addEventListener('mousedown', function(e){onStart(e.clientX);});
-  window.addEventListener('mousemove',function(e){onMove(e.clientX);});
-  window.addEventListener('mouseup',  function(e){onEnd();});
-  setFaderVal(0.5);
-}
-
-function initDJGenres(){ /* ループボタンはHTMLに直書き */ }
-
-
-function setMode(mode){
-  ['splash','helpView','samplerView','djView'].forEach(function(id){
-    var el=document.getElementById(id);
-    if(el) el.style.display='none';
-  });
-  if(mode==='splash'){
-    var sp=document.getElementById('splash');
-    sp.style.display='flex';sp.classList.remove('fade-out');appStarted=false;
-  } else if(mode==='help'){
-    document.getElementById('helpView').style.display='flex';
-  } else if(mode==='sampler'){
-    document.getElementById('samplerView').style.display='flex';
-  } else if(mode==='dj'){
-    document.getElementById('djView').style.display='flex';
-  }
-}
 var appStarted=false;
 function startApp(){
-  if(appStarted) return;
+  if(appStarted)return;
   appStarted=true;
+  getCtx().resume();
   var sp=document.getElementById('splash');
   sp.classList.add('fade-out');
   setTimeout(function(){
@@ -598,14 +439,16 @@ function startApp(){
   },900);
 }
 
-// 初期表示：スプラッシュを表示
-window.addEventListener('DOMContentLoaded', function(){
+window.addEventListener('DOMContentLoaded',function(){
   setMode('splash');
   initFader();
   initDJGenres();
   bindTurntable(decks[0],'recordA');
   bindTurntable(decks[1],'recordB');
+  // 音声プリロード
+  ['wa','ga','no','to','mo','wo','ni','de'].forEach(function(k){getBuffer(k).catch(function(){});});
 });
+
 </script>
 </body>
 </html>
