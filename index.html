@@ -48,17 +48,14 @@ body{background:#0e0c08;color:#f0e8d0;font-family:'Shippori Mincho B1',serif;
 .dj-scene{
   position:relative;
   width:100%;
-  /* aspect-ratioで背景画像と1:1対応 */
-  aspect-ratio:571/1024;
-  max-height:100vh;
-  max-width:calc(100vh * 724/1568);
-  margin:auto;
+  height:100%;
   overflow:hidden;
 }
 .dj-bg-img{
   position:absolute;top:0;left:0;
   width:100%;height:100%;
-  object-fit:fill;
+  object-fit:cover;
+  object-position:center top;
   pointer-events:none;
 }
 .dj-record{
