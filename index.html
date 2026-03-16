@@ -112,10 +112,9 @@ function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioConte
 function getBuffer(key){
   if(bufCache[key])return Promise.resolve(bufCache[key]);
   return fetch('voice/'+key+'.mp3')
-    .then(function(r){if(!r.ok)throw new Error('404:'+key);return r.arrayBuffer();})
+    .then(function(r){return r.arrayBuffer();})
     .then(function(ab){return getCtx().decodeAudioData(ab);})
-    .then(function(b){bufCache[key]=b;return b;})
-    .catch(function(e){console.warn('audio:',key,e);return null;});
+    .then(function(b){bufCache[key]=b;return b;});
 }
 function playKey(key){
   var ctx=getCtx();if(ctx.state==='suspended')ctx.resume();
@@ -126,37 +125,65 @@ function playKey(key){
 }
 
 var WORD_POOL=[
-  {key:'wabi',name:'侘び',cat:'cat-noun',w:4},
-  {key:'sabi',name:'寂び',cat:'cat-noun',w:4},
-  {key:'zen',name:'禅',cat:'cat-noun',w:4},
-  {key:'mu',name:'無',cat:'cat-noun',w:5},
-  {key:'kalma',name:'業',cat:'cat-noun',w:3},
-  {key:'wabisabi',name:'侘び寂び',cat:'cat-noun',w:2},
-  {key:'chajin',name:'茶人',cat:'cat-noun',w:2},
-  {key:'konpeitou',name:'金平糖',cat:'cat-noun',w:2},
-  {key:'chasitu',name:'茶室',cat:'cat-noun',w:3},
-  {key:'hiphop',name:'Hip Hop',cat:'cat-hip',w:3},
-  {key:'ippon',name:'一本',cat:'cat-hip',w:3},
-  {key:'nippon',name:'日本',cat:'cat-hip',w:3},
-  {key:'keepon',name:'Keep On',cat:'cat-hip',w:3},
-  {key:'tensai',name:'天才',cat:'cat-hip',w:3},
-  {key:'zokubutu',name:'俗物',cat:'cat-hip',w:3},
-  {key:'kyouki',name:'狂気',cat:'cat-hip',w:2},
-  {key:'bigaku',name:'美学',cat:'cat-hip',w:2},
+  // 茶道・仏教
+  {key:'wabi',        name:'侘び',            cat:'cat-noun',w:4},
+  {key:'sabi',        name:'寂び',            cat:'cat-noun',w:4},
+  {key:'zen',         name:'禅',              cat:'cat-noun',w:4},
+  {key:'mu',          name:'無',              cat:'cat-noun',w:5},
+  {key:'kalma',       name:'業',              cat:'cat-noun',w:3},
+  {key:'wabisabi',    name:'侘び寂び',        cat:'cat-noun',w:2},
+  {key:'chajin',      name:'茶人',            cat:'cat-noun',w:3},
+  {key:'konpeitou',   name:'金平糖',          cat:'cat-noun',w:2},
+  {key:'chasitu',     name:'茶室',            cat:'cat-noun',w:3},
+  {key:'kazuchawan',  name:'楽茶碗',          cat:'cat-noun',w:2},
+  {key:'sennorikyuu', name:'千利休',          cat:'cat-noun',w:2},
+  {key:'sikantaza',   name:'只管打坐',        cat:'cat-noun',w:2},
+  {key:'yunomi',      name:'湯呑み',          cat:'cat-noun',w:3},
+  {key:'kyakkashouko',name:'脚下照顧',        cat:'cat-noun',w:2},
+  // ヒップホップ・現代
+  {key:'hiphop',      name:'Hip Hop',         cat:'cat-hip', w:3},
+  {key:'ippon',       name:'一本',            cat:'cat-hip', w:3},
+  {key:'nippon',      name:'日本',            cat:'cat-hip', w:3},
+  {key:'keepon',      name:'Keep On',         cat:'cat-hip', w:3},
+  {key:'tensai',      name:'天才',            cat:'cat-hip', w:3},
+  {key:'zokubutu',    name:'俗物',            cat:'cat-hip', w:3},
+  {key:'kyouki',      name:'狂気',            cat:'cat-hip', w:2},
+  {key:'bigaku',      name:'美学',            cat:'cat-hip', w:2},
+  {key:'yokubou',     name:'欲望',            cat:'cat-hip', w:3},
+  {key:'kiden',       name:'貴殿',            cat:'cat-hip', w:2},
+  // 形容・評価
   {key:'yabodegozaimasu',name:'野暮でございます',cat:'cat-adj',w:2},
-  {key:'omomukibukai',name:'趣き深い',cat:'cat-adj',w:3},
-  {key:'migoto',name:'見事',cat:'cat-adj',w:3},
-  {key:'oroka',name:'愚か',cat:'cat-adj',w:3},
-  {key:'asamasii',name:'浅ましい',cat:'cat-adj',w:3},
-  {key:'kekkounaotemae',name:'結構なお手前',cat:'cat-adj',w:2},
-  {key:'shikashi',name:'しかし',cat:'cat-conj',w:3},
-  {key:'dakara',name:'だから',cat:'cat-conj',w:3},
-  {key:'yueni',name:'ゆえに',cat:'cat-conj',w:2},
-  {key:'saredo',name:'されど',cat:'cat-conj',w:2},
-  {key:'sorekosoga',name:'それこそが',cat:'cat-conj',w:2},
-  {key:'yeah',name:'yeah',cat:'cat-ai',w:3},
-  {key:'yo',name:'Yo',cat:'cat-ai',w:3},
-  {key:'chekera',name:'チェケラ',cat:'cat-ai',w:2},
+  {key:'omomukibukai',   name:'趣き深い',     cat:'cat-adj', w:3},
+  {key:'migoto',         name:'見事',         cat:'cat-adj', w:3},
+  {key:'oroka',          name:'愚か',         cat:'cat-adj', w:3},
+  {key:'asamasii',       name:'浅ましい',     cat:'cat-adj', w:3},
+  {key:'kekkounaotemae', name:'結構なお手前', cat:'cat-adj', w:2},
+  {key:'hinsou',         name:'貧相',         cat:'cat-adj', w:3},
+  {key:'anchoku',        name:'安直',         cat:'cat-adj', w:3},
+  {key:'dorokusai',      name:'泥臭い',       cat:'cat-adj', w:3},
+  {key:'yabo',           name:'野暮',         cat:'cat-adj', w:3},
+  // 接続・副詞
+  {key:'sorekosoga',  name:'それこそが',      cat:'cat-conj',w:3},
+  {key:'towa',        name:'とは',            cat:'cat-conj',w:3},
+  {key:'sono',        name:'その',            cat:'cat-conj',w:3},
+  {key:'marude',      name:'まるで',          cat:'cat-conj',w:3},
+  {key:'tugihagi',    name:'継ぎ接ぎ',        cat:'cat-conj',w:2},
+  {key:'jituni',      name:'実に',            cat:'cat-conj',w:3},
+  // 丁寧語・語尾
+  {key:'desune',      name:'ですね',          cat:'cat-adj', w:3},
+  {key:'gozaimasu',   name:'ございます',      cat:'cat-adj', w:2},
+  {key:'nanodesu',    name:'なのです',        cat:'cat-adj', w:2},
+  {key:'jituniyoi',   name:'実によい',        cat:'cat-adj', w:2},
+  {key:'yoidesuka',   name:'よいですか',      cat:'cat-adj', w:2},
+  // キャラクター・固有名詞
+  {key:'onore',       name:'おのれ',          cat:'cat-hip', w:2},
+  {key:'hedogaderu',  name:'反吐が出る',      cat:'cat-adj', w:2},
+  {key:'akindonosoroban',name:'商人のそろばん',cat:'cat-noun',w:1},
+  {key:'nanto',       name:'なんと',          cat:'cat-ai',  w:3},
+  {key:'daga',        name:'だが',            cat:'cat-conj',w:3},
+  // 合いの手
+  {key:'yeah',        name:'yeah',            cat:'cat-ai',  w:3},
+  {key:'yo',          name:'Yo',              cat:'cat-ai',  w:3},
 ];
 
 var THRESH=28,DIAG=0.41;
@@ -228,10 +255,13 @@ function bindBlock(col,row){
       tap(col,row);
     } else if(DIR_MAP[dir]){
       var word=grid[col][row].word;
-      var label=DIR_MAP[dir].label;
-      addVJ(word.name+label,word.cat);
-      playKey(DIR_MAP[dir].key);
+      var joshi=DIR_MAP[dir];
+      addVJ(word.name+joshi.label,word.cat);
       lastWord=word;
+      // ワードを鳴らし、鳴り終わってから助詞を鳴らす
+      playKey(word.key).then(function(dur){
+        setTimeout(function(){ playKey(joshi.key); }, (dur||0.3)*1000);
+      });
       tap(col,row,true);
     }
   }
