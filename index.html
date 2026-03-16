@@ -119,9 +119,8 @@ function getBuffer(key){
 function playKey(key){
   var ctx=getCtx();if(ctx.state==='suspended')ctx.resume();
   return getBuffer(key).then(function(buf){
-    if(!buf)return 0;
     var src=ctx.createBufferSource();src.buffer=buf;src.connect(ctx.destination);src.start(0);return buf.duration;
-  }).catch(function(e){console.warn('playKey:',key,e);return 0;});
+  });
 }
 
 var WORD_POOL=[
@@ -211,12 +210,6 @@ function pickWord(){
   return WORD_POOL[0];
 }
 
-function preload(){
-  // 全ワード＋助詞を事前にfetchしてキャッシュ
-  var keys=['wa','ga','no','to','mo','wo','ni','de'];
-  WORD_POOL.forEach(function(w){keys.push(w.key);});
-  keys.forEach(function(k){getBuffer(k).catch(function(){});});
-}
 
 var COLS=5,ROWS=5,grid=[],lastWord=null;
 
@@ -268,7 +261,7 @@ function bindBlock(col,row){
       playKey(word.key).then(function(dur){
         setTimeout(function(){ playKey(joshi.key); }, (dur||0.3)*1000);
       });
-      tap(col,row,true);
+      tap(col,row,true,true);
     }
   }
   el.addEventListener('touchstart',function(e){e.preventDefault();start(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
@@ -277,11 +270,11 @@ function bindBlock(col,row){
   el.addEventListener('mouseup',function(e){end(e.clientX,e.clientY);});
 }
 
-function tap(col,row,skipVJ){
+function tap(col,row,skipVJ,skipAudio){
   var cell=grid[col][row];if(!cell)return;
   lastWord=cell.word;
   if(!skipVJ)addVJ(cell.word.name,cell.word.cat);
-  playKey(cell.word.key);
+  if(!skipAudio)playKey(cell.word.key);
   cell.el.classList.add('vanish');
   var c=col,r=row;
   setTimeout(function(){shiftDown(c,r);},160);
@@ -465,9 +458,7 @@ var appStarted=false;
 function startApp(){
   if(appStarted)return;
   appStarted=true;
-  getCtx().resume().then(function(){
-    preload();
-  });
+  getCtx().resume();
   var sp=document.getElementById('splash');
   sp.classList.add('fade-out');
   setTimeout(function(){
