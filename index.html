@@ -45,6 +45,11 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 .block.drop{animation:dropIn 0.35s cubic-bezier(0.25,0.46,0.45,0.94) both;}
 @keyframes vanish{0%{transform:scale(1);opacity:1;}100%{transform:scale(0);opacity:0;}}
 .block.vanish{animation:vanish 0.15s ease-in both;pointer-events:none;}
+@keyframes shake{0%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}100%{transform:translateX(0);}}
+.block.shake{animation:shake 0.4s ease both;}
+@keyframes flashNeon{0%{opacity:1;}25%{opacity:0;}50%{opacity:1;}75%{opacity:0;}100%{opacity:1;}}
+#vjFlash{position:absolute;inset:0;z-index:5;pointer-events:none;display:none;}
+#vjFlash.active{display:block;animation:flashNeon 0.6s ease both;}
 /* DJモード */
 #djView{position:fixed;inset:0;z-index:100;width:100%;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#000;}
 .dj-scene{position:relative;width:100%;aspect-ratio:571/1024;max-height:100dvh;max-width:calc(100dvh * 571/1024);overflow:hidden;}
@@ -83,6 +88,7 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
     <img class="vj-monitor" src="VJmoniter.png" alt="">
     <div id="vjBg"></div>
     <div id="vjText"></div>
+    <div id="vjFlash"></div>
     <img id="djModeBtn" src="todjmode.png" alt="DJモードへ" onclick="setMode('dj')">
   </div>
   <div id="blockGrid"></div>
@@ -231,6 +237,50 @@ function getDir(dx,dy){
   if(dx>0&&dy<0)return 'upright';if(dx<0&&dy<0)return 'upleft';
   if(dx>0&&dy>0)return 'downright';return 'downleft';
 }
+// コンボ追跡
+var comboHistory = []; // 直近タップのcat履歴
+var streakCat = null, streakCount = 0; // 同色連続
+
+function checkCombo(cat){
+  // 5色コンボチェック
+  comboHistory.push(cat);
+  if(comboHistory.length > 5) comboHistory.shift();
+  if(comboHistory.length === 5){
+    var cats = new Set(comboHistory);
+    if(cats.size === 5) triggerCombo('5COLORS');
+  }
+  // 3連以上同色チェック
+  if(cat === streakCat){
+    streakCount++;
+    if(streakCount >= 3) triggerCombo('COMBO');
+  } else {
+    streakCat = cat;
+    streakCount = 1;
+  }
+}
+
+function triggerCombo(type){
+  // VJネオンフラッシュ
+  var flash = document.getElementById('vjFlash');
+  if(flash){
+    flash.style.background = type === '5COLORS'
+      ? 'radial-gradient(circle, rgba(255,255,0,0.5), transparent)'
+      : 'radial-gradient(circle, rgba(255,0,255,0.5), transparent)';
+    flash.classList.remove('active');
+    void flash.offsetWidth; // reflow
+    flash.classList.add('active');
+  }
+  // VJテキスト表示
+  addVJ(type === '5COLORS' ? '5 COLORS!' : 'COMBO!', type === '5COLORS' ? 'cat-hip' : 'cat-ai');
+  // 全ブロックを揺らす
+  document.querySelectorAll('.block').forEach(function(el){
+    el.classList.remove('shake');
+    void el.offsetWidth;
+    el.classList.add('shake');
+    setTimeout(function(){ el.classList.remove('shake'); }, 400);
+  });
+}
+
 function pickWord(){
   var total=WORD_POOL.reduce(function(s,w){return s+w.w;},0);
   var r=Math.random()*total,acc=0;
@@ -304,6 +354,7 @@ function bindBlock(col,row){
 function tap(col,row,skipVJ,skipAudio){
   var cell=grid[col][row];if(!cell)return;
   lastWord=cell.word;
+  checkCombo(cell.word.cat);
   if(!skipVJ)addVJ(cell.word.name,cell.word.cat);
   if(!skipAudio)playKey(cell.word.key);
   cell.el.classList.add('vanish');
