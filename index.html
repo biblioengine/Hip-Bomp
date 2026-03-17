@@ -265,21 +265,24 @@ function bindBlock(col,row){
   if(oldEl.parentNode)oldEl.parentNode.replaceChild(newEl,oldEl);
   cell.el=newEl;
   var el=newEl,sx,sy;
-  function start(px,py){sx=px;sy=py;el.classList.add('fired');}
+  function start(px,py){
+    sx=px;sy=py;el.classList.add('fired');
+    // touchstart時にワードを鳴らす
+    var c=grid[col][row];if(c)playKey(c.word.key);
+  }
   function end(px,py){
     el.classList.remove('fired');
     var c=grid[col][row];if(!c)return;
     var dir=getDir(px-sx,py-sy);
     if(dir==='none'){
-      tap(col,row);
+      tap(col,row,false,true); // タップ：ワードはすでに鳴っているのでskipAudio
     } else if(DIR_MAP[dir]){
       var word=c.word;
       var joshi=DIR_MAP[dir];
       addVJ(word.name+joshi.label,word.cat);
       lastWord=word;
-      playKey(word.key).then(function(dur){
-        setTimeout(function(){ playKey(joshi.key); }, (dur||0.3)*1000);
-      });
+      // フリックを離した時に助詞だけ鳴らす
+      playKey(joshi.key);
       tap(col,row,true,true);
     }
   }
