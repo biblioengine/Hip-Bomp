@@ -123,21 +123,17 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 <script>// v20260317-0219
 
 
-var actx=null, bufCache={};
-function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
-function getBuffer(key){
-  if(bufCache[key])return Promise.resolve(bufCache[key]);
-  return fetch('voice/'+key+'.mp3')
-    .then(function(r){return r.arrayBuffer();})
-    .then(function(ab){return getCtx().decodeAudioData(ab);})
-    .then(function(b){bufCache[key]=b;return b;});
-}
 function playKey(key){
-  var ctx=getCtx();if(ctx.state==='suspended')ctx.resume();
-  return getBuffer(key).then(function(buf){
-    var src=ctx.createBufferSource();src.buffer=buf;src.connect(ctx.destination);src.start(0);return buf.duration;
+  return new Promise(function(resolve){
+    var a=new Audio('voice/'+key+'.mp3');
+    a.onended=function(){resolve(a.duration||0.3);};
+    a.onerror=function(){resolve(0.3);};
+    a.play().catch(function(){resolve(0.3);});
   });
 }
+// AudioContext（DJモードのスクラッチ音用）
+var actx=null;
+function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
 
 var WORD_POOL=[
   // 茶道・仏教・和
@@ -556,8 +552,7 @@ window.addEventListener('DOMContentLoaded',function(){
   initDJGenres();
   bindTurntable(decks[0],'recordA');
   bindTurntable(decks[1],'recordB');
-  // 音声プリロード
-  ['wa','ga','no','to','mo','wo','ni','de'].forEach(function(k){getBuffer(k).catch(function(){});});
+
 });
 
 </script>
