@@ -45,6 +45,20 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 .block.drop{animation:dropIn 0.35s cubic-bezier(0.25,0.46,0.45,0.94) both;}
 @keyframes vanish{0%{transform:scale(1);opacity:1;}100%{transform:scale(0);opacity:0;}}
 .block.vanish{animation:vanish 0.15s ease-in both;pointer-events:none;}
+/* ブロック破砕エフェクト */
+@keyframes chip1{0%{transform:translate(0,0) rotate(0deg);opacity:1;}100%{transform:translate(-120%,-100%) rotate(-60deg);opacity:0;}}
+@keyframes chip2{0%{transform:translate(0,0) rotate(0deg);opacity:1;}100%{transform:translate(120%,-80%) rotate(45deg);opacity:0;}}
+@keyframes chip3{0%{transform:translate(0,0) rotate(0deg);opacity:1;}100%{transform:translate(-80%,120%) rotate(-90deg);opacity:0;}}
+@keyframes chip4{0%{transform:translate(0,0) rotate(0deg);opacity:1;}100%{transform:translate(100%,110%) rotate(75deg);opacity:0;}}
+@keyframes chip5{0%{transform:translate(0,0) rotate(0deg);opacity:1;}100%{transform:translate(0,-130%) rotate(30deg);opacity:0;}}
+@keyframes chip6{0%{transform:translate(0,0) rotate(0deg);opacity:1;}100%{transform:translate(20%,140%) rotate(-45deg);opacity:0;}}
+.chip{position:absolute;border-radius:3px;animation-duration:0.35s;animation-timing-function:ease-out;animation-fill-mode:both;pointer-events:none;}
+.chip1{animation-name:chip1;}
+.chip2{animation-name:chip2;}
+.chip3{animation-name:chip3;}
+.chip4{animation-name:chip4;}
+.chip5{animation-name:chip5;}
+.chip6{animation-name:chip6;}
 @keyframes shake{0%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}100%{transform:translateX(0);}}
 .block.shake{animation:shake 0.4s ease both;}
 @keyframes flashNeon{0%{opacity:1;}25%{opacity:0;}50%{opacity:1;}75%{opacity:0;}100%{opacity:1;}}
@@ -72,17 +86,25 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
   <meta name="twitter:image" content="https://biblioengine.github.io/Hip-Bomp/title.jpg">
 </head>
 <body>
-<div id="splash" onclick="startApp()">
+<div id="splash" onclick="startApp()" ontouchstart="startApp()">
   <img src="title.jpg" alt="Hip-Bomp">
+  <div id="splashHelpBtn" onclick="event.stopPropagation();setMode('help')" ontouchstart="event.stopPropagation();setMode('help')">
+    <img src="ensou_logo.png" alt="ヘルプ">
+    <span>ヘルプ</span>
+  </div>
 </div>
 <div id="helpView">
-  <img class="help-img" src="help.png" alt="ヘルプ">
-  <img id="helpBackBtn" src="hipbomp_logo.png" alt="タイトルへ" onclick="setMode('splash')">
+  <img class="help-img" id="helpPageImg" src="rapmodehelp.png" alt="ヘルプ">
+  <div class="help-nav">
+    <button class="help-nav-btn" id="helpPrevBtn" onclick="helpPage(-1)" disabled>◀ 戻る</button>
+    <img class="help-logo" src="hipbomp_logo.png" alt="タイトルへ" onclick="setMode('splash')">
+    <button class="help-nav-btn" id="helpNextBtn" onclick="helpPage(1)">次へ ▶</button>
+  </div>
 </div>
 <div id="samplerView">
   <div class="nav-bar">
     <img class="nav-logo" src="hipbomp_logo.png" alt="タイトルへ" onclick="setMode('splash')">
-    <img class="nav-help" src="ensou_logo.png" alt="ヘルプ" onclick="setMode('help')">
+    <img class="nav-help" src="ensou_logo.png" alt="ヘルプ" onclick="openHelp()">
   </div>
   <div id="vjArea">
     <img class="vj-monitor" src="VJmoniter.png" alt="">
@@ -116,24 +138,28 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
   <div class="dj-tap lbtn-B" style="left:79.7%;top:68.4%;width:13.3%;height:7.6%;" onclick="selectLoop('B',5)"></div>
   <div class="dj-nav">
     <img src="hipbomp_logo.png" onclick="setMode('splash')" alt="タイトルへ">
-    <img src="ensou_logo.png" onclick="setMode('help')" alt="ヘルプ">
+    <img src="ensou_logo.png" onclick="openHelp()" alt="ヘルプ">
   </div>
 </div>
 </div>
 <script>// v20260317-0219
 
 
+var actx=null, bufCache={};
+function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
+function getBuffer(key){
+  if(bufCache[key])return Promise.resolve(bufCache[key]);
+  return fetch('voice/'+key+'.mp3')
+    .then(function(r){return r.arrayBuffer();})
+    .then(function(ab){return getCtx().decodeAudioData(ab);})
+    .then(function(b){bufCache[key]=b;return b;});
+}
 function playKey(key){
-  return new Promise(function(resolve){
-    var a=new Audio('voice/'+key+'.mp3');
-    a.onended=function(){resolve(a.duration||0.3);};
-    a.onerror=function(){resolve(0.3);};
-    a.play().catch(function(){resolve(0.3);});
+  var ctx=getCtx();if(ctx.state==='suspended')ctx.resume();
+  return getBuffer(key).then(function(buf){
+    var src=ctx.createBufferSource();src.buffer=buf;src.connect(ctx.destination);src.start(0);return buf.duration;
   });
 }
-// AudioContext（DJモードのスクラッチ音用）
-var actx=null;
-function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
 
 var WORD_POOL=[
   // 茶道・仏教・和
@@ -320,24 +346,21 @@ function bindBlock(col,row){
   if(oldEl.parentNode)oldEl.parentNode.replaceChild(newEl,oldEl);
   cell.el=newEl;
   var el=newEl,sx,sy;
-  function start(px,py){
-    sx=px;sy=py;el.classList.add('fired');
-    // touchstart時にワードを鳴らす
-    var c=grid[col][row];if(c)playKey(c.word.key);
-  }
+  function start(px,py){sx=px;sy=py;el.classList.add('fired');}
   function end(px,py){
     el.classList.remove('fired');
     var c=grid[col][row];if(!c)return;
     var dir=getDir(px-sx,py-sy);
     if(dir==='none'){
-      tap(col,row,false,true); // タップ：ワードはすでに鳴っているのでskipAudio
+      tap(col,row);
     } else if(DIR_MAP[dir]){
       var word=c.word;
       var joshi=DIR_MAP[dir];
       addVJ(word.name+joshi.label,word.cat);
       lastWord=word;
-      // フリックを離した時に助詞だけ鳴らす
-      playKey(joshi.key);
+      playKey(word.key).then(function(dur){
+        setTimeout(function(){ playKey(joshi.key); },(dur||0.3)*1000);
+      });
       tap(col,row,true,true);
     }
   }
@@ -347,13 +370,32 @@ function bindBlock(col,row){
   el.addEventListener('mouseup',function(e){end(e.clientX,e.clientY);});
 }
 
-function tap(col,row,skipVJ,skipAudio){
+function breakBlock(el, cat){
+  var rect=el.getBoundingClientRect();
+  var colors={'cat-noun':'#f0f','cat-hip':'#ff0','cat-adj':'#0f8','cat-conj':'#fa0','cat-ai':'#f66'};
+  var color=colors[cat]||'#fff';
+  var sizes=[[40,20],[25,25],[30,15],[20,30],[35,18],[22,22]];
+  for(var i=1;i<=6;i++){
+    var chip=document.createElement('div');
+    chip.className='chip chip'+i;
+    chip.style.width=sizes[i-1][0]+'%';
+    chip.style.height=sizes[i-1][1]+'%';
+    chip.style.background=color;
+    chip.style.boxShadow='0 0 6px '+color;
+    chip.style.left=Math.random()*60+20+'%';
+    chip.style.top=Math.random()*60+20+'%';
+    el.appendChild(chip);
+  }
+  el.classList.add('vanish');
+}
+
+function tap(col,row,skipVJ){
   var cell=grid[col][row];if(!cell)return;
   lastWord=cell.word;
   checkCombo(cell.word.cat);
   if(!skipVJ)addVJ(cell.word.name,cell.word.cat);
-  if(!skipAudio)playKey(cell.word.key);
-  cell.el.classList.add('vanish');
+  if(!skipVJ)playKey(cell.word.key);
+  breakBlock(cell.el, cell.word.cat);
   var c=col,r=row;
   setTimeout(function(){shiftDown(c,r);},160);
 }
@@ -532,6 +574,21 @@ function setMode(mode){
   }
 }
 
+// ヘルプページ制御
+var HELP_PAGES=['rapmodehelp.png','djmodehelp.png'];
+var helpCurPage=0;
+function helpPage(dir){
+  helpCurPage=Math.max(0,Math.min(HELP_PAGES.length-1,helpCurPage+dir));
+  document.getElementById('helpPageImg').src=HELP_PAGES[helpCurPage];
+  document.getElementById('helpPrevBtn').disabled=(helpCurPage===0);
+  document.getElementById('helpNextBtn').disabled=(helpCurPage===HELP_PAGES.length-1);
+}
+function openHelp(){
+  helpCurPage=0;
+  helpPage(0);
+  setMode('help');
+}
+
 var appStarted=false;
 function startApp(){
   if(appStarted)return;
@@ -543,6 +600,10 @@ function startApp(){
     sp.style.display='none';
     setMode('sampler');
     initGrid();
+    // 全ワードをプリロード
+    var keys=['wa','ga','no','to','mo','wo','ni','de'];
+    WORD_POOL.forEach(function(w){keys.push(w.key);});
+    keys.forEach(function(k){getBuffer(k).catch(function(){});});
   },900);
 }
 
