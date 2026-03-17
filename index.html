@@ -80,7 +80,7 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
     <img class="nav-help" src="ensou_logo.png" alt="ヘルプ" onclick="setMode('help')">
   </div>
   <div id="vjArea">
-    <img class="vj-monitor" src="title.jpg" alt="">
+    <img class="vj-monitor" src="VJmoniter.png" alt="">
     <div id="vjBg"></div>
     <div id="vjText"></div>
     <img id="djModeBtn" src="todjmode.png" alt="DJモードへ" onclick="setMode('dj')">
@@ -489,7 +489,13 @@ var appStarted=false;
 function startApp(){
   if(appStarted)return;
   appStarted=true;
-  getCtx().resume();
+  // AudioContextを確実に起動（無音バッファを再生）
+  var ctx=getCtx();
+  ctx.resume().then(function(){
+    var buf=ctx.createBuffer(1,1,ctx.sampleRate);
+    var src=ctx.createBufferSource();
+    src.buffer=buf;src.connect(ctx.destination);src.start(0);
+  });
   var sp=document.getElementById('splash');
   sp.classList.add('fade-out');
   setTimeout(function(){
