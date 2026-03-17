@@ -489,13 +489,7 @@ var appStarted=false;
 function startApp(){
   if(appStarted)return;
   appStarted=true;
-  // AudioContextを確実に起動（無音バッファを再生）
-  var ctx=getCtx();
-  ctx.resume().then(function(){
-    var buf=ctx.createBuffer(1,1,ctx.sampleRate);
-    var src=ctx.createBufferSource();
-    src.buffer=buf;src.connect(ctx.destination);src.start(0);
-  });
+  getCtx().resume();
   var sp=document.getElementById('splash');
   sp.classList.add('fade-out');
   setTimeout(function(){
