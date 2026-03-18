@@ -58,12 +58,18 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 .dj-nav img{height:28px;cursor:pointer;touch-action:manipulation;}</style>
 </head>
 <body>
-<div id="splash" onclick="startApp()">
+<div id="splash" onclick="startApp()" ontouchstart="startApp()">
   <img src="title.jpg" alt="Hip-Bomp">
+  <img id="splashEnsou" src="ensou_logo.png" alt="HELP" onclick="event.stopPropagation();openHelp()" ontouchstart="event.stopPropagation();openHelp()">
+  <div id="splashHelpText" onclick="event.stopPropagation();openHelp()" ontouchstart="event.stopPropagation();openHelp()">HELP</div>
 </div>
 <div id="helpView">
-  <img class="help-img" src="help.png" alt="ヘルプ">
-  <img id="helpBackBtn" src="hipbomp_logo.png" alt="タイトルへ" onclick="setMode(helpPrevMode)">
+  <img class="help-img" id="helpPageImg" src="rapmodehelp.png" alt="ヘルプ">
+  <div class="help-nav">
+    <button class="help-nav-btn" id="helpPrevBtn" onclick="helpPage(-1)" disabled>◀ 戻る</button>
+    <img class="help-logo" src="hipbomp_logo.png" alt="戻る" onclick="setMode(helpPrevMode)" ontouchstart="setMode(helpPrevMode)">
+    <button class="help-nav-btn" id="helpNextBtn" onclick="helpPage(1)">次へ ▶</button>
+  </div>
 </div>
 <div id="samplerView">
   <div class="nav-bar">
@@ -454,6 +460,24 @@ function setMode(mode){
     document.getElementById('djView').style.display='flex';
     setTimeout(function(){ setFaderVal(faderVal); },150);
   }
+}
+
+var helpPrevMode='splash';
+function openHelp(){
+  if(document.getElementById('samplerView').style.display==='flex') helpPrevMode='sampler';
+  else if(document.getElementById('djView').style.display==='flex') helpPrevMode='dj';
+  else helpPrevMode='splash';
+  helpCurPage=0; helpPage(0);
+  setMode('help');
+}
+
+var HELP_PAGES=['rapmodehelp.png','djmodehelp.png'];
+var helpCurPage=0;
+function helpPage(dir){
+  helpCurPage=Math.max(0,Math.min(HELP_PAGES.length-1,helpCurPage+dir));
+  document.getElementById('helpPageImg').src=HELP_PAGES[helpCurPage];
+  document.getElementById('helpPrevBtn').disabled=(helpCurPage===0);
+  document.getElementById('helpNextBtn').disabled=(helpCurPage===HELP_PAGES.length-1);
 }
 
 var appStarted=false;
