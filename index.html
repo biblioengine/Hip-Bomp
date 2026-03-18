@@ -361,22 +361,29 @@ function bindBlock(col,row){
   var newEl=oldEl.cloneNode(true);
   if(oldEl.parentNode)oldEl.parentNode.replaceChild(newEl,oldEl);
   cell.el=newEl;
-  var el=newEl,sx,sy;
-  function start(px,py){sx=px;sy=py;el.classList.add('fired');}
+  var el=newEl,sx,sy,wordPlayed=false;
+  function start(px,py){
+    sx=px;sy=py;wordPlayed=false;
+    el.classList.add('fired');
+    var c=grid[col][row];if(!c)return;
+    // タッチした瞬間にワードを先行再生
+    playKey(c.word.key);
+    wordPlayed=true;
+  }
   function end(px,py){
     el.classList.remove('fired');
     var c=grid[col][row];if(!c)return;
     var dir=getDir(px-sx,py-sy);
     if(dir==='none'){
-      tap(col,row);
+      // タップ：start()で既に再生済みなのでVJ・breakのみ
+      tap(col,row,false,true);
     } else if(DIR_MAP[dir]){
       var word=c.word;
       var joshi=DIR_MAP[dir];
       addVJ(word.name+joshi.label,word.cat);
       lastWord=word;
-      playKey(word.key).then(function(dur){
-        setTimeout(function(){ playKey(joshi.key); },(dur||0.3)*1000);
-      });
+      // 指を離した瞬間に助詞を再生
+      playKey(joshi.key);
       tap(col,row,true,true);
     }
   }
