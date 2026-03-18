@@ -458,36 +458,47 @@ function addVJ(text,cat){
 }
 
 // DJ ループ音源
-var loopState={A:{idx:null,audio:null},B:{idx:null,audio:null}};
+var loopState={A:{idx:null,source:null,gain:null},B:{idx:null,source:null,gain:null}};
 var faderVal=0.5;
 var faderDragging=false,faderStartX=0,faderStartVal=0.5;
 
 function updateFader(){
   var vA=Math.cos(faderVal*Math.PI/2)*0.85,vB=Math.sin(faderVal*Math.PI/2)*0.85;
-  if(loopState.A.audio)loopState.A.audio.volume=vA;
-  if(loopState.B.audio)loopState.B.audio.volume=vB;
+  if(loopState.A.gain)loopState.A.gain.gain.value=vA;
+  if(loopState.B.gain)loopState.B.gain.gain.value=vB;
 }
 function playLoop(side){
   var st=loopState[side];if(st.idx===null)return;
-  if(st.audio){st.audio.pause();st.audio=null;}
-  var a=new Audio('bgm/loop'+(st.idx+1)+'.mp3');
-  a.loop=true;
-  a.volume=side==='A'?Math.cos(faderVal*Math.PI/2)*0.85:Math.sin(faderVal*Math.PI/2)*0.85;
-  a.play().catch(function(){});st.audio=a;
+  stopLoop(side);
+  var ctx=getCtx();if(ctx.state==='suspended')ctx.resume();
+  fetch('bgm/loop'+(st.idx+1)+'.mp3')
+    .then(function(r){return r.arrayBuffer();})
+    .then(function(ab){return ctx.decodeAudioData(ab);})
+    .then(function(buf){
+      var gain=ctx.createGain();
+      gain.gain.value=side==='A'?Math.cos(faderVal*Math.PI/2)*0.85:Math.sin(faderVal*Math.PI/2)*0.85;
+      gain.connect(ctx.destination);
+      var src=ctx.createBufferSource();
+      src.buffer=buf;src.loop=true;
+      src.connect(gain);src.start(0);
+      loopState[side].source=src;
+      loopState[side].gain=gain;
+    }).catch(function(){});
 }
 function stopLoop(side){
   var st=loopState[side];
-  if(st.audio){st.audio.pause();st.audio.currentTime=0;st.audio=null;}
+  if(st.source){try{st.source.stop();}catch(e){} st.source=null;}
+  if(st.gain){st.gain.disconnect();st.gain=null;}
 }
 function selectLoop(side,idx){
   var st=loopState[side];
   if(st.idx===idx){
-    if(st.audio){st.audio.pause();st.audio=null;}
+    stopLoop(side);
     st.idx=null;
     document.querySelectorAll('.lbtn-'+side).forEach(function(b){b.classList.remove('on');});
     return;
   }
-  if(st.audio){st.audio.pause();st.audio=null;}
+  stopLoop(side);
   st.idx=idx;
   document.querySelectorAll('.lbtn-'+side).forEach(function(b,i){b.classList.toggle('on',i===idx);});
   playLoop(side);
@@ -496,7 +507,7 @@ function toggleDJBGM(){
   var btn=document.getElementById('djBgmBtn');
   var on=btn.classList.contains('on');
   if(on){stopLoop('A');stopLoop('B');btn.classList.remove('on');}
-  else{playLoop('A');playLoop('B');if(loopState.A.audio||loopState.B.audio)btn.classList.add('on');}
+  else{playLoop('A');playLoop('B');btn.classList.add('on');}
 }
 
 // ターンテーブル
