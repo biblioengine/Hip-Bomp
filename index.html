@@ -543,13 +543,16 @@ function bindTurntable(dk,id){
     dk.el.style.transform='rotate('+dk.angle+'deg)';
     var speed=Math.abs(da);
     if(speed>1.5){
-      // スクラッチ音：速さに応じてscluch1/scluch2を再生
-      if(dk.scratchAudio){dk.scratchAudio.pause();dk.scratchAudio.currentTime=0;}
-      var sfile=speed>8?'scluch2.mp3':'scluch1.mp3';
-      var sa=new Audio(sfile);
-      sa.volume=Math.min(speed/15,1.0);
-      sa.play().catch(function(){});
-      dk.scratchAudio=sa;
+      // スクラッチ音：150ms以上間隔を空けて再生
+      var now=Date.now();
+      if(!dk.scratchLastTime||now-dk.scratchLastTime>150){
+        dk.scratchLastTime=now;
+        var sfile=speed>8?'scluch2.mp3':'scluch1.mp3';
+        var sa=new Audio(sfile);
+        sa.volume=Math.min(speed/15,1.0);
+        sa.play().catch(function(){});
+        dk.scratchAudio=sa;
+      }
     }
   }
   function onEnd(){
