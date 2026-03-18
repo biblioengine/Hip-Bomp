@@ -543,16 +543,11 @@ function bindTurntable(dk,id){
     dk.el.style.transform='rotate('+dk.angle+'deg)';
     var speed=Math.abs(da);
     if(speed>1.5){
-      var ctx=getCtx();if(ctx.state==='suspended')ctx.resume();
-      var dur=0.04;
-      var buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*dur),ctx.sampleRate);
-      var d=buf.getChannelData(0);
-      for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.min(speed/20,1);
-      var src=ctx.createBufferSource();src.buffer=buf;
-      var bpf=ctx.createBiquadFilter();bpf.type='bandpass';bpf.frequency.value=800+speed*80;bpf.Q.value=2;
-      var gn=ctx.createGain();gn.gain.value=Math.min(speed/15,0.5);
-      src.connect(bpf);bpf.connect(gn);gn.connect(ctx.destination);
-      src.start(0);src.stop(ctx.currentTime+dur+0.01);
+      // スクラッチ音：速さに応じてscluch1/scluch2を再生
+      var sfile=speed>8?'scluch2.mp3':'scluch1.mp3';
+      var sa=new Audio(sfile);
+      sa.volume=Math.min(speed/15,1.0);
+      sa.play().catch(function(){});
     }
   }
   function onEnd(){
