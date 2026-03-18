@@ -161,14 +161,12 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 <script>// v20260317-0219
 
 
-var actx=null, bufCache={};
+var actx=null, bufCache={}, abCache={};
 function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
 function getBuffer(key){
   if(bufCache[key])return Promise.resolve(bufCache[key]);
-  return fetch('voice/'+key+'.mp3')
-    .then(function(r){return r.arrayBuffer();})
-    .then(function(ab){return getCtx().decodeAudioData(ab);})
-    .then(function(b){bufCache[key]=b;return b;});
+  var fetchP=abCache[key]?Promise.resolve(abCache[key]):fetch('voice/'+key+'.mp3').then(function(r){return r.arrayBuffer();}).then(function(ab){abCache[key]=ab;return ab;});
+  return fetchP.then(function(ab){return getCtx().decodeAudioData(ab.slice(0));}).then(function(b){bufCache[key]=b;return b;});
 }
 function playKey(key){
   var ctx=getCtx();if(ctx.state==='suspended')ctx.resume();
@@ -401,9 +399,11 @@ function bindBlock(col,row){
     sx=px;sy=py;wordPlayed=false;
     el.classList.add('fired');
     var c=grid[col][row];if(!c)return;
-    // タッチした瞬間にワードを先行再生
-    playKey(c.word.key);
-    wordPlayed=true;
+    // キャッシュ済みの場合だけtouchstart時に即再生
+    if(bufCache[c.word.key]){
+      playKey(c.word.key);
+      wordPlayed=true;
+    }
   }
   function end(px,py){
     el.classList.remove('fired');
@@ -767,10 +767,7 @@ function startApp(){
     sp.style.display='none';
     setMode('sampler');
     initGrid();
-    // 全ワードをプリロード
-    var keys=['wa','ga','no','to','mo','wo','ni','de'];
-    WORD_POOL.forEach(function(w){keys.push(w.key);});
-    keys.forEach(function(k){getBuffer(k).catch(function(){});});
+    // プリロードはDOMContentLoaded時に開始済み
   },300);
 }
 
@@ -780,7 +777,19 @@ window.addEventListener('DOMContentLoaded',function(){
   initDJGenres();
   bindTurntable(decks[0],'recordA');
   bindTurntable(decks[1],'recordB');
-
+  // スプラッシュ表示中にArrayBufferだけフェッチしておく（decode不要）
+  var preloadKeys=['wa','ga','no','to','mo','wo','ni','de'];
+  WORD_POOL.forEach(function(w){preloadKeys.push(w.key);});
+  function preloadNext(i){
+    if(i>=preloadKeys.length)return;
+    if(abCache[preloadKeys[i]]){preloadNext(i+1);return;}
+    fetch('voice/'+preloadKeys[i]+'.mp3')
+      .then(function(r){return r.arrayBuffer();})
+      .then(function(ab){abCache[preloadKeys[i]]=ab;})
+      .catch(function(){})
+      .then(function(){setTimeout(function(){preloadNext(i+1);},20);});
+  }
+  setTimeout(function(){preloadNext(0);},200);
 });
 
 </script>
