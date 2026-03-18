@@ -719,7 +719,6 @@ function startApp(){
   openingBGM.play().catch(function(){});
   var sp=document.getElementById('splash');
   fullscreenBurst();
-  sp.classList.add('fade-out');
   setTimeout(function(){
     sp.style.display='none';
     setMode('sampler');
@@ -728,7 +727,7 @@ function startApp(){
     var keys=['wa','ga','no','to','mo','wo','ni','de'];
     WORD_POOL.forEach(function(w){keys.push(w.key);});
     keys.forEach(function(k){getBuffer(k).catch(function(){});});
-  },900);
+  },300);
 }
 
 window.addEventListener('DOMContentLoaded',function(){
