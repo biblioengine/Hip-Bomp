@@ -137,7 +137,7 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
   <img id="recordA" class="dj-record" src="record_L.png" alt="" style="left:2%;top:24.5%;width:42%;height:auto;">
   <img id="recordB" class="dj-record" src="record_R.png" alt="" style="left:55%;top:24.5%;width:42%;height:auto;">
   <img id="faderImg" class="dj-fader-img" src="slider.png" alt="" style="width:7%;top:51%;left:46%;">
-  <img src="torapmode.png" alt="ラップモードへ" onclick="setMode('sampler');fullscreenBurst();"
+  <img src="torapmode.png" alt="ラップモードへ" onclick="setMode('sampler')"
     style="position:absolute;left:50%;bottom:5%;transform:translateX(-50%);width:70%;cursor:pointer;touch-action:manipulation;z-index:10;">
   <div class="dj-tap dj-bgm-tap" id="djBgmBtn" style="left:25%;top:17%;width:50%;height:8%;" onclick="toggleDJBGM()"></div>
   <div class="dj-tap lbtn-A" style="left:5.3%;top:59.6%;width:13.3%;height:6.6%;" onclick="selectLoop('A',0)"></div>
@@ -431,8 +431,15 @@ function bindBlock(col,row){
       var joshi=DIR_MAP[dir];
       addVJ(word.name+joshi.label,word.cat);
       lastWord=word;
-      // 指を離した瞬間に助詞を再生
-      playKey(joshi.key);
+      // フリック：ワードが未再生なら先に再生してから助詞
+      if(!wordPlayed){
+        playKey(word.key).then(function(dur){
+          setTimeout(function(){ playKey(joshi.key); },(dur||0.3)*1000);
+        });
+      } else {
+        // キャッシュ済みでstart()再生済みなら即助詞
+        playKey(joshi.key);
+      }
       tap(col,row,true,true);
     }
   }
@@ -776,7 +783,6 @@ function startApp(){
   openingBGM=new Audio(pick);
   openingBGM.play().catch(function(){});
   var sp=document.getElementById('splash');
-  fullscreenBurst();
   setTimeout(function(){
     sp.style.display='none';
     setMode('sampler');
