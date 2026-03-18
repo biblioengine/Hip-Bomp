@@ -649,6 +649,8 @@ function startApp(){
   if(appStarted)return;
   appStarted=true;
   getCtx().resume();
+  // hipbomp.mp3を再生
+  new Audio('voice/hipbomp.mp3').play().catch(function(){});
   var sp=document.getElementById('splash');
   sp.classList.add('fade-out');
   setTimeout(function(){
