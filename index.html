@@ -526,7 +526,15 @@ var decks=[
 function getAngle(cx,cy,px,py){return Math.atan2(py-cy,px-cx)*180/Math.PI;}
 function bindTurntable(dk,id){
   var el=document.getElementById(id);if(!el)return;dk.el=el;
-  function onStart(px,py){var r=el.getBoundingClientRect();dk.cx=r.left+r.width/2;dk.cy=r.top+r.height/2;dk.lastAngle=getAngle(dk.cx,dk.cy,px,py);dk.spinning=true;}
+  var side=id==='recordA'?'A':'B';
+  function onStart(px,py){
+    var r=el.getBoundingClientRect();dk.cx=r.left+r.width/2;dk.cy=r.top+r.height/2;
+    dk.lastAngle=getAngle(dk.cx,dk.cy,px,py);dk.spinning=true;
+    // CSSアニメーション停止、現在の回転角を維持
+    var computed=window.getComputedStyle(el).transform;
+    el.classList.remove('spinning');
+    el.style.transform=computed;
+  }
   function onMove(px,py){
     if(!dk.spinning)return;
     var a=getAngle(dk.cx,dk.cy,px,py);
@@ -547,7 +555,14 @@ function bindTurntable(dk,id){
       src.start(0);src.stop(ctx.currentTime+dur+0.01);
     }
   }
-  function onEnd(){dk.spinning=false;}
+  function onEnd(){
+    dk.spinning=false;
+    // ループ再生中なら自動回転に戻す
+    if(loopState[side].source){
+      el.style.transform='';
+      el.classList.add('spinning');
+    }
+  }
   el.addEventListener('touchstart',function(e){e.preventDefault();var t=e.touches[0];onStart(t.clientX,t.clientY);},{passive:false});
   el.addEventListener('touchmove',function(e){e.preventDefault();var t=e.touches[0];onMove(t.clientX,t.clientY);},{passive:false});
   el.addEventListener('touchend',function(e){e.preventDefault();onEnd();},{passive:false});
