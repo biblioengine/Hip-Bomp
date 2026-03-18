@@ -82,7 +82,7 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 .help-nav-btn:disabled{opacity:0.25;pointer-events:none;}
 .help-logo{height:24px;cursor:pointer;touch-action:manipulation;}
 /* スプラッシュのヘルプボタン */
-#splashHelpBtn{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;touch-action:manipulation;z-index:10;}
+#splashHelpBtn{position:absolute;bottom:15%;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;touch-action:manipulation;z-index:10;}
 #splashHelpBtn img{height:20px;opacity:0.75;}
 #splashHelpBtn span{font-size:0.45rem;color:#888;letter-spacing:0.5em;font-family:'Shippori Mincho B1',serif;}
 </style>
@@ -133,7 +133,7 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
   <img class="dj-bg-img" src="djmode.png" alt="">
   <img id="recordA" class="dj-record" src="record_L.png" alt="" style="left:3.5%;top:25.9%;width:42%;height:auto;">
   <img id="recordB" class="dj-record" src="record_R.png" alt="" style="left:53.4%;top:25.9%;width:42%;height:auto;">
-  <img id="faderImg" class="dj-fader-img" src="slider.png" alt="" style="width:8%;top:46%;left:46%;">
+  <img id="faderImg" class="dj-fader-img" src="slider.png" alt="" style="width:8%;top:46.5%;left:46%;">
   <img src="torapmode.png" alt="ラップモードへ" onclick="setMode('sampler')"
     style="position:absolute;left:50%;bottom:5%;transform:translateX(-50%);width:70%;cursor:pointer;touch-action:manipulation;z-index:10;">
   <div class="dj-tap dj-bgm-tap" id="djBgmBtn" style="left:25%;top:17%;width:50%;height:8%;" onclick="toggleDJBGM()"></div>
@@ -540,7 +540,7 @@ function bindTurntable(dk,id){
 
 function initFader(){
   var el=document.getElementById('faderImg');if(!el)return;
-  var GROOVE_L=5.3,GROOVE_R=86.0;
+  var GROOVE_L=8.0,GROOVE_R=88.0;
   function setFaderVal(val){
     faderVal=Math.max(0,Math.min(1,val));
     var scene=document.querySelector('.dj-scene');if(!scene)return;
