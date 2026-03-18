@@ -40,6 +40,7 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 .cat-adj   .block-text{color:#0f8;text-shadow:0 0 6px #0f8;}
 .cat-conj  .block-text{color:#fa0;text-shadow:0 0 6px #fa0;}
 .cat-ai    .block-text{color:#f66;text-shadow:0 0 6px #f66;}
+.cat-verb  .block-text{color:#0cf;text-shadow:0 0 6px #0cf;}
 @keyframes dropIn{0%{transform:translateY(-120px);opacity:0;}60%{transform:translateY(8px);opacity:1;}100%{transform:translateY(0);opacity:1;}}
 .block.drop{animation:dropIn 0.35s cubic-bezier(0.25,0.46,0.45,0.94) both;}
 @keyframes vanish{0%{transform:scale(1);opacity:1;}100%{transform:scale(0);opacity:0;}}
@@ -250,6 +251,40 @@ var WORD_POOL=[
   {key:'iza',            name:'いざ',            cat:'cat-conj', w:1},
   {key:'akindonosoroban',name:'商人のそろばん',  cat:'cat-noun', w:1},
   {key:'yoidesuka',      name:'よいですか',      cat:'cat-adj',  w:2},
+  // 追加ワード
+  {key:'agaku',          name:'足掻く',          cat:'cat-verb', w:3},
+  {key:'bomp',           name:'凡夫',            cat:'cat-noun', w:3},
+  {key:'chagasi',        name:'茶菓子',          cat:'cat-noun', w:3},
+  {key:'chinza',         name:'鎮座',            cat:'cat-adj',  w:3},
+  {key:'daimyou',        name:'大名',            cat:'cat-noun', w:3},
+  {key:'deshou',         name:'でしょう',        cat:'cat-ai',   w:4},
+  {key:'dopeness',       name:'DOPENESS',        cat:'cat-ai',   w:4},
+  {key:'dosigatai',      name:'度し難い',        cat:'cat-adj',  w:3},
+  {key:'hana',           name:'花',              cat:'cat-noun', w:4},
+  {key:'hibi',           name:'ヒビ(貫入り)',    cat:'cat-adj',  w:3},
+  {key:'hippu',          name:'匹夫',            cat:'cat-noun', w:3},
+  {key:'ikiru',          name:'生きる',          cat:'cat-verb', w:4},
+  {key:'ikusa',          name:'戦',              cat:'cat-noun', w:3},
+  {key:'kabuki',         name:'歌舞伎',          cat:'cat-noun', w:3},
+  {key:'kacchuu',        name:'甲冑',            cat:'cat-noun', w:3},
+  {key:'kaki',           name:'花器',            cat:'cat-noun', w:3},
+  {key:'karesansui',     name:'枯山水',          cat:'cat-noun', w:3},
+  {key:'kazuchawan',     name:'数茶碗',          cat:'cat-adj',  w:3},
+  {key:'kintugi',        name:'金継ぎ',          cat:'cat-adj',  w:3},
+  {key:'kurusimu',       name:'苦しむ',          cat:'cat-verb', w:3},
+  {key:'kuukan',         name:'空間',            cat:'cat-noun', w:3},
+  {key:'metaninti',      name:'メタ認知',        cat:'cat-adj',  w:3},
+  {key:'mogaku',         name:'もがく',          cat:'cat-verb', w:3},
+  {key:'mujou',          name:'無常',            cat:'cat-adj',  w:4},
+  {key:'rap',            name:'ラップ',          cat:'cat-ai',   w:4},
+  {key:'rikennomi',      name:'離見の見',        cat:'cat-adj',  w:3},
+  {key:'shuuchaku',      name:'執着',            cat:'cat-adj',  w:3},
+  {key:'si',             name:'死',              cat:'cat-noun', w:3},
+  {key:'sisiodosi',      name:'鹿おどし',        cat:'cat-noun', w:3},
+  {key:'suki',           name:'数奇',            cat:'cat-adj',  w:3},
+  {key:'tokihanatu',     name:'解き放つ',        cat:'cat-verb', w:3},
+  {key:'umareru',        name:'生まれる',        cat:'cat-verb', w:4},
+  {key:'yuugen',         name:'幽玄',            cat:'cat-adj',  w:4},
   // 合いの手
   {key:'yeah',           name:'yeah',            cat:'cat-ai',   w:5},
   {key:'yo',             name:'Yo',              cat:'cat-ai',   w:5},
@@ -264,7 +299,7 @@ var DIR_MAP={
   upleft:{key:'mo',label:'も'},upright:{key:'wo',label:'を'},
   downleft:{key:'ni',label:'に'},downright:{key:'de',label:'で'}
 };
-var NEON={'cat-noun':'#f0f','cat-hip':'#ff0','cat-adj':'#0f8','cat-conj':'#fa0','cat-ai':'#f66'};
+var NEON={'cat-noun':'#f0f','cat-hip':'#ff0','cat-adj':'#0f8','cat-conj':'#fa0','cat-ai':'#f66','cat-verb':'#0cf'};
 
 function getDir(dx,dy){
   var ax=Math.abs(dx),ay=Math.abs(dy);
@@ -395,7 +430,7 @@ function bindBlock(col,row){
 
 function breakBlock(el, cat){
   var rect=el.getBoundingClientRect();
-  var colors={'cat-noun':'#f0f','cat-hip':'#ff0','cat-adj':'#0f8','cat-conj':'#fa0','cat-ai':'#f66'};
+  var colors={'cat-noun':'#f0f','cat-hip':'#ff0','cat-adj':'#0f8','cat-conj':'#fa0','cat-ai':'#f66','cat-verb':'#0cf'};
   var color=colors[cat]||'#fff';
   var sizes=[[40,20],[25,25],[30,15],[20,30],[35,18],[22,22]];
   for(var i=1;i<=6;i++){
