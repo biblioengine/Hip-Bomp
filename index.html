@@ -14,8 +14,7 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 #splash.fade-out{opacity:0;pointer-events:none;}
 #splash img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center 15%;}
 /* ヘルプ */
-#helpView{position:fixed;inset:0;z-index:9000;background:#000;display:none;flex-direction:column;align-items:center;justify-content:flex-start;}
-.help-img{width:100%;flex:1;object-fit:contain;object-position:center top;min-height:0;}
+
 #helpBackBtn{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);width:40%;max-width:160px;cursor:pointer;touch-action:manipulation;}
 /* ナビバー */
 .nav-bar{width:100%;display:flex;justify-content:space-between;align-items:center;padding:6px 10px;flex-shrink:0;background:#000;}
@@ -88,9 +87,9 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 <body>
 <div id="splash" onclick="startApp()" ontouchstart="startApp()">
   <img src="title.jpg" alt="Hip-Bomp">
-  <div id="splashHelpBtn" onclick="event.stopPropagation();setMode('help')" ontouchstart="event.stopPropagation();setMode('help')">
+  <div id="splashHelpBtn" onclick="event.stopPropagation();openHelp()" ontouchstart="event.stopPropagation();openHelp()">
     <img src="ensou_logo.png" alt="ヘルプ">
-    <span>ヘルプ</span>
+    <span>HELP</span>
   </div>
 </div>
 <div id="helpView">
