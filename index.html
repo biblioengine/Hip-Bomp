@@ -718,12 +718,12 @@ function startApp(){
   openingBGM=new Audio(pick);
   openingBGM.play().catch(function(){});
   var sp=document.getElementById('splash');
+  fullscreenBurst();
   sp.classList.add('fade-out');
   setTimeout(function(){
     sp.style.display='none';
     setMode('sampler');
     initGrid();
-    setTimeout(fullscreenBurst, 100);
     // 全ワードをプリロード
     var keys=['wa','ga','no','to','mo','wo','ni','de'];
     WORD_POOL.forEach(function(w){keys.push(w.key);});
