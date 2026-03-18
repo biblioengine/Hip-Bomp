@@ -110,7 +110,7 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 <div id="helpView">
   <img id="helpPageImg" src="rapmodehelp.png" alt="ヘルプ">
   <div class="help-nav">
-    <button class="help-nav-btn" id="helpPrevBtn" onclick="helpPage(-1)" disabled>◀ 戻る</button>
+    <button class="help-nav-btn" id="helpPrevBtn" onclick="setMode(helpPrevMode)">◀ 戻る</button>
     <img class="help-logo" src="hipbomp_logo.png" alt="戻る" onclick="setMode(helpPrevMode)">
     <button class="help-nav-btn" id="helpNextBtn" onclick="helpPage(1)">次へ ▶</button>
   </div>
