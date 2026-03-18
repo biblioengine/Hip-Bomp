@@ -330,7 +330,21 @@ function checkCombo(cat){
   }
 }
 
+var vjMonitorTimer=null;
 function triggerCombo(type){
+  // VJモニター画像を差し替え
+  var mon=document.querySelector('.vj-monitor');
+  if(mon){
+    if(vjMonitorTimer){clearTimeout(vjMonitorTimer);}
+    var imgs=type==='5COLORS'
+      ? ['vjmoniter2.png','vjmoniter3.png','vjmoniter4.png']
+      : ['vjmoniter2.png','vjmoniter3.png','vjmoniter4.png'];
+    mon.src=imgs[Math.floor(Math.random()*imgs.length)];
+    vjMonitorTimer=setTimeout(function(){
+      mon.src='VJmoniter.png';
+      vjMonitorTimer=null;
+    }, type==='5COLORS' ? 4000 : 2500);
+  }
   // VJネオンフラッシュ
   var flash = document.getElementById('vjFlash');
   if(flash){
@@ -338,7 +352,7 @@ function triggerCombo(type){
       ? 'radial-gradient(circle, rgba(255,255,0,0.5), transparent)'
       : 'radial-gradient(circle, rgba(255,0,255,0.5), transparent)';
     flash.classList.remove('active');
-    void flash.offsetWidth; // reflow
+    void flash.offsetWidth;
     flash.classList.add('active');
   }
   // VJテキスト表示
