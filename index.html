@@ -734,8 +734,6 @@ function setMode(mode){
     document.getElementById('samplerView').style.display='flex';
   } else if(mode==='dj'){
     document.getElementById('djView').style.display='flex';
-    // openingBGM停止
-    if(openingBGM){openingBGM.pause();openingBGM=null;}
     // AudioContextを確実にresume（iOS対応）
     var ctx=getCtx();
     ctx.resume().then(function(){
