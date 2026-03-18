@@ -530,7 +530,7 @@ function playLoop(side){
       loopState[side].gain=gain;
       var recId=side==='A'?'recordA':'recordB';
       var recEl=document.getElementById(recId);
-      if(recEl)recEl.classList.add('spinning');
+      if(recEl){recEl.style.transform='';recEl.classList.add('spinning');}
     }).catch(function(){});
 }
 function stopLoop(side){
