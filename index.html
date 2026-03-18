@@ -657,8 +657,14 @@ function startApp(){
   if(appStarted)return;
   appStarted=true;
   getCtx().resume();
-  // hipbomp.mp3を再生
-  new Audio('voice/hipbomp.mp3').play().catch(function(){});
+  // hipbomp.mp3を再生し、終了後にopeningフォルダからランダムで1曲再生
+  var hb=new Audio('voice/hipbomp.mp3');
+  hb.play().catch(function(){});
+  hb.onended=function(){
+    var bgms=['opening/opbgm1.mp3','opening/opbgm2.mp3','opening/opbgm3.mp3','opening/opbgm4.mp3'];
+    var pick=bgms[Math.floor(Math.random()*bgms.length)];
+    new Audio(pick).play().catch(function(){});
+  };
   var sp=document.getElementById('splash');
   sp.classList.add('fade-out');
   setTimeout(function(){
