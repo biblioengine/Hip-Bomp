@@ -133,10 +133,10 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 <div id="djView">
 <div class="dj-scene">
   <img class="dj-bg-img" src="djmode.png" alt="">
-  <img id="recordA" class="dj-record" src="record_L.png" alt="" style="left:3.5%;top:24.5%;width:42%;height:auto;">
-  <img id="recordB" class="dj-record" src="record_R.png" alt="" style="left:53.4%;top:24.5%;width:42%;height:auto;">
+  <img id="recordA" class="dj-record" src="record_L.png" alt="" style="left:2%;top:24.5%;width:42%;height:auto;">
+  <img id="recordB" class="dj-record" src="record_R.png" alt="" style="left:55%;top:24.5%;width:42%;height:auto;">
   <img id="faderImg" class="dj-fader-img" src="slider.png" alt="" style="width:7%;top:51%;left:46%;">
-  <img src="torapmode.png" alt="ラップモードへ" onclick="setMode('sampler')"
+  <img src="torapmode.png" alt="ラップモードへ" onclick="triggerFlashMode('sampler')"
     style="position:absolute;left:50%;bottom:5%;transform:translateX(-50%);width:70%;cursor:pointer;touch-action:manipulation;z-index:10;">
   <div class="dj-tap dj-bgm-tap" id="djBgmBtn" style="left:25%;top:17%;width:50%;height:8%;" onclick="toggleDJBGM()"></div>
   <div class="dj-tap lbtn-A" style="left:5.3%;top:59.6%;width:13.3%;height:6.6%;" onclick="selectLoop('A',0)"></div>
@@ -615,6 +615,17 @@ function initFader(){
 
 function initDJGenres(){}
 
+function triggerFlashMode(mode){
+  // vjFlashがsamplerView内なので、先にsamplerViewを表示してフラッシュ
+  setMode(mode);
+  var flash=document.getElementById('vjFlash');
+  if(flash){
+    flash.style.background='linear-gradient(135deg,#ff00ff,#00ffff,#ffff00)';
+    flash.classList.remove('active');
+    void flash.offsetWidth;
+    flash.classList.add('active');
+  }
+}
 function setMode(mode){
   ['splash','helpView','samplerView','djView'].forEach(function(id){
     var el=document.getElementById(id);
@@ -676,7 +687,7 @@ function startApp(){
   sp.classList.add('fade-out');
   setTimeout(function(){
     sp.style.display='none';
-    setMode('sampler');
+    triggerFlashMode('sampler');
     initGrid();
     // 全ワードをプリロード
     var keys=['wa','ga','no','to','mo','wo','ni','de'];
