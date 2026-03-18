@@ -82,9 +82,9 @@ body{display:flex;flex-direction:column;align-items:center;max-width:480px;margi
 .help-nav-btn:disabled{opacity:0.25;pointer-events:none;}
 .help-logo{height:24px;cursor:pointer;touch-action:manipulation;}
 /* スプラッシュのヘルプボタン */
-#splashHelpBtn{position:absolute;top:62%;left:32%;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;touch-action:manipulation;z-index:10;}
-#splashHelpBtn img{height:20px;opacity:0.75;}
-#splashHelpBtn span{font-size:0.45rem;color:#888;letter-spacing:0.5em;font-family:'Shippori Mincho B1',serif;}
+#splashHelpBtn{position:absolute;top:78%;left:33%;display:flex;flex-direction:row;align-items:center;gap:8px;cursor:pointer;touch-action:manipulation;z-index:10;}
+#splashHelpBtn img{height:36px;opacity:1;}
+#splashHelpBtn span{font-size:0.65rem;color:#ff0;text-shadow:0 0 8px #ff0,0 0 16px #ff0;letter-spacing:0.3em;font-family:'Shippori Mincho B1',serif;white-space:nowrap;}
 </style>
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://biblioengine.github.io/Hip-Bomp/">
@@ -538,17 +538,18 @@ function bindTurntable(dk,id){
   el.addEventListener('mouseleave',function(e){onEnd();});
 }
 
+var GROOVE_L=18.0,GROOVE_R=82.0;
+function setFaderVal(val){
+  var el=document.getElementById('faderImg');if(!el)return;
+  faderVal=Math.max(0,Math.min(1,val));
+  var scene=document.querySelector('.dj-scene');if(!scene)return;
+  var sw=scene.offsetWidth,fw=el.offsetWidth;
+  var lMin=GROOVE_L/100*sw,lMax=GROOVE_R/100*sw;
+  el.style.left=(lMin+faderVal*(lMax-lMin)-fw/2)+'px';
+  updateFader();
+}
 function initFader(){
   var el=document.getElementById('faderImg');if(!el)return;
-  var GROOVE_L=18.0,GROOVE_R=82.0;
-  function setFaderVal(val){
-    faderVal=Math.max(0,Math.min(1,val));
-    var scene=document.querySelector('.dj-scene');if(!scene)return;
-    var sw=scene.offsetWidth,fw=el.offsetWidth;
-    var lMin=GROOVE_L/100*sw,lMax=GROOVE_R/100*sw;
-    el.style.left=(lMin+faderVal*(lMax-lMin)-fw/2)+'px';
-    updateFader();
-  }
   function onStart(px){faderDragging=true;faderStartX=px;faderStartVal=faderVal;}
   function onMove(px){
     if(!faderDragging)return;
@@ -584,6 +585,7 @@ function setMode(mode){
     document.getElementById('samplerView').style.display='flex';
   } else if(mode==='dj'){
     document.getElementById('djView').style.display='flex';
+    setTimeout(function(){ setFaderVal(faderVal); },150);
   }
 }
 
