@@ -176,6 +176,7 @@ function playKey(key){
   });
 }
 
+var openingBGM=null;
 var WORD_POOL=[
   // 茶道・仏教・和
   {key:'wabi',           name:'侘び',            cat:'cat-noun', w:4},
@@ -499,6 +500,7 @@ function stopLoop(side){
   if(recEl)recEl.classList.remove('spinning');
 }
 function selectLoop(side,idx){
+  if(openingBGM){openingBGM.pause();openingBGM=null;}
   var st=loopState[side];
   if(st.idx===idx){
     stopLoop(side);
@@ -663,7 +665,8 @@ function startApp(){
   hb.onended=function(){
     var bgms=['opening/opbgm1.mp3','opening/opbgm2.mp3','opening/opbgm3.mp3','opening/opbgm4.mp3'];
     var pick=bgms[Math.floor(Math.random()*bgms.length)];
-    new Audio(pick).play().catch(function(){});
+    openingBGM=new Audio(pick);
+    openingBGM.play().catch(function(){});
   };
   var sp=document.getElementById('splash');
   sp.classList.add('fade-out');
