@@ -631,7 +631,15 @@ var helpCurPage=0;
 function helpPage(dir){
   helpCurPage=Math.max(0,Math.min(HELP_PAGES.length-1,helpCurPage+dir));
   document.getElementById('helpPageImg').src=HELP_PAGES[helpCurPage];
-  document.getElementById('helpPrevBtn').disabled=(helpCurPage===0);
+  var prevBtn=document.getElementById('helpPrevBtn');
+  if(helpCurPage===0){
+    prevBtn.textContent='◀ 戻る';
+    prevBtn.onclick=function(){ setMode(helpPrevMode); };
+  } else {
+    prevBtn.textContent='◀ 戻る';
+    prevBtn.onclick=function(){ helpPage(-1); };
+  }
+  prevBtn.disabled=false;
   document.getElementById('helpNextBtn').disabled=(helpCurPage===HELP_PAGES.length-1);
 }
 var helpPrevMode='splash';
