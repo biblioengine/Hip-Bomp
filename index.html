@@ -536,23 +536,27 @@ function updateFader(){
 function playLoop(side){
   var st=loopState[side];if(st.idx===null)return;
   stopLoop(side);
-  var ctx=getCtx();if(ctx.state==='suspended')ctx.resume();
-  fetch('bgm/loop'+(st.idx+1)+'.mp3')
-    .then(function(r){return r.arrayBuffer();})
-    .then(function(ab){return ctx.decodeAudioData(ab);})
-    .then(function(buf){
-      var gain=ctx.createGain();
-      gain.gain.value=side==='A'?Math.cos(faderVal*Math.PI/2)*0.85:Math.sin(faderVal*Math.PI/2)*0.85;
-      gain.connect(ctx.destination);
-      var src=ctx.createBufferSource();
-      src.buffer=buf;src.loop=true;
-      src.connect(gain);src.start(0);
-      loopState[side].source=src;
-      loopState[side].gain=gain;
-      var recId=side==='A'?'recordA':'recordB';
-      var recEl=document.getElementById(recId);
-      if(recEl){recEl.style.transform='';recEl.classList.add('spinning');}
-    }).catch(function(){});
+  var ctx=getCtx();
+  var p=ctx.state==='suspended'?ctx.resume():Promise.resolve();
+  p.then(function(){
+    return fetch('bgm/loop'+(st.idx+1)+'.mp3');
+  }).then(function(r){
+    if(!r.ok)throw new Error('fetch failed: '+r.status+' '+r.url);
+    return r.arrayBuffer();
+  }).then(function(ab){return ctx.decodeAudioData(ab);})
+  .then(function(buf){
+    var gain=ctx.createGain();
+    gain.gain.value=side==='A'?Math.cos(faderVal*Math.PI/2)*0.85:Math.sin(faderVal*Math.PI/2)*0.85;
+    gain.connect(ctx.destination);
+    var src=ctx.createBufferSource();
+    src.buffer=buf;src.loop=true;
+    src.connect(gain);src.start(0);
+    loopState[side].source=src;
+    loopState[side].gain=gain;
+    var recId=side==='A'?'recordA':'recordB';
+    var recEl=document.getElementById(recId);
+    if(recEl){recEl.style.transform='';recEl.classList.add('spinning');}
+  }).catch(function(e){console.error('[HipBomp DJ]',e);});
 }
 function stopLoop(side){
   var st=loopState[side];
